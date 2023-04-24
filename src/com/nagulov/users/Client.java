@@ -1,0 +1,60 @@
+package com.nagulov.users;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.nagulov.controllers.ManagerController;
+import com.nagulov.treatments.Treatment;
+
+public class Client extends User{
+
+	private List<Treatment> treatments = new ArrayList<Treatment>();
+	private double spent = 0;
+	private boolean hasLoyalityCard = false;
+	
+	public Client() {
+		
+	}
+	
+	public Client(UserBuilder builder) {
+		super(builder);
+	}
+	
+	public void addTreatment(Treatment t) {
+		if(!treatments.contains(t)) {
+			treatments.add(t);
+		}
+	}
+
+	public List<Treatment> getTreatments() {
+		return treatments;
+	}
+
+	public void setTreatments(List<Treatment> treatments) {
+		this.treatments = treatments;
+	}
+
+	public boolean isHasLoyalityCard() {
+		return hasLoyalityCard;
+	}
+
+	public void setHasLoyalityCard(boolean hasLoyalityCard) {
+		this.hasLoyalityCard = hasLoyalityCard;
+	}
+
+	public double getSpent() {
+		return spent;
+	}
+
+	public void setSpent(double spent) {
+		this.spent = spent;
+	}
+	
+	public void addSpent(double spent) {
+		this.spent += spent;
+		if(this.spent >= ManagerController.LOYALTY_CARD_NEEDED) {
+			this.hasLoyalityCard = true;
+		}
+	}
+
+}
