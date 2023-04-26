@@ -23,33 +23,7 @@ public class Validator {
 //	public static ErrorMessage updateUser(User user, HashMap<String, String> updateMap) {
 //		
 //	}
-	
-	
-	public static ErrorMessage changePassword(String oldPassword, String newPassword) {
 		
-		if(DataBase.loggedUser.getUsername().isBlank()) {
-			return ErrorMessage.EMPTY_USERNAME;
-		}
-		if(oldPassword.isBlank()) {
-			return ErrorMessage.EMPTY_PASSWORD;
-		}
-		if(newPassword.isBlank()) {
-			return ErrorMessage.EMPTY_PASSWORD;
-		}
-		if(!DataBase.users.containsKey(DataBase.loggedUser.getUsername())) {
-			return ErrorMessage.INVALID_USERNAME;
-		}
-		if(!DataBase.users.get(DataBase.loggedUser.getUsername()).getPassword().equals(oldPassword)) {
-			return ErrorMessage.INVALID_PASSWORD;
-		}
-		HashMap<String, String> updateMap = new HashMap<String, String>();
-		updateMap.put("Password", newPassword);
-		
-		managerController.updateUser(DataBase.users.get(DataBase.loggedUser.getUsername()), updateMap);
-		return ErrorMessage.SUCCESS;
-	}
-	
-	
 	public static ErrorMessage loginUser(String username, String password) {
 		if(username.isBlank()) {
 			return ErrorMessage.EMPTY_USERNAME;
@@ -78,7 +52,7 @@ public class Validator {
 		if(DataBase.users.containsKey(username)) {
 			return ErrorMessage.USERNAME_ALREADY_EXISTS;
 		}
-		managerController.createUser(name, surname, gender, phoneNumber, address, username, password);
+		managerController.createUser(name, surname, gender, phoneNumber, address, username, password, Client.class);
 		
 		return ErrorMessage.SUCCESS;
 	}

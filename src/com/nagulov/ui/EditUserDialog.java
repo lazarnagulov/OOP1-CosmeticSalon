@@ -2,7 +2,6 @@ package com.nagulov.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,6 +11,11 @@ import javax.swing.JTextField;
 
 import com.nagulov.controllers.ManagerController;
 import com.nagulov.data.DataBase;
+import com.nagulov.ui.models.UserModel;
+import com.nagulov.users.Beautician;
+import com.nagulov.users.Client;
+import com.nagulov.users.Manager;
+import com.nagulov.users.Receptionist;
 import com.nagulov.users.User;
 
 import net.miginfocom.swing.MigLayout;
@@ -24,6 +28,16 @@ public class EditUserDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
 	private static ManagerController managerController = ManagerController.getInstance();
 	private User user;
+	
+	private Class<?> getRole(String string){
+		switch(string) {
+			case "Client" -> {return Client.class;}
+			case "Manager" -> {return Manager.class;}
+			case "Beautician" -> {return Beautician.class;}
+			case "Receptionist" -> {return Receptionist.class;}
+		}
+		return null;
+	}
 	
 	private void initEditUserDialog() {
 		JTextField nameField = new JTextField(20);
@@ -67,15 +81,14 @@ public class EditUserDialog extends JDialog{
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				HashMap<String, String> updateMap = new HashMap<String, String>();
-				updateMap.put("Name", nameField.getText());
-				updateMap.put("Surname", surnameField.getText());
-				updateMap.put("PhoneNumber", phoneNumberField.getText());
-				updateMap.put("Address", addressField.getText());
-				updateMap.put("Role", comboBox.getSelectedItem().toString());
+				String name = nameField.getText();
+				String surname = surnameField.getText();
+				String phoneNumber =  phoneNumberField.getText();
+				String address =  addressField.getText();
+				String role = comboBox.getSelectedItem().toString();
 				
-				managerController.updateUser(user, updateMap);
-				DataBase.saveUsers();
+				UserModel.removeUser(user);
+				managerController.updateUser(user, name, surname, user.getGender(), phoneNumber, address, user.getUsername(), user.getPassword(), getRole(role));
 				TableDialog.refreshUser();
 				setVisible(false);
 				frame.dispose();

@@ -31,6 +31,10 @@ public class UserModel extends AbstractTableModel{
 		users.remove(row);
 	}
 	
+	public static void removeUser(User user) {
+		users.remove(user);
+	}
+	
 	public static void addUser(User user) {
 		users.add(user);
 	}

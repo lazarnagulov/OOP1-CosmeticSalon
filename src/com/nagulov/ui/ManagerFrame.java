@@ -30,56 +30,56 @@ public class ManagerFrame extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private void initChangePasswordDialog(JDialog d) {
-		JPasswordField oldPasswordField = new JPasswordField(20);
-		JPasswordField newPasswordField = new JPasswordField(20);
+//	private void initChangePasswordDialog(JDialog d) {
+//		JPasswordField oldPasswordField = new JPasswordField(20);
+//		JPasswordField newPasswordField = new JPasswordField(20);
+//	
+//		JButton confirmButton = new JButton("Comfirm");
+//		JButton cancelButton = new JButton("Cancel");
+//		
+//		d.setLayout(new MigLayout("wrap 2", "[][]", "[][]20[]"));
+//		d.add(new JLabel("Old Password"));
+//		d.add(oldPasswordField);
+//		d.add(new JLabel("New Password"));
+//		d.add(newPasswordField);
+//		d.add(cancelButton);
+//		d.add(confirmButton);
+//		
+//		confirmButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				String oldPassword = new String(oldPasswordField.getPassword());
+//				String newPassword = new String(newPasswordField.getPassword());
+//				
+//				ErrorMessage message = Validator.changePassword(oldPassword, newPassword);
+//				if(message != ErrorMessage.SUCCESS) {
+//					JOptionPane.showMessageDialog(null, message.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+//					return;
+//				}
+//				d.setVisible(false);
+//				d.dispose();
+//			}
+//			
+//		});
+//		
+//		cancelButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				d.setVisible(false);
+//				d.dispose();
+//			}
+//		});
+//	}
 	
-		JButton confirmButton = new JButton("Comfirm");
-		JButton cancelButton = new JButton("Cancel");
-		
-		d.setLayout(new MigLayout("wrap 2", "[][]", "[][]20[]"));
-		d.add(new JLabel("Old Password"));
-		d.add(oldPasswordField);
-		d.add(new JLabel("New Password"));
-		d.add(newPasswordField);
-		d.add(cancelButton);
-		d.add(confirmButton);
-		
-		confirmButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String oldPassword = new String(oldPasswordField.getPassword());
-				String newPassword = new String(newPasswordField.getPassword());
-				
-				ErrorMessage message = Validator.changePassword(oldPassword, newPassword);
-				if(message != ErrorMessage.SUCCESS) {
-					JOptionPane.showMessageDialog(null, message.getError(), "Error", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				d.setVisible(false);
-				d.dispose();
-			}
-			
-		});
-		
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				d.setVisible(false);
-				d.dispose();
-			}
-		});
-	}
-	
-	private void changePasswordDialog(){
-		JDialog d = new JDialog();
-		d.setTitle("Cosmetic Salon Nagulov");
-		d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		d.setSize(300,300);
-		initChangePasswordDialog(d);
-		d.setVisible(true);
-	}
-	
+//	private void changePasswordDialog(){
+//		JDialog d = new JDialog();
+//		d.setTitle("Cosmetic Salon Nagulov");
+//		d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//		d.setSize(300,300);
+//		initChangePasswordDialog(d);
+//		d.setVisible(true);
+//	}
+//	
 	
 	private void initManagerFrame() {
 		JButton editInfoButton = new JButton("Edit info");

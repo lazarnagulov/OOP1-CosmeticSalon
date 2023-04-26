@@ -85,5 +85,21 @@ public abstract class User {
 	public String toString() {
 		return this.getClass().getSimpleName() + "," +  this.getUsername() + "," + this.getPassword() + "," + this.getName() + "," + this.getSurname() + "," + this.getGender() + "," + this.getPhoneNumber() + "," + this.getAddress();
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other == this) {
+			return true;
+		}
+		if(!(other instanceof User)) {
+			return false;
+		}
+		
+		User u = (User)other;
+		if(this.getUsername() == u.getUsername()) {
+			return true;
+		}
+		return false;
+	}
 
 }

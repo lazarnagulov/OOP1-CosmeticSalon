@@ -1,17 +1,15 @@
 package com.nagulov.app;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.nagulov.data.DataBase;
-import com.nagulov.reports.Report;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.treatments.TreatmentBuilder;
 import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.ui.LoginDialog;
-import com.nagulov.users.Client;
 import com.nagulov.users.Beautician;
+import com.nagulov.users.Client;
 import com.nagulov.users.Manager;
 import com.nagulov.users.Receptionist;
 import com.nagulov.users.UserBuilder;
@@ -117,27 +115,16 @@ public class App {
 	
 	public static void main(String[] args) {
 		
-//		testSaveUsers();
+		testSaveUsers();
 //		testSaveServices();
 		
-		DataBase.loadUsers();
+//		DataBase.loadUsers();
 		DataBase.loadServices();
 		DataBase.loadTreatments();
-			
+//			
 //		testSaveTreatments();
-//		Report.updateCosmetologistReport(LocalDate.now(), (Beautician)DataBase.users.get("JovanaPanic"), 1000);
-//		Report.updateCosmetologistReport(LocalDate.now(), (Beautician)DataBase.users.get("natasa"), 500);
-//		Report.updateCosmetologistReport(LocalDate.now(), (Beautician)DataBase.users.get("natasa"), 1500);
 //		
-//		Report.updateTreatmentsReport(TreatmentStatus.CANCELED_BY_THE_CLIENT, LocalDate.now());
-//		Report.updateTreatmentsReport(TreatmentStatus.CANCELED_BY_THE_CLIENT, LocalDate.now().minusDays(1));
-//		Report.updateTreatmentsReport(TreatmentStatus.PERFORMED, LocalDate.now().minusDays(1));
-//		Report.updateTreatmentsReport(TreatmentStatus.PERFORMED, LocalDate.now().minusDays(2));
-//		Report.updateTreatmentsReport(TreatmentStatus.PERFORMED, LocalDate.now().minusDays(2));
-//		Report.updateTreatmentsReport(TreatmentStatus.SCHEDULED, LocalDate.now().minusDays(3));
-		
-		
-		
+//		
 		new LoginDialog();
 	}
 }

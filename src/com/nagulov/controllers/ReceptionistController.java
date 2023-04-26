@@ -2,6 +2,7 @@ package com.nagulov.controllers;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
@@ -14,6 +15,7 @@ import com.nagulov.users.Client;
 public class ReceptionistController implements ReceptionistControl {
 
 	private static ReceptionistController instance = null;
+	private static ManagerController managerInstance = ManagerController.getInstance();
 	
 	protected ReceptionistController() {
 		
@@ -51,8 +53,16 @@ public class ReceptionistController implements ReceptionistControl {
 
 	@Override
 	public void updateTreatment(Treatment treatment, HashMap<String, String> updateMap) {
-		// TODO Auto-generated method stub
-		
+		for(Map.Entry<String, String> t : updateMap.entrySet()) {
+			switch(t.getKey()) {
+				case "Status" -> treatment.setStatus(TreatmentStatus.valueOf(t.getValue().toUpperCase()));
+				case "Service" -> treatment.setService(managerInstance.getService(t.getValue()));
+				case "Treatment" -> treatment.setTreatment(t.getValue());
+				case "Beautician" -> treatment.setBeautician((Beautician)managerInstance.getUser(t.getValue()));
+				case "Date" -> treatment.setDate(LocalDateTime.parse(t.getValue(), DataBase.TREATMENTS_DATE));
+				case "Client" -> treatment.setClient((Client)managerInstance.getUser(t.getValue()));
+			}
+		}
 	}
 
 	@Override

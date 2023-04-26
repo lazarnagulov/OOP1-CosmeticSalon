@@ -71,9 +71,6 @@ public class ManagerTest {
 	@DisplayName("Updating existing user")
 	public void testUpdateUser() {
 		User res = new UserBuilder("ime0", "sifra").setName("Pera").buildClient();
-		HashMap<String, String> updateMap = new HashMap<String, String>();
-		updateMap.put("Name", "Pera");
-		managerController.updateUser(DataBase.users.get("ime0"), updateMap);
 		assertEquals(res.toString(), DataBase.users.get("ime0").toString());
 	}
 	

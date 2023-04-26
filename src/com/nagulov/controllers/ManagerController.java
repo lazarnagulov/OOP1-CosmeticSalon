@@ -5,8 +5,10 @@ import java.util.Map;
 
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.ui.models.UserModel;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
+import com.nagulov.users.Manager;
 import com.nagulov.users.Receptionist;
 import com.nagulov.users.Staff;
 import com.nagulov.users.User;
@@ -30,28 +32,73 @@ public class ManagerController extends ReceptionistController implements Manager
 	}
 	
 	@Override
-	public Client createUser(String name, String surname, String gender, String phoneNumber, String address, String username, String password) {
-		Client c = new UserBuilder(username, password)
-				.setAddress(address)
-				.setName(name)
-				.setPhoneNumber(phoneNumber)
-				.setGender(gender)
-				.setSurname(surname)
-				.buildClient();
-		DataBase.users.put(username, c); 
-		DataBase.saveUsers();
-		return c;
+	public User createUser(String name, String surname, String gender, String phoneNumber, String address, String username, String password, Class<?> position) {
+		if(position == Receptionist.class) {
+			Receptionist r = new UserBuilder(username, password)
+					.setName(name)
+					.setSurname(surname)
+					.setGender(gender)
+					.setPhoneNumber(phoneNumber)
+					.setAddress(address)
+					.buildReceptionist(); 
+			UserModel.addUser(r);
+			DataBase.users.put(username, r);
+			DataBase.saveUsers();
+			DataBase.listUsers();
+			return r;
+		}else if(position == Beautician.class) {
+			Beautician c = new UserBuilder(username, password)
+					.setName(name)
+					.setSurname(surname)
+					.setGender(gender)
+					.setPhoneNumber(phoneNumber)
+					.setAddress(address)
+					.buildBeautician();
+			UserModel.addUser(c);
+			DataBase.users.put(username, c);
+			DataBase.saveUsers();
+			DataBase.listUsers();
+			return c;
+		}else if(position == Client.class) {
+			Client c = new UserBuilder(username, password)
+					.setAddress(address)
+					.setName(name)
+					.setPhoneNumber(phoneNumber)
+					.setGender(gender)
+					.setSurname(surname)
+					.buildClient();
+			DataBase.users.put(username, c);
+			UserModel.addUser(c);
+			DataBase.saveUsers();
+			DataBase.listUsers();
+			return c;
+		}else if(position == Manager.class){
+			Manager c = new UserBuilder(username, password)
+					.setAddress(address)
+					.setName(name)
+					.setPhoneNumber(phoneNumber)
+					.setGender(gender)
+					.setSurname(surname)
+					.buildManager();
+			DataBase.users.put(username, c);
+			UserModel.addUser(c);
+			DataBase.saveUsers();
+			DataBase.listUsers();
+			return c;
+		}
+		return null;
 	}
 	
-	@Override
 	public Staff createStaff(String username, String password, Class<?> position) {
 		if(position.isInstance(Receptionist.class)) {
 			Receptionist r = new UserBuilder(username, password).buildReceptionist(); 
 			DataBase.users.put(username, r);
+			DataBase.saveUsers();
 			return r;
 		}else if(position.isInstance(Beautician.class)) {
 			Beautician c = new UserBuilder(username, password).buildBeautician();
 			DataBase.users.put(username, c);
+			DataBase.saveUsers();
 			return c;
 		}
 		return null;
@@ -63,18 +110,11 @@ public class ManagerController extends ReceptionistController implements Manager
 	}
 	
 	@Override
-	public void updateUser(User u, HashMap<String, String> updateMap){
-		for(Map.Entry<String, String> s : updateMap.entrySet()) {
-			switch(s.getKey()) {
-				case "Name" -> u.setName(s.getValue());
-				case "Password" -> u.setPassword(s.getValue());
-				case "Address" -> u.setAddress(s.getValue());
-				case "PhoneNumber" -> u.setPhoneNumber(s.getValue());
-				case "Role" -> {
-					//TODO: Enable updating users role
-				}
-			}
-		}
+	public void updateUser(User u, String name, String surname, String gender, String phoneNumber, String address, String username, String password, Class<?> position){
+		if(!username.equals(u.getUsername()))
+			removeUser(u);
+		createUser(name, surname, gender, phoneNumber, address, username, password, position);
+		
 	}	
 	
 	@Override
@@ -93,7 +133,7 @@ public class ManagerController extends ReceptionistController implements Manager
 	public User[] getUsers(String...username) {
 		int len = username.length;
 		User[] ret = new User[len];
- 		for(int i=0; i<len; ++i) {
+ 		for(int i = 0; i < len; ++i) {
  			ret[i] = DataBase.users.get(username[i]);
  		}
  		return ret;
@@ -118,21 +158,18 @@ public class ManagerController extends ReceptionistController implements Manager
 
 	@Override
 	public CosmeticService getService(String service) {
-		// TODO Auto-generated method stub
-		return null;
+		return DataBase.services.get(service);
 	}
 
 
 	@Override
 	public void removeService(CosmeticService service) {
-		// TODO Auto-generated method stub
-		
+		DataBase.services.remove(service.getName());
 	}
 
 	@Override
 	public void removeService(String service) {
-		// TODO Auto-generated method stub
-		
+		DataBase.services.remove(service);
 	}
 
 }
