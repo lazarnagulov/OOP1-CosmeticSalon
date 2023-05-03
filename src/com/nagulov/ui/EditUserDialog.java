@@ -76,8 +76,6 @@ public class EditUserDialog extends JDialog{
 		this.add(cancelButton);
 		this.add(confirmButton);
 		
-		EditUserDialog frame = this;
-		
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -91,15 +89,15 @@ public class EditUserDialog extends JDialog{
 				managerController.updateUser(user, name, surname, user.getGender(), phoneNumber, address, user.getUsername(), user.getPassword(), getRole(role));
 				TableDialog.refreshUser();
 				setVisible(false);
-				frame.dispose();
+				dispose();
 			}
 		});
 		
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-				frame.dispose();
+				setVisible(false);
+				dispose();
 			}
 		});
 	}
@@ -108,6 +106,7 @@ public class EditUserDialog extends JDialog{
 		this.user = user;
 		setTitle("Cosmetic Salon Nagulov");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
 		initEditUserDialog();
 		pack();
 		setVisible(true);

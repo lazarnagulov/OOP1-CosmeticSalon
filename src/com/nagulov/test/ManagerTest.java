@@ -1,9 +1,11 @@
 package com.nagulov.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,17 +14,31 @@ import org.junit.jupiter.api.Test;
 
 import com.nagulov.controllers.ManagerController;
 import com.nagulov.data.DataBase;
+import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.Treatment;
+import com.nagulov.treatments.TreatmentStatus;
+import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
 import com.nagulov.users.User;
 import com.nagulov.users.UserBuilder;
 
 public class ManagerTest {
 	
-	private static Client c;
-	private static ManagerController managerController = ManagerController.getInstance();
+	private  Client c;
+	private  Beautician b;
+	private  CosmeticService s;
+	private  LocalDateTime dt;
+	private  ManagerController managerController = ManagerController.getInstance();
+	
 	@BeforeAll
-	public static void init() {
+	public void init() {
 		c = new UserBuilder("ime", "nesto").buildClient();
+		b = new UserBuilder("neko", "nesto").buildBeautician();
+		s = new CosmeticService("TestService");
+		dt = LocalDateTime.now();
+		
+//		b.addService(s);
+		
 		DataBase.users.put(c.getUsername(), c);
 		for(int i=0; i<10; i++) {
 			DataBase.users.put("ime" + i, new UserBuilder("ime" + i, "sifra").buildClient());
@@ -30,23 +46,27 @@ public class ManagerTest {
 	}
 
 	@AfterAll
-	public static void destroy() {
+	public void destroy() {
 		managerController.removeUser(c.getUsername());
+		managerController.removeUser(b.getUsername());
+		managerController.removeService(s);
+		for(int i=0; i<10; i++) {
+			managerController.removeUser("ime" + i);
+		}
 	}
-	
 	
 	@Test
 	@DisplayName("Getting user")
 	public void testGetUser() {
-		User[] ret = managerController.getUsers(c.getUsername());
-		assertEquals(c, ret[0]);
+		User ret = managerController.getUser(c.getUsername());
+		assertEquals(c, ret);
 	}
 
 	@Test
 	@DisplayName("Getting invalid user")
 	public void testGetInvalidUser() {
-		User[] ret = managerController.getUsers("nepoznato");
-		assertNull(ret[0]);
+		User ret = managerController.getUser("nepoznato");
+		assertNull(ret);
 	}
 	
 	@Test
@@ -54,8 +74,8 @@ public class ManagerTest {
 	public void testGetUsers() {
 		User[] res = {DataBase.users.get(c.getUsername()), DataBase.users.get("ime0"), DataBase.users.get("ime1")};
 		User[] ret = managerController.getUsers(c.getUsername(), "ime0", "ime1");
-		assertEquals(ret.length, 3);
-		assertEquals(res.toString().split("@")[0],ret.toString().split("@")[0]);
+		assertEquals(3, ret.length);
+		assertEquals(ret.toString().split("@")[0], res.toString().split("@")[0]);
 	}
 	
 	@Test
@@ -64,14 +84,13 @@ public class ManagerTest {
 		User[] res = {DataBase.users.get(c.getUsername()), DataBase.users.get("ime0")};
 		User[] ret = managerController.getUsers(c.getUsername(), "ime0", "nepoznato");
 		assertEquals(ret.length, 3);
-		assertEquals(res.toString().split("@")[0],ret.toString().split("@")[0]);
+		assertEquals(ret.toString().split("@")[0], res.toString().split("@")[0]);
 	}
 
 	@Test
 	@DisplayName("Updating existing user")
 	public void testUpdateUser() {
-		User res = new UserBuilder("ime0", "sifra").setName("Pera").buildClient();
-		assertEquals(res.toString(), DataBase.users.get("ime0").toString());
+		fail("Not implemented");
 	}
 	
 	@Test
@@ -82,23 +101,81 @@ public class ManagerTest {
 	}
 	
 	@Test
+	@DisplayName("Creating service")
+	public void testCreateService() {
+		managerController.createService("service");
+		CosmeticService s = DataBase.services.get("service");
+		assertNotNull(s);
+		assertEquals("service", s.getName());
+	}
+	
+	@Test
+	@DisplayName("Creating cosmetic treatment")
+	public void testCreateCosmeticTreatment() {
+		fail("Not implemented!");
+	}
+	
+	@Test
+	@DisplayName("Removing cosmetic treatment")
+	public void testRemoveCosmeticTreatment() {
+		fail("Not implemented!");
+	}
+	
+	@Test
+	@DisplayName("Updating cosmetic treatment")
+	public void testUpdateCosmeticTreatment() {
+		fail("Not implemented!");
+	}
+	
+	@Test
+	@DisplayName("Getting cosmetic treatment")
+	public void testGetCosmeticTreatment() {
+		fail("Not implemented!");
+	}
+	
+	@Test
+	@DisplayName("Removing service")
+	public void testRemoveService() {
+		fail("Not implemented!");
+	}
+	
+	@Test
+	@DisplayName("Update service")
+	public void testUpdateService() {
+		fail("Not implemented!");
+	}
+	
+	@Test
+	@DisplayName("Getting service")
+	public void testGetService() {
+		fail("Not implemented!");
+	}
+	
+	@Test
 	@DisplayName("Creating treatment")
 	public void testCreateTreatment(){
-		
+//		managerController.createTreatment(TreatmentStatus.SCHEDULED, s,"Treatment", b, dt, c);
+//		Treatment t = DataBase.treatments.get(DataBase.treatmentId);
+//		System.out.println(t);
+//		assertNotNull(t);
+//		assertEquals(b, t.getBeautician());
+//		assertEquals(dt, t.getDate());
+//		assertEquals(c, t.getClient());
+//		assertEquals("Treatment", t.getTreatment());
+//		assertEquals(TreatmentStatus.SCHEDULED, t.getStatus());
+		fail("Not implemented!");
 	}
 	
 	@Test
 	@DisplayName("Removing treatment")
 	public void testRemoveTreatment() {
-		
+		managerController.removeTreatment(DataBase.treatmentId);
+		assertNull(DataBase.treatments.get(DataBase.treatmentId));
 	}
 	
 	@Test
 	@DisplayName("Updating treatment")
 	public void testUpdatingTreatment() {
-		
+		fail("Not implemented!");
 	}
-	
-	
-	
 }

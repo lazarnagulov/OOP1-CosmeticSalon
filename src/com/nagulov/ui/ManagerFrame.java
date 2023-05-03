@@ -6,19 +6,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 
 import com.nagulov.data.DataBase;
-import com.nagulov.data.ErrorMessage;
-import com.nagulov.data.Validator;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -135,13 +130,12 @@ public class ManagerFrame extends JFrame{
 			
 		});
 		
-		JFrame frame = this;
 		
 		logoutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-				frame.dispose();
+				setVisible(false);
+				dispose();
 				new LoginDialog();
 			}
 		});
@@ -169,6 +163,7 @@ public class ManagerFrame extends JFrame{
 		this.setTitle("Comestic Salon Nagulov");
 		this.setSize(500,500);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {

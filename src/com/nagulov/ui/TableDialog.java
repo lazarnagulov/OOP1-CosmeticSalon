@@ -144,7 +144,7 @@ public class TableDialog extends JDialog {
 				CosmeticService service = DataBase.services.get(serviceName);
 				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete", "Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
-					service.removeTreatment(treatmentName);
+//					service.removeTreatment(treatmentName);
 					ServiceModel.removeService(row);
 					refreshService();
 				}
@@ -154,6 +154,7 @@ public class TableDialog extends JDialog {
 	
 	private void init() {
 		this.setSize(500,300);
+		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.getContentPane().add(addButton);

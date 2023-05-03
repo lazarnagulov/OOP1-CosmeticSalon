@@ -1,11 +1,15 @@
 package com.nagulov.treatments;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.nagulov.data.DataBase;
+import com.nagulov.users.User;
 
 public class CosmeticService {
 	
 	private String name;
-	private HashMap<String, Double> treatments = new HashMap<String, Double>();
+	private List<CosmeticTreatment> treatments = new ArrayList<CosmeticTreatment>();
 	
 	public CosmeticService() {
 		
@@ -15,20 +19,31 @@ public class CosmeticService {
 		this.name = name;
 	}
 	
-	public void addTreatment(String treatment, double price) {
-		treatments.put(treatment,price);
+	public void addTreatment(CosmeticTreatment treatment) {
+		DataBase.cosmeticTreatments.put(treatment, this);
+		treatments.add(treatment);
 	}
 	
-	public void removeTreatment(String treatment) {
+	public void removeTreatment(CosmeticTreatment treatment) {
+		DataBase.cosmeticTreatments.remove(treatment);
 		treatments.remove(treatment);
 	}
 	
-	public HashMap<String, Double> getTreatments() {
+	public List<CosmeticTreatment> getTreatments() {
 		return treatments;
 	}
 	
-	public void setTreatments(HashMap<String, Double> treatments) {
+	public void setTreatments(List<CosmeticTreatment> treatments) {
 		this.treatments = treatments; 
+	}
+	
+	public CosmeticTreatment getTreatment(String treatment) {
+		for(CosmeticTreatment ct : treatments) {
+			if(ct.getName().equals(treatment)) {
+				return ct;
+			}
+		}
+		return null;
 	}
 	
 	public String getName() {
@@ -41,7 +56,20 @@ public class CosmeticService {
 	
 	@Override
 	public String toString() {
-		return this.name + "," + this.treatments.keySet() + "," +  this.treatments.values();
+		return this.getName();
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		if(other == this) {
+			return true;
+		}
+		if(!(other instanceof User)) {
+			return false;
+		}
+		if(this.getName().equals(((CosmeticService) other).getName())) {
+			return true;
+		}
+		return false;
+	}	
 }

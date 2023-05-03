@@ -1,7 +1,6 @@
 package com.nagulov.users;
 
 public abstract class User {
-	private int id; //TODO: make id primary key instead of username
 	private String name;
 	private String surname;
 	private String gender;
@@ -83,7 +82,22 @@ public abstract class User {
 	
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "," +  this.getUsername() + "," + this.getPassword() + "," + this.getName() + "," + this.getSurname() + "," + this.getGender() + "," + this.getPhoneNumber() + "," + this.getAddress();
+		return new StringBuilder(this.getClass().getSimpleName())
+				.append(",")
+			    .append(this.getUsername())
+			    .append(",")
+			    .append(this.getPassword())
+			    .append(",")
+			    .append(this.getName())
+			    .append(",")
+			    .append(this.getSurname())
+			    .append(",")
+			    .append(this.getGender())
+			    .append(",")
+			    .append(this.getPhoneNumber())
+			    .append(",")
+			    .append(this.getAddress())
+			    .toString();
 	}
 	
 	@Override
@@ -96,7 +110,7 @@ public abstract class User {
 		}
 		
 		User u = (User)other;
-		if(this.getUsername() == u.getUsername()) {
+		if(this.getUsername().equals(u.getUsername())) {
 			return true;
 		}
 		return false;

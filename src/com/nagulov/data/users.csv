@@ -1,5 +1,5 @@
 Role,Username,Password,Name,Surname,Gender,Phone number, Address
-Client,MilosMrdja,sifra123,Milos,Mrdja,Male,0642342342,Milosa Mrdje 4
+Client,MilosMrdja,sifra123,Milos,Mrdja,Male,0642342342,Milosa Mrdje 4,0.0,false,
 Manager,LazarNagulov,sifra,Lazar,Nagulov,Male,0612133213,Lazara Nagulov 3
-Beautician,JovanaPanic,sifra123,Jovana,Panic,Female,0642342342,Jovane Panic 24,
-Receptionist,FilipTot,sifra2,Filip,Tot,Male,0696663332,Filipa Tota 2
+Beautician,JovanaPanic,sifra123,Jovana,Panic,Female,0642342342,Jovane Panic 24,0.0,0.0,0,0,0.0,Face|Classic;
+Receptionist,FilipTot,sifra2,Filip,Tot,Male,0696663332,Filipa Tota 2,0.0,0.0,0,0,0.0,

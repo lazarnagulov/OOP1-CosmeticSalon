@@ -36,7 +36,7 @@ public class EditServiceDialog extends JDialog {
 		
 		serviceField.setText(service.getName());
 		treatmentField.setText(treatment);
-		priceField.setText(service.getTreatments().get(treatment).toString());
+//		priceField.setText(service.getTreatments().get(treatment).toString());
 		
 		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][]20[]"));
 		
@@ -79,14 +79,15 @@ public class EditServiceDialog extends JDialog {
 	}
 	
 	public EditServiceDialog(CosmeticService service, String treatment, int row) {
-		this.service = service;
-		this.treatment = treatment;
-		this.row = row;
-		setTitle("Cosmetic Salon Nagulov");
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		initEditServiceDialog("Edit service");
-		pack();
-		setVisible(true);
+//		this.service = service;
+//		this.treatment = treatment;
+//		this.row = row;
+//		setTitle("Cosmetic Salon Nagulov");
+//		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//		this.setLocationRelativeTo(null);
+//		initEditServiceDialog("Edit service");
+//		pack();
+//		setVisible(true);
 	}
 
 }

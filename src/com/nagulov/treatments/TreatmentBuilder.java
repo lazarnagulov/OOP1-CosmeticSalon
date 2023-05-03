@@ -9,7 +9,7 @@ public class TreatmentBuilder {
 	private int id;
 	private TreatmentStatus status;
 	private CosmeticService service;
-	private String treatment;
+	private CosmeticTreatment treatment;
 	private Beautician beautician;
 	private LocalDateTime date;
 	private Client client;
@@ -30,7 +30,7 @@ public class TreatmentBuilder {
 		this.service = service;
 		return this;
 	}
-	public TreatmentBuilder setTreatment(String treatment) {
+	public TreatmentBuilder setTreatment(CosmeticTreatment treatment) {
 		this.treatment = treatment;
 		return this;
 	}
@@ -63,7 +63,7 @@ public class TreatmentBuilder {
 		return service;
 	}
 
-	public String getTreatment() {
+	public CosmeticTreatment getTreatment() {
 		return treatment;
 	}
 

@@ -2,10 +2,11 @@ package com.nagulov.users;
 
 public class StaffBuilder extends UserBuilder{
 
+	private int qualification;
 	private double income;
 	private int internship;
-	private int bonuses;
-	private int salary;
+	private double bonuses;
+	private double salary;
 	
 	public StaffBuilder(String username, String password) {
 		super(username, password);
@@ -21,12 +22,17 @@ public class StaffBuilder extends UserBuilder{
 		return this;
 	}
 
-	public StaffBuilder setBonuses(int bonuses) {
+	public StaffBuilder setBonuses(double bonuses) {
 		this.bonuses = bonuses;
 		return this;
 	}
 
-	public StaffBuilder setSalary(int salary) {
+	public StaffBuilder setQulification(int qualification) {
+		this.qualification = qualification;
+		return this;
+	}
+	
+	public StaffBuilder setSalary(double salary) {
 		this.salary = salary;
 		return this;
 	}
@@ -39,12 +45,17 @@ public class StaffBuilder extends UserBuilder{
 		return internship;
 	}
 
-	public int getBonuses() {
+	public double getBonuses() {
 		return bonuses;
 	}
 
-	public int getSalary() {
+	public double getSalary() {
 		return salary;
 	}
+	public int getQualification() {
+		return qualification;
+	}
+
+
 
 }

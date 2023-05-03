@@ -77,7 +77,6 @@ public class Report {
 					loyalityReport.add((Client)u);
 				}
 			}
-			return loyalityReport;
 		}
 		return loyalityReport;
 	}

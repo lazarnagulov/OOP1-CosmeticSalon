@@ -1,10 +1,9 @@
 package com.nagulov.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.CosmeticTreatment;
+import com.nagulov.ui.models.ServiceModel;
 import com.nagulov.ui.models.UserModel;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
@@ -14,9 +13,9 @@ import com.nagulov.users.Staff;
 import com.nagulov.users.User;
 import com.nagulov.users.UserBuilder;
 
-public class ManagerController extends ReceptionistController implements ManagerControl{
+public class ManagerController extends ReceptionistController {
 	
-	public static final double LOYALTY_CARD_NEEDED = 15000.0; 
+	public static double loyaltyCardNeeded = 15000.0; 
 	
 	private static ManagerController instance = null;
 	
@@ -31,7 +30,6 @@ public class ManagerController extends ReceptionistController implements Manager
 		return instance;
 	}
 	
-	@Override
 	public User createUser(String name, String surname, String gender, String phoneNumber, String address, String username, String password, Class<?> position) {
 		if(position == Receptionist.class) {
 			Receptionist r = new UserBuilder(username, password)
@@ -56,7 +54,6 @@ public class ManagerController extends ReceptionistController implements Manager
 					.buildBeautician();
 			UserModel.addUser(c);
 			DataBase.users.put(username, c);
-			DataBase.saveUsers();
 			DataBase.listUsers();
 			return c;
 		}else if(position == Client.class) {
@@ -70,7 +67,6 @@ public class ManagerController extends ReceptionistController implements Manager
 			DataBase.users.put(username, c);
 			UserModel.addUser(c);
 			DataBase.saveUsers();
-			DataBase.listUsers();
 			return c;
 		}else if(position == Manager.class){
 			Manager c = new UserBuilder(username, password)
@@ -83,7 +79,6 @@ public class ManagerController extends ReceptionistController implements Manager
 			DataBase.users.put(username, c);
 			UserModel.addUser(c);
 			DataBase.saveUsers();
-			DataBase.listUsers();
 			return c;
 		}
 		return null;
@@ -104,32 +99,19 @@ public class ManagerController extends ReceptionistController implements Manager
 		return null;
 	}
 	
-	@Override
 	public CosmeticService createService(String name) {
-		return new CosmeticService(name);
+		CosmeticService service = new CosmeticService(name);
+		DataBase.services.put(name, service);
+		ServiceModel.addService(name);
+		return service;
 	}
 	
-	@Override
 	public void updateUser(User u, String name, String surname, String gender, String phoneNumber, String address, String username, String password, Class<?> position){
 		if(!username.equals(u.getUsername()))
 			removeUser(u);
 		createUser(name, surname, gender, phoneNumber, address, username, password, position);
-		
-	}	
-	
-	@Override
-	public void updateService(String service, String treatment, double price) {
-		if(DataBase.services.containsKey(service)) {
-			CosmeticService cs = DataBase.services.get(service);
-			cs.addTreatment(treatment, price);
-		}else {
-			CosmeticService newService = createService(service);
-			newService.addTreatment(treatment, price);
-		}
 	}
 	
-	
-	@Override
 	public User[] getUsers(String...username) {
 		int len = username.length;
 		User[] ret = new User[len];
@@ -139,12 +121,10 @@ public class ManagerController extends ReceptionistController implements Manager
  		return ret;
 	}
 	
-	@Override
 	public User getUser(String username) {
 		return DataBase.users.get(username);
 	}
 	
-	@Override
 	public void removeUser(String username){
 		DataBase.users.remove(username);
 		DataBase.saveUsers();
@@ -155,21 +135,31 @@ public class ManagerController extends ReceptionistController implements Manager
 		DataBase.saveUsers();
 	}
 
-
-	@Override
+	
+	public void updateService(String service, String treatment, double price) {
+//		if(DataBase.services.containsKey(service)) {
+//			CosmeticService cs = DataBase.services.get(service);
+//			cs.addTreatment(treatment, price);
+//		}else {
+//			CosmeticService newService = createService(service);
+//			newService.addTreatment(treatment, price);
+//		}
+	}
+	
 	public CosmeticService getService(String service) {
 		return DataBase.services.get(service);
 	}
 
-
-	@Override
 	public void removeService(CosmeticService service) {
 		DataBase.services.remove(service.getName());
 	}
 
-	@Override
 	public void removeService(String service) {
 		DataBase.services.remove(service);
+	}
+	
+	public CosmeticTreatment getCosmeticTreatment(String name) {
+		return null;
 	}
 
 }

@@ -1,14 +1,11 @@
 package com.nagulov.data;
 
-import java.util.HashMap;
-
 import com.nagulov.controllers.ManagerController;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
 import com.nagulov.users.Manager;
 import com.nagulov.users.Receptionist;
-import com.nagulov.users.User;
 import com.nagulov.users.UserBuilder;
 
 public class Validator {
@@ -19,10 +16,6 @@ public class Validator {
 	public static void scheduleTreatment(Treatment t) {
 		return;
 	}
-	
-//	public static ErrorMessage updateUser(User user, HashMap<String, String> updateMap) {
-//		
-//	}
 		
 	public static ErrorMessage loginUser(String username, String password) {
 		if(username.isBlank()) {
@@ -69,7 +62,7 @@ public class Validator {
 		}
 		
 		switch(role) {
-			case "Receptionist":
+			case DataBase.RECEPTIONIST:
 				Receptionist receptionist = new UserBuilder(username, password)
 				.setName(name)
 				.setSurname(surname)
@@ -79,7 +72,7 @@ public class Validator {
 				.buildReceptionist();
 				DataBase.users.put(receptionist.getUsername(), receptionist);
 				break;
-			case "Manager":
+			case DataBase.MANAGER:
 				Manager manager = new UserBuilder(username, password)
 				.setName(name)
 				.setSurname(surname)
@@ -89,7 +82,7 @@ public class Validator {
 				.buildManager();
 				DataBase.users.put(manager.getUsername(), manager);
 				break;
-			case "Client":
+			case DataBase.CLIENT:
 				Client client = new UserBuilder(username, password)
 				.setName(name)
 				.setSurname(surname)
@@ -99,7 +92,7 @@ public class Validator {
 				.buildClient();
 				DataBase.users.put(client.getUsername(), client);
 				break;
-			case "Beautician":
+			case DataBase.BEAUTICIAN:
 				Beautician beautician = new UserBuilder(username, password)
 				.setName(name)
 				.setSurname(surname)

@@ -52,9 +52,29 @@ public class Client extends User{
 	
 	public void addSpent(double spent) {
 		this.spent += spent;
-		if(this.spent >= ManagerController.LOYALTY_CARD_NEEDED) {
+		if(!this.hasLoyalityCard && this.spent >= ManagerController.loyaltyCardNeeded) {
 			this.hasLoyalityCard = true;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder data = new StringBuilder(this.getClass().getSimpleName()).append(",")
+			    .append(this.getUsername()).append(",")
+			    .append(this.getPassword()).append(",")
+			    .append(this.getName()).append(",")
+			    .append(this.getSurname()).append(",")
+			    .append(this.getGender()).append(",")
+			    .append(this.getPhoneNumber()).append(",")
+			    .append(this.getAddress()).append(",")
+			    .append(this.spent).append(",")
+			    .append(this.hasLoyalityCard).append(",");
+		
+		for(Treatment t : this.treatments) {
+			data.append(t).append(";");
+		}
+		
+		return data.toString();
 	}
 
 }

@@ -54,7 +54,7 @@ public class ReportChart{
 			if(Report.getBeauticianReport().containsKey(start)){
 				for(Map.Entry<Beautician, HashMap<ReportOption, Double>> entry : Report.getBeauticianReport().get(start).entrySet()) {
 					if(beauticians.containsKey(entry.getKey())) {
-						beauticians.put(entry.getKey(), (int) (beauticians.get(entry.getValue()) + entry.getValue().get(ReportOption.TREATMENT)));
+						beauticians.put(entry.getKey(), (int) (beauticians.get(entry.getKey()) + entry.getValue().get(ReportOption.TREATMENT)));
 					}
 					else {
 						beauticians.put(entry.getKey(), (int) (0 + entry.getValue().get(ReportOption.TREATMENT)));

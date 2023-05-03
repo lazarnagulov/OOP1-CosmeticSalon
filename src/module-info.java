@@ -2,12 +2,12 @@
  * 
  */
 /**
- * @author Lazar Nagulov
+ * @author Lazar
  *
  */
 module CosmeticSalon {
-	requires org.junit.jupiter.api;
 	requires java.desktop;
-	requires miglayout;
 	requires org.knowm.xchart;
+	requires miglayout;
+	requires org.junit.jupiter.api;
 }

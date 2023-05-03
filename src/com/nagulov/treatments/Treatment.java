@@ -3,14 +3,14 @@ package com.nagulov.treatments;
 import java.time.LocalDateTime;
 
 import com.nagulov.data.DataBase;
-import com.nagulov.users.Client;
 import com.nagulov.users.Beautician;
+import com.nagulov.users.Client;
 
 public class Treatment {
 	private int id;
 	private TreatmentStatus status;
 	private CosmeticService service;
-	private String treatment;
+	private CosmeticTreatment treatment;
 	private Beautician beautician;
 	private LocalDateTime date;
 	private Client client;
@@ -47,8 +47,11 @@ public class Treatment {
 	}
 	
 	public void setBeautician(Beautician beautician) {
-		if(beautician.getService().contains(service)) {
+		if(beautician.getTreatments().contains(treatment)) {
 			this.beautician = beautician;
+		}
+		else {
+			System.out.printf("Beautician %s does not have %s treatment\n", beautician.getUsername(), treatment);
 		}
 	}
 
@@ -59,7 +62,11 @@ public class Treatment {
 	public Client getClient() {
 		return client;
 	}
-
+	
+	public CosmeticTreatment getTreatment() {
+		return treatment;
+	}
+	
 	public void setClient(Client client) {
 		this.client = client;
 	}
@@ -75,13 +82,20 @@ public class Treatment {
 		this.service = service;
 	}
 
-	public void setTreatment(String treatment) {
+	public void setTreatment(CosmeticTreatment treatment) {
 		this.treatment = treatment;
 	}
 	
 	@Override
 	public String toString() {
-		return this.id + "," + this.status.getStatus() + "," + this.service.getName() + "," + this.treatment + "," + this.beautician.getUsername() + "," + this.date.format(DataBase.TREATMENTS_DATE) + "," + this.client.getUsername();
+		return new StringBuilder(this.id).append(",")
+				.append(this.status.getStatus()).append(",")
+				.append(this.service.getName()).append(",")
+				.append(this.treatment.getName()).append(",")
+				.append(this.beautician.getUsername()).append(",")
+				.append(this.date.format(DataBase.TREATMENTS_DATE)).append(",")
+				.append(this.client.getUsername())
+				.toString();
  	}
 }
 
