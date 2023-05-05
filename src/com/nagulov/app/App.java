@@ -49,7 +49,7 @@ public class App {
 				.buildBeautician();
 		
 		
-		b.addTreatment(DataBase.services.get("Face").getTreatment("Classic"));
+		b.addTreatment(DataBase.services.get("Face"));
 		
 		DataBase.users.put(m.getUsername(), m);
 		DataBase.users.put(r.getUsername(), r);
@@ -116,7 +116,7 @@ public class App {
 		Beautician b = (Beautician) DataBase.users.get("JovanaPanic");
 		Client c = (Client)DataBase.users.get("MilosMrdja");
 		
-		b.addTreatment(DataBase.services.get("Face").getTreatment("Classic"));
+		b.addTreatment(DataBase.services.get("Face"));
 		
 		Treatment t = new TreatmentBuilder()
 				.setId(1)
@@ -138,14 +138,14 @@ public class App {
 //		testSaveServices();
 		
 		DataBase.loadServices();
-//		DataBase.listUsers();
+//		Debug.listUsers();
 //		testSaveUsers();
 		
 		DataBase.loadUsers();
-//		DataBase.listUsers();
+//		Debug.listUsers();
 		
 		DataBase.loadTreatments();
-//		DataBase.listTreatments();
+//		Debug.listTreatments();
 		
 //		testSaveTreatments();
 //		

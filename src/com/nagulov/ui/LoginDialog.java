@@ -11,6 +11,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.nagulov.controllers.ManagerController;
+import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.data.Validator;
 import com.nagulov.users.User;
@@ -90,7 +91,7 @@ public class LoginDialog extends JDialog{
 	}
 
 	private void loginDialog() {
-		this.setTitle("Cosmetic Salon Nagulov");
+		this.setTitle(DataBase.salonName);
 		this.setSize(724,540);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

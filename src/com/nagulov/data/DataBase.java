@@ -38,6 +38,10 @@ public class DataBase {
 	
 	public static int treatmentId = -1;
 	
+	public static String salonName = "Comsetic Salon Nagulov";
+	public static LocalTime opening = LocalTime.of(8, 0);
+	public static LocalTime closing = LocalTime.of(20, 0);
+	
 	public static final String CLIENT = "Client";
 	public static final String BEAUTICIAN = "Beautician";
 	public static final String MANAGER = "Manager";
@@ -61,35 +65,8 @@ public class DataBase {
 
 	public static User loggedUser;
 	
-	public static void listServices() {
-		System.out.println(services);
-	}
-	
-	public static void listUsers() {
-		System.out.println(users);
-	}
-	
-	public static void listTreatments() {
-		System.out.println(treatments);
-	}
-	
 	public static void saveTreatments() {
-		PrintWriter out = null;
-		try {
-			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(TREATMENTS_FILE), "UTF-8")));
-			out.print(TREATMENT_HEADER);
-			for(Map.Entry<Integer, Treatment> treatment : treatments.entrySet()) {
-				out.print(treatment.getKey());
-				out.print(treatment.getValue());
-				out.println();
-			}
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} finally {
-			if(out != null) {
-				out.close();
-			}
-		}
+		saveTreatments(TREATMENTS_FILE);
 	}
 	
 	public static void saveTreatments(File file) {
@@ -209,7 +186,8 @@ public class DataBase {
 					Pricelist.getInstance().setPrice(treatment, Double.parseDouble(data[3]));
 				}
 			}
-			services.put(service.getName(), service);
+			if(service != null)
+				services.put(service.getName(), service);
 			in.close();
 		} catch (UnsupportedEncodingException | FileNotFoundException e) {
 			e.printStackTrace();
@@ -318,8 +296,7 @@ public class DataBase {
 						if(data.length >= 13) {
 							String[] treatments = data[13].split(";");
 							for(int i = 0; i < treatments.length; ++i) {
-								String[] tp = treatments[i].split("\\|");
-								beautician.addTreatment(DataBase.services.get(tp[0]).getTreatment(tp[1]));
+								beautician.addTreatment(DataBase.services.get(treatments[i]));
 							}
 						}
 						DataBase.users.put(beautician.getUsername(), beautician);

@@ -19,6 +19,7 @@ import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.ui.models.ServiceModel;
+import com.nagulov.ui.models.TreatmentModel;
 import com.nagulov.ui.models.UserModel;
 import com.nagulov.users.User;
 
@@ -48,6 +49,11 @@ public class TableDialog extends JDialog {
 	
 	public static void refreshService() {
 		ServiceModel model = (ServiceModel)table.getModel();
+		model.fireTableDataChanged();
+	}
+	
+	public static void refreshTreatment() {
+		TreatmentModel model = (TreatmentModel)table.getModel();
 		model.fireTableDataChanged();
 	}
 	
@@ -113,8 +119,7 @@ public class TableDialog extends JDialog {
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				new AddServiceDialog();
 			}
 		});
 		
@@ -142,7 +147,7 @@ public class TableDialog extends JDialog {
 				String serviceName = table.getValueAt(row, 0).toString();
 				String treatmentName = table.getValueAt(row, 1).toString();
 				CosmeticService service = DataBase.services.get(serviceName);
-				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete", "Confirm", JOptionPane.YES_NO_OPTION);
+				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete " + treatmentName + "?", "Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
 //					service.removeTreatment(treatmentName);
 					ServiceModel.removeService(row);
@@ -150,6 +155,53 @@ public class TableDialog extends JDialog {
 				}
 			}
 		});
+	}
+	
+	private void initTreatmentModel(){
+		this.setTitle("Treatments");	
+		table = new JTable(new TreatmentModel());
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
+		init();
+		
+		addButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//TODO
+			}
+		});
+		
+		editButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				if(row == -1) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+			}
+		});
+		
+		removeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				if(row == -1) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				int treatmentId = Integer.parseInt(table.getValueAt(row, 1).toString());
+				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete", "Confirm", JOptionPane.YES_NO_OPTION);
+				if(choice == JOptionPane.OK_OPTION) {
+					DataBase.treatments.remove(treatmentId);
+					TreatmentModel.removeTreatment(row);
+					refreshTreatment();
+				}
+			}
+		});
+		
+		
 	}
 	
 	private void init() {
@@ -189,7 +241,8 @@ public class TableDialog extends JDialog {
 				initServiceModel();
 				break;
 			case TREATMENT:
-				//TODO
+				TreatmentModel.init();
+				initTreatmentModel();
 				break;
 		}
 		

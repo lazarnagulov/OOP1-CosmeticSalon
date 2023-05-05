@@ -82,20 +82,13 @@ public abstract class User {
 	
 	@Override
 	public String toString() {
-		return new StringBuilder(this.getClass().getSimpleName())
-				.append(",")
-			    .append(this.getUsername())
-			    .append(",")
-			    .append(this.getPassword())
-			    .append(",")
-			    .append(this.getName())
-			    .append(",")
-			    .append(this.getSurname())
-			    .append(",")
-			    .append(this.getGender())
-			    .append(",")
-			    .append(this.getPhoneNumber())
-			    .append(",")
+		return new StringBuilder(this.getClass().getSimpleName()).append(",")
+			    .append(this.getUsername()).append(",")
+			    .append(this.getPassword()).append(",")
+			    .append(this.getName()).append(",")
+			    .append(this.getSurname()).append(",")
+			    .append(this.getGender()).append(",")
+			    .append(this.getPhoneNumber()).append(",")
 			    .append(this.getAddress())
 			    .toString();
 	}

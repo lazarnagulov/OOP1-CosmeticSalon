@@ -19,12 +19,10 @@ public class UserModel extends AbstractTableModel{
 	private static List<User> users = new ArrayList<User>();
 	
 	public static void init() {
-		if(users.isEmpty()) {
-			for(Map.Entry<String, User> entry : DataBase.users.entrySet()) {
-				users.add(entry.getValue());
-			}
+		for(Map.Entry<String, User> entry : DataBase.users.entrySet()) {
+			users.add(entry.getValue());
 		}
-		
+		System.out.println(users);
 	}
 	
 	public static void removeUser(int row) {
@@ -36,7 +34,14 @@ public class UserModel extends AbstractTableModel{
 	}
 	
 	public static void addUser(User user) {
+		if(users.contains(user)) {
+			users.remove(user);
+		}
 		users.add(user);
+	}
+	
+	public static List<User> getUsers(){
+		return users;
 	}
 	
 	public static boolean isEmpty() {

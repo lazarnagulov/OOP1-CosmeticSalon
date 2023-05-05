@@ -2,22 +2,32 @@ package com.nagulov.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import com.nagulov.controllers.ManagerController;
+import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
-import com.nagulov.data.Validator;
+import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.ui.models.UserModel;
+import com.nagulov.users.Beautician;
+import com.nagulov.users.Client;
+import com.nagulov.users.Manager;
+import com.nagulov.users.Receptionist;
+import com.nagulov.users.Staff;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -30,6 +40,19 @@ public class RegisterDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
 	private static ManagerController managerController = ManagerController.getInstance();
 	
+	private static Class<?> getRole(String string){
+		if(string == null) {
+			return Client.class;
+		}
+		switch(string) {
+			case DataBase.CLIENT -> {return Client.class;}
+			case DataBase.MANAGER -> {return Manager.class;}
+			case DataBase.BEAUTICIAN -> {return Beautician.class;}
+			case DataBase.RECEPTIONIST -> {return Receptionist.class;}
+			default -> { return Client.class; }
+		}
+	}
+	
 	private void initRegisterDialog(boolean isManager) {
 		JTextField nameField = new JTextField(20);
 		JTextField surnameField = new JTextField(20);
@@ -38,11 +61,25 @@ public class RegisterDialog extends JDialog{
 		JTextField usernameField = new JTextField(20);
 		JPasswordField passwordField = new JPasswordField(20);
 		
-		JComboBox<String> comboBox = new JComboBox<String>();
+		JTextField internshipField = new JTextField(20);
 		
+		List<JCheckBox> checkboxes = new ArrayList<JCheckBox>();
+		
+		JComboBox<Integer> qualificationBox = new JComboBox<Integer>();
+		qualificationBox.addItem(null);
+		qualificationBox.addItem(4);
+		qualificationBox.addItem(5);
+		qualificationBox.addItem(6);
+		qualificationBox.addItem(7);
+		qualificationBox.addItem(8);
+		
+		JTextField bonusesField = new JTextField(20);
+		JTextField salaryField = new JTextField(20);
+		
+		JComboBox<String> roleComboBox = new JComboBox<String>();
+
 		JButton cancelButton = new JButton("Cancel");
 		JButton registerButton = new JButton("Register");
-		
 		
 		JRadioButton male = new JRadioButton("Male");
 		JRadioButton female = new JRadioButton("Female");
@@ -53,7 +90,10 @@ public class RegisterDialog extends JDialog{
 		genderRadio.add(male);
 		genderRadio.add(female);
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][]20[][]"));
+		if(isManager) {
+			this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][][][][][][][]20[]"));
+		}
+		else this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][]20[]"));
 		this.getRootPane().setDefaultButton(registerButton);
 		
 		this.getContentPane().add(new JLabel("Register form"), "span 2");
@@ -74,17 +114,41 @@ public class RegisterDialog extends JDialog{
 		if(isManager) {
 			this.getContentPane().add(new JLabel("Role"));
 			
-			comboBox.addItem("Client");
-			comboBox.addItem("Manager");
-			comboBox.addItem("Receptionist");
-			comboBox.addItem("Beautician");
+			roleComboBox.addItem(DataBase.CLIENT);
+			roleComboBox.addItem(DataBase.MANAGER);
+			roleComboBox.addItem(DataBase.RECEPTIONIST);
+			roleComboBox.addItem(DataBase.BEAUTICIAN);
 			
-			this.getContentPane().add(comboBox);
+			this.getContentPane().add(roleComboBox);
+			
+			this.getContentPane().add(new JLabel("Staff only"), "span 2");
+			
+			this.getContentPane().add(new JLabel("Internship"));
+			this.getContentPane().add(internshipField);
+			this.getContentPane().add(new JLabel("Qualification"));
+			this.getContentPane().add(qualificationBox);
+			this.getContentPane().add(new JLabel("Bonuses"));
+			this.getContentPane().add(bonusesField);
+			this.getContentPane().add(new JLabel("Salary"));
+			this.getContentPane().add(salaryField);
+			
+			this.getContentPane().add(new JLabel("Treatments (Beautician only):"), "span 2");
+			JPanel treatmentsPanel = new JPanel();
+			treatmentsPanel.setLayout(new MigLayout("wrap 2", "[][]"));
+			
+			
+			
+			for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
+				JCheckBox btn = new JCheckBox(service.getValue().getName());
+				treatmentsPanel.add(btn);
+				checkboxes.add(btn);
+			}
+			
+			this.getContentPane().add(treatmentsPanel, "span 2");
+			
 		}
 		this.getContentPane().add(cancelButton);
-		this.getContentPane().add(registerButton, "split 2");
-		
-		JDialog dialog = this;
+		this.getContentPane().add(registerButton);
 		
 		registerButton.addActionListener(new ActionListener() {
 			@Override
@@ -96,46 +160,66 @@ public class RegisterDialog extends JDialog{
 				String address = addressField.getText();
 				String username = usernameField.getText();
 				String password = new String(passwordField.getPassword());
+				String role = null;
 				
+				Staff staff = null;
 				ErrorMessage message = null;
 				
 				if(isManager) {
-					String role = comboBox.getSelectedItem().toString();
-					message = Validator.registerUser(role, name, surname, gender, phoneNumber, address, username, password);
-				}
-				else {
-					message = Validator.registerUser(name, surname, gender, phoneNumber, address, username, password);
+					role = roleComboBox.getSelectedItem().toString();
+					if(role.equals(DataBase.BEAUTICIAN) || role.equals(DataBase.RECEPTIONIST)) {
+						int internship = Integer.parseInt(internshipField.getText());
+						int qualification = Integer.parseInt(qualificationBox.getSelectedItem().toString());
+						double bonuses = Double.parseDouble(bonusesField.getText());
+						double salary = Double.parseDouble(salaryField.getText());
+						
+						staff = managerController.createStaff(name, surname, gender, phoneNumber, address, username, password, bonuses, bonuses, internship, qualification, salary, getRole(role));
+
+						if (role == DataBase.BEAUTICIAN) {
+							for(JCheckBox cb : checkboxes) {
+								if(cb.isSelected()) {
+									CosmeticService service = DataBase.services.get(cb.getText());
+									Beautician b = (Beautician)DataBase.users.get(staff.getUsername());
+									b.addTreatment(service);
+								}
+							}
+						}
+					}
 				}
 				
-				if(message != ErrorMessage.SUCCESS) {
-					JOptionPane.showMessageDialog(null, message.getError(), "Error", JOptionPane.ERROR_MESSAGE);
-					return;
+				if(staff == null) {
+					managerController.createUser(name, surname, gender, phoneNumber, address, username, password, getRole(role));
 				}
-				if(!UserModel.isEmpty()) {
-					UserModel.addUser(managerController.getUser(username));
-				}
+//				if(!isManager) {
+//					message = Validator.registerUser(name, surname, gender, phoneNumber, address, username, password);
+//				}
+//				if(message != ErrorMessage.SUCCESS) {
+//					JOptionPane.showMessageDialog(null, message.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+//					return;
+//				}
 				
 				if(isManager) {
+					UserModel.addUser(DataBase.users.get(username));
 					TableDialog.refreshUser();
 				}
 				
-				dialog.setVisible(false);
-				dialog.dispose();
+				setVisible(false);
+				dispose();
 			}
 		});
 		
 		cancelButton.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(false);
-				dialog.dispose();
+				setVisible(false);
+				dispose();
 			}
 		});
 		
 	}
 
 	public RegisterDialog(boolean isManager) {
-		this.setTitle("Cosmetic Salon Nagulov");
+		this.setTitle(DataBase.salonName);
 		this.setSize(724,540);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.nagulov.data.DataBase;
+import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 
 public class Beautician extends Staff {
 
-	private List<CosmeticTreatment> treatments = new ArrayList<CosmeticTreatment>();
+	private List<CosmeticService> services = new ArrayList<CosmeticService>();
 	
 	public Beautician() {
 		
@@ -22,13 +23,13 @@ public class Beautician extends Staff {
 		super(builder);
 	}
 	
-	public List<CosmeticTreatment> getTreatments(){
-		return treatments;
+	public List<CosmeticService> getTreatments(){
+		return services;
 	}
 
-	public void addTreatment(CosmeticTreatment service) {
-		if (!treatments.contains(service)) {
-			treatments.add(service);
+	public void addTreatment(CosmeticService service) {
+		if (!services.contains(service)) {
+			services.add(service);
 		}
 	}
 	
@@ -48,9 +49,8 @@ public class Beautician extends Staff {
 				.append(this.getQulification()).append(",")
 				.append(this.getSalary()).append(",");
 		
-		for(CosmeticTreatment t : treatments) {
-			data.append(DataBase.cosmeticTreatments.get(t)).append("|")
-				.append(t.getName()).append(";");
+		for(CosmeticService t : services) {
+			data.append(t.getName()).append(";");
 		}
 		
 		return data.toString();

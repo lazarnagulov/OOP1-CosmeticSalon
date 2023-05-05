@@ -2,15 +2,24 @@ package com.nagulov.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import com.nagulov.controllers.ManagerController;
 import com.nagulov.data.DataBase;
+import com.nagulov.treatments.CosmeticService;
 import com.nagulov.ui.models.UserModel;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
@@ -31,10 +40,10 @@ public class EditUserDialog extends JDialog{
 	
 	private Class<?> getRole(String string){
 		switch(string) {
-			case "Client" -> {return Client.class;}
-			case "Manager" -> {return Manager.class;}
-			case "Beautician" -> {return Beautician.class;}
-			case "Receptionist" -> {return Receptionist.class;}
+			case DataBase.CLIENT -> {return Client.class;}
+			case DataBase.MANAGER -> {return Manager.class;}
+			case DataBase.BEAUTICIAN -> {return Beautician.class;}
+			case DataBase.RECEPTIONIST -> {return Receptionist.class;}
 		}
 		return null;
 	}
@@ -44,37 +53,109 @@ public class EditUserDialog extends JDialog{
 		JTextField surnameField = new JTextField(20);
 		JTextField phoneNumberField = new JTextField(20);
 		JTextField addressField = new JTextField(20);
+		JTextField usernameField = new JTextField(20);
+		JPasswordField passwordField = new JPasswordField(20);
 		
-		JButton confirmButton = new JButton("Confirm");
+		JTextField internshipField = new JTextField(20);
+		
+		List<JCheckBox> checkboxes = new ArrayList<JCheckBox>();
+		
+		JComboBox<Integer> qualificationBox = new JComboBox<Integer>();
+		qualificationBox.addItem(null);
+		qualificationBox.addItem(4);
+		qualificationBox.addItem(5);
+		qualificationBox.addItem(6);
+		qualificationBox.addItem(7);
+		qualificationBox.addItem(8);
+		
+		JTextField bonusesField = new JTextField(20);
+		JTextField salaryField = new JTextField(20);
+		
+		JComboBox<String> roleComboBox = new JComboBox<String>();
+
 		JButton cancelButton = new JButton("Cancel");
+		JButton confirmButton = new JButton("Confirm");
 		
-		JComboBox<String> comboBox = new JComboBox<String>();
+		JRadioButton male = new JRadioButton("Male");
+		if(user.getGender().equals("Male")) {
+			male.setSelected(true);
+		}
+		JRadioButton female = new JRadioButton("Female");
+		if(user.getGender().equals("Female")) {
+			female.setSelected(true);
+		}
+		ButtonGroup bg = new ButtonGroup();
+		bg.add(male);
+		bg.add(female);
+		JPanel genderRadio = new JPanel();
+		genderRadio.add(male);
+		genderRadio.add(female);
 		
-		comboBox.addItem("Client");
-		comboBox.addItem("Manager");
-		comboBox.addItem("Receptionist");
-		comboBox.addItem("Beautician");
-		comboBox.setSelectedItem(DataBase.users.get(user.getUsername()).getClass().getSimpleName());
+		
+		roleComboBox.addItem(DataBase.CLIENT);
+		roleComboBox.addItem(DataBase.MANAGER);
+		roleComboBox.addItem(DataBase.BEAUTICIAN);
+		roleComboBox.addItem(DataBase.RECEPTIONIST);
+		roleComboBox.setSelectedItem(DataBase.users.get(user.getUsername()).getClass().getSimpleName());
 		
 		nameField.setText(user.getName());
 		surnameField.setText(user.getSurname());
 		phoneNumberField.setText(user.getPhoneNumber());
 		addressField.setText(user.getAddress());
+		passwordField.setText(user.getPassword());
+		usernameField.setText(user.getUsername());
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][]20[]"));
-		this.add(new JLabel("Edit account"), "span 2");
-		this.add(new JLabel("Name"));
-		this.add(nameField);
-		this.add(new JLabel("Surname"));
-		this.add(surnameField);
-		this.add(new JLabel("Phone number"));
-		this.add(phoneNumberField);
-		this.add(new JLabel("Address"));
-		this.add(addressField);
+		
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][][][][][][][]20[]"));
+		this.getContentPane().add(new JLabel("Register form"), "span 2");
+		this.getContentPane().add(new JLabel("Name"));
+		this.getContentPane().add(nameField);
+		this.getContentPane().add(new JLabel("Surname"));
+		this.getContentPane().add(surnameField);
+		this.getContentPane().add(new JLabel("Gender"));
+		this.getContentPane().add(genderRadio);
+		this.getContentPane().add(new JLabel("Phone number"));
+		this.getContentPane().add(phoneNumberField);
+		this.getContentPane().add(new JLabel("Address"));
+		this.getContentPane().add(addressField);
+		this.getContentPane().add(new JLabel("Username"));
+		this.getContentPane().add(usernameField);
+		this.getContentPane().add(new JLabel("Password"));
+		this.getContentPane().add(passwordField);
+		
 		this.getContentPane().add(new JLabel("Role"));
-		this.getContentPane().add(comboBox);
-		this.add(cancelButton);
-		this.add(confirmButton);
+		
+		roleComboBox.addItem(DataBase.CLIENT);
+		roleComboBox.addItem(DataBase.MANAGER);
+		roleComboBox.addItem(DataBase.RECEPTIONIST);
+		roleComboBox.addItem(DataBase.BEAUTICIAN);
+		
+		this.getContentPane().add(roleComboBox);
+		
+		this.getContentPane().add(new JLabel("Staff only"), "span 2");
+		
+		this.getContentPane().add(new JLabel("Internship"));
+		this.getContentPane().add(internshipField);
+		this.getContentPane().add(new JLabel("Qualification"));
+		this.getContentPane().add(qualificationBox);
+		this.getContentPane().add(new JLabel("Bonuses"));
+		this.getContentPane().add(bonusesField);
+		this.getContentPane().add(new JLabel("Salary"));
+		this.getContentPane().add(salaryField);
+		
+		this.getContentPane().add(new JLabel("Treatments (Beautician only):"), "span 2");
+		JPanel treatmentsPanel = new JPanel();
+		treatmentsPanel.setLayout(new MigLayout("wrap 2", "[][]"));
+		
+		for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
+			JCheckBox btn = new JCheckBox(service.getValue().getName());
+			treatmentsPanel.add(btn);
+			checkboxes.add(btn);
+		}
+		
+		this.getContentPane().add(treatmentsPanel, "span 2");
+		this.getContentPane().add(cancelButton);
+		this.getContentPane().add(confirmButton);
 		
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
@@ -82,11 +163,14 @@ public class EditUserDialog extends JDialog{
 				String name = nameField.getText();
 				String surname = surnameField.getText();
 				String phoneNumber =  phoneNumberField.getText();
+				String gender = male.isSelected() ? "Male" : "Female";
+				String username = usernameField.getText();
 				String address =  addressField.getText();
-				String role = comboBox.getSelectedItem().toString();
+				String password = new String(passwordField.getPassword());
+				String role = roleComboBox.getSelectedItem().toString();
 				
 				UserModel.removeUser(user);
-				managerController.updateUser(user, name, surname, user.getGender(), phoneNumber, address, user.getUsername(), user.getPassword(), getRole(role));
+				managerController.updateUser(user, name, surname, gender, phoneNumber, address, username, password, getRole(role));
 				TableDialog.refreshUser();
 				setVisible(false);
 				dispose();
@@ -104,7 +188,7 @@ public class EditUserDialog extends JDialog{
 
 	public EditUserDialog(User user) {
 		this.user = user;
-		setTitle("Cosmetic Salon Nagulov");
+		setTitle(DataBase.salonName);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		initEditUserDialog();

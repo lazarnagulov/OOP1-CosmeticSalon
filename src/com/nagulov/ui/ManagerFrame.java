@@ -77,9 +77,9 @@ public class ManagerFrame extends JFrame{
 //	
 	
 	private void initManagerFrame() {
-		JButton editInfoButton = new JButton("Edit info");
+		JButton editInfoButton = new JButton("Edit user info");
 		JButton logoutButton = new JButton("Logout");
-		JButton changePasswordButton = new JButton("Change password");
+		JButton editSalonButton = new JButton("Edit salon info");
 		
 		JMenuBar menu = new JMenuBar();
 		
@@ -106,7 +106,7 @@ public class ManagerFrame extends JFrame{
 		userInfo.add(new JLabel("Phone number: " + DataBase.loggedUser.getPhoneNumber()));
 		userInfo.add(new JLabel("Address: " + DataBase.loggedUser.getAddress()));
 		userInfo.add(editInfoButton);
-		userInfo.add(changePasswordButton);
+		userInfo.add(editSalonButton);
 		
 //		JPanel beauticianChart = new XChartPanel<PieChart>(ReportChart.initBeauticianChart());
 //		JPanel treatmentChart = new XChartPanel<PieChart>(ReportChart.initTreatmentChart());
@@ -128,6 +128,13 @@ public class ManagerFrame extends JFrame{
 				new EditUserDialog(DataBase.loggedUser);
 			}
 			
+		});
+		
+		editSalonButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new EditSalonDialog();
+			}
 		});
 		
 		
@@ -156,11 +163,18 @@ public class ManagerFrame extends JFrame{
 			}
 			
 		});
+		
+		treatmentItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new TableDialog(Table.TREATMENT);
+			}
+		});
 	
 	}
 	
 	void managerFrame() {
-		this.setTitle("Comestic Salon Nagulov");
+		this.setTitle(DataBase.salonName);
 		this.setSize(500,500);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
