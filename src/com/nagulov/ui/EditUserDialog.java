@@ -25,6 +25,7 @@ import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
 import com.nagulov.users.Manager;
 import com.nagulov.users.Receptionist;
+import com.nagulov.users.Staff;
 import com.nagulov.users.User;
 
 import net.miginfocom.swing.MigLayout;
@@ -61,7 +62,6 @@ public class EditUserDialog extends JDialog{
 		List<JCheckBox> checkboxes = new ArrayList<JCheckBox>();
 		
 		JComboBox<Integer> qualificationBox = new JComboBox<Integer>();
-		qualificationBox.addItem(null);
 		qualificationBox.addItem(4);
 		qualificationBox.addItem(5);
 		qualificationBox.addItem(6);
@@ -91,12 +91,23 @@ public class EditUserDialog extends JDialog{
 		genderRadio.add(male);
 		genderRadio.add(female);
 		
-		
 		roleComboBox.addItem(DataBase.CLIENT);
 		roleComboBox.addItem(DataBase.MANAGER);
 		roleComboBox.addItem(DataBase.BEAUTICIAN);
 		roleComboBox.addItem(DataBase.RECEPTIONIST);
 		roleComboBox.setSelectedItem(DataBase.users.get(user.getUsername()).getClass().getSimpleName());
+		
+		JPanel treatmentsPanel = new JPanel();
+		treatmentsPanel.setLayout(new MigLayout("wrap 2", "[][]"));
+
+		for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
+			JCheckBox btn = new JCheckBox(service.getValue().getName());
+			treatmentsPanel.add(btn);
+			checkboxes.add(btn);
+			if(user instanceof Beautician && ((Beautician)DataBase.users.get(user.getUsername())).containsTreatment(service.getValue())) {
+				btn.setSelected(true);
+			}
+		}
 		
 		nameField.setText(user.getName());
 		surnameField.setText(user.getSurname());
@@ -104,7 +115,14 @@ public class EditUserDialog extends JDialog{
 		addressField.setText(user.getAddress());
 		passwordField.setText(user.getPassword());
 		usernameField.setText(user.getUsername());
-		
+
+		if(user instanceof Staff) {
+			Staff s = (Staff)DataBase.users.get(user.getUsername());
+			qualificationBox.setSelectedItem(Integer.valueOf(s.getQualification()));
+			bonusesField.setText(Double.valueOf(s.getBonuses()).toString());
+			salaryField.setText(Double.valueOf(s.getSalary()).toString());
+			internshipField.setText(Integer.valueOf(s.getInternship()).toString());
+		}		
 		
 		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][][][][][][][]20[]"));
 		this.getContentPane().add(new JLabel("Register form"), "span 2");
@@ -144,14 +162,6 @@ public class EditUserDialog extends JDialog{
 		this.getContentPane().add(salaryField);
 		
 		this.getContentPane().add(new JLabel("Treatments (Beautician only):"), "span 2");
-		JPanel treatmentsPanel = new JPanel();
-		treatmentsPanel.setLayout(new MigLayout("wrap 2", "[][]"));
-		
-		for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
-			JCheckBox btn = new JCheckBox(service.getValue().getName());
-			treatmentsPanel.add(btn);
-			checkboxes.add(btn);
-		}
 		
 		this.getContentPane().add(treatmentsPanel, "span 2");
 		this.getContentPane().add(cancelButton);
@@ -169,8 +179,32 @@ public class EditUserDialog extends JDialog{
 				String password = new String(passwordField.getPassword());
 				String role = roleComboBox.getSelectedItem().toString();
 				
+				Staff staff = null;
+				
+				if(role.equals(DataBase.BEAUTICIAN) || role.equals(DataBase.RECEPTIONIST)) {
+					int internship = Integer.parseInt(internshipField.getText());
+					int qualification = Integer.parseInt(qualificationBox.getSelectedItem().toString());
+					double bonuses = Double.parseDouble(bonusesField.getText());
+					double salary = Double.parseDouble(salaryField.getText());
+					
+					staff = managerController.createStaff(name, surname, gender, phoneNumber, address, username, password, bonuses, bonuses, internship, qualification, salary, getRole(role));
+					
+					if (role == DataBase.BEAUTICIAN) {
+						for(JCheckBox cb : checkboxes) {
+							if(cb.isSelected()) {
+								CosmeticService service = DataBase.services.get(cb.getText());
+								Beautician b = (Beautician)DataBase.users.get(staff.getUsername());
+								b.addTreatment(service);
+							}
+						}
+					}
+				}
+				
 				UserModel.removeUser(user);
-				managerController.updateUser(user, name, surname, gender, phoneNumber, address, username, password, getRole(role));
+				if(staff == null) {
+					managerController.updateUser(user, name, surname, gender, phoneNumber, address, username, password, getRole(role));
+				}
+				UserModel.addUser(DataBase.users.get(username));
 				TableDialog.refreshUser();
 				setVisible(false);
 				dispose();

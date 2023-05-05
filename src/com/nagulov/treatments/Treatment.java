@@ -14,6 +14,7 @@ public class Treatment {
 	private Beautician beautician;
 	private LocalDateTime date;
 	private Client client;
+	private double price;
 	
 	public Treatment(TreatmentBuilder builder) {
 		this.id = builder.getId();
@@ -24,6 +25,7 @@ public class Treatment {
 		this.setBeautician(builder.getBeautician());
 		this.setDate(builder.getDate());
 		this.setClient(builder.getClient());
+		this.setPrice(builder.getPrice());
 	}
 
 	public LocalDateTime getDate() {
@@ -97,5 +99,13 @@ public class Treatment {
 				.append(this.client.getUsername())
 				.toString();
  	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
 }
 

@@ -7,6 +7,8 @@ public enum ErrorMessage {
 	EMPTY_PASSWORD("You must provide password"),
 	USERNAME_ALREADY_EXISTS("Username already exists!"),
 	SUCCESS("Success"),
+	BEAUTICIAN_WITHOUT_SERVICE("Beautician does not have service: "),
+	NOT_SELECTED("Please fill all required data!"),
 	ROW_NOT_SELECTED("You did not select row!");
 
 	private final String error;

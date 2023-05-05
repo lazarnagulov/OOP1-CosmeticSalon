@@ -58,7 +58,7 @@ public class EditServiceDialog extends JDialog {
 		this.getContentPane().add(new JLabel("Edit service"), "span 2");
 		this.getContentPane().add(new JLabel("Service"));
 		this.getContentPane().add(serviceField);
-		this.getContentPane().add(new JLabel("Treatments"));
+		this.getContentPane().add(new JLabel("Treatment"));
 		this.getContentPane().add(treatmentField);
 		this.getContentPane().add(new JLabel("Duration"));
 		this.getContentPane().add(durationField);
@@ -97,7 +97,7 @@ public class EditServiceDialog extends JDialog {
 		this.service = service;
 		this.treatment = treatment;
 		this.row = row;
-		setTitle("Cosmetic Salon Nagulov");
+		setTitle(DataBase.salonName);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		initEditServiceDialog();

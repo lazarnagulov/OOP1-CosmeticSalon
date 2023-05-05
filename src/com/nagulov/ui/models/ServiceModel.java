@@ -18,8 +18,8 @@ public class ServiceModel extends AbstractTableModel{
 	private static List<String> services = new ArrayList<String>();
 	
 	public static void init() {
-		StringBuilder sb = new StringBuilder();
 		if(services.isEmpty()) {
+			StringBuilder sb = new StringBuilder();
 			for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
 				sb.append(service.getKey()).append(",");
 				for(int i = 0; i < service.getValue().getTreatments().size(); ++i) {

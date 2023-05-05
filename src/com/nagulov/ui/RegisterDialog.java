@@ -21,7 +21,6 @@ import com.nagulov.controllers.ManagerController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
-import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.ui.models.UserModel;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
@@ -66,12 +65,13 @@ public class RegisterDialog extends JDialog{
 		List<JCheckBox> checkboxes = new ArrayList<JCheckBox>();
 		
 		JComboBox<Integer> qualificationBox = new JComboBox<Integer>();
-		qualificationBox.addItem(null);
 		qualificationBox.addItem(4);
 		qualificationBox.addItem(5);
 		qualificationBox.addItem(6);
 		qualificationBox.addItem(7);
 		qualificationBox.addItem(8);
+		
+		
 		
 		JTextField bonusesField = new JTextField(20);
 		JTextField salaryField = new JTextField(20);

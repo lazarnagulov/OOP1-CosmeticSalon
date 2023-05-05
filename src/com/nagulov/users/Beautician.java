@@ -3,9 +3,7 @@ package com.nagulov.users;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
-import com.nagulov.treatments.CosmeticTreatment;
 
 public class Beautician extends Staff {
 
@@ -25,6 +23,10 @@ public class Beautician extends Staff {
 	
 	public List<CosmeticService> getTreatments(){
 		return services;
+	}
+	
+	public boolean containsTreatment(CosmeticService service) {
+		return services.contains(service);
 	}
 
 	public void addTreatment(CosmeticService service) {
@@ -46,7 +48,7 @@ public class Beautician extends Staff {
 				.append(this.getBonuses()).append(",")
 				.append(this.getIncome()).append(",")
 				.append(this.getInternship()).append(",")
-				.append(this.getQulification()).append(",")
+				.append(this.getQualification()).append(",")
 				.append(this.getSalary()).append(",");
 		
 		for(CosmeticService t : services) {

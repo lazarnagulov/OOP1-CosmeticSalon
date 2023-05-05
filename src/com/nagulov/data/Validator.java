@@ -6,10 +6,8 @@ import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
 import com.nagulov.users.Manager;
 import com.nagulov.users.Receptionist;
-import com.nagulov.users.UserBuilder;
 
 public class Validator {
-	
 	
 	private static ManagerController managerController = ManagerController.getInstance();
 	

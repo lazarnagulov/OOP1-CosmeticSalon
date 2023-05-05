@@ -13,6 +13,7 @@ public class TreatmentBuilder {
 	private Beautician beautician;
 	private LocalDateTime date;
 	private Client client;
+	private double price;
 	
 	public TreatmentBuilder() {
 		
@@ -77,6 +78,15 @@ public class TreatmentBuilder {
 
 	public Client getClient() {
 		return client;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public TreatmentBuilder setPrice(double price) {
+		this.price = price;
+		return this;
 	}
 	
 	

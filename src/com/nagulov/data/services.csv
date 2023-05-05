@@ -1,13 +1,10 @@
 Service,Treatment,Duration,Price
-Pedicure,Pedicure,01:00,1100.0
-Pedicure,Pedicure for pensioners,01:00,700.0
-Face,Classic,02:00,3500.0
-Face,Hydrafacial,03:00,4000.0
-Face,Oxygen,02:00,4100.0
-Face,Hollywood,02:00,4200.0
-Face,Dermapen,03:00,8000.0
-Depilation,Legs,02:00,1100.0
-Depilation,Thigs,01:00,900.0
-Depilation,Bikini zone,01:00,700.0
-Depilation,Face,01:00,700.0
-Depilation,Hands,01:00,800.0
+Manikir,Francuski manikir,00:50,1500.0
+Manikir,Gel lak,01:20,1600.0
+Manikir,Spa manikir,01:30,2000.0
+Manikir,Francuski manikir,00:55,1500.0
+Pedikir,Spa pedikir,00:45,1600.0
+Masaza,Relaks masaza,00:45,2000.0
+Masaza,Sportska masaza,01:15,2500.0
+Masaza,Spa pedikir,00:45,1600.0
+Masaza,Relaks masaza,00:45,1700.0

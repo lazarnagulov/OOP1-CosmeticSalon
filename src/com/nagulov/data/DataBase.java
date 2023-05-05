@@ -47,9 +47,9 @@ public class DataBase {
 	public static final String MANAGER = "Manager";
 	public static final String RECEPTIONIST = "Receptionist";
 	
-	public static final String USER_HEADER = "Role,Username,Password,Name,Surname,Gender,Phone number, Address\n"; 
+	public static final String USER_HEADER = "Role,Username,Password,Name,Surname,Gender,Phone number,Address\n"; 
 	public static final String SERVICE_HEADER = "Service,Treatment,Duration,Price\n";
-	public static final String TREATMENT_HEADER = "Id,Status,Service,Treatment,Beautician,Date,Client\n";
+	public static final String TREATMENT_HEADER = "Id,Status,Service,Treatment,Beautician,Date,Client,Price\n";
 	
 	private static final File USERS_FILE = new File("src" + SEPARATOR + "com"+ SEPARATOR + "nagulov" + SEPARATOR + "data"+ SEPARATOR + "users.csv");
 	private static final File SERVICES_FILE = new File("src" + SEPARATOR + "com" + SEPARATOR + "nagulov" + SEPARATOR +"data" + SEPARATOR + "services.csv");
@@ -61,6 +61,7 @@ public class DataBase {
 	
 	public static HashMap<String, User> users = new HashMap<String,User>();
 	public static HashMap<String, CosmeticService> services = new HashMap<String, CosmeticService>();
+	public static HashMap<String, CosmeticService> deletedServices = new HashMap<String, CosmeticService>();
 	public static HashMap<Integer, Treatment> treatments = new HashMap<Integer, Treatment>();
 
 	public static User loggedUser;
@@ -101,7 +102,7 @@ public class DataBase {
 				String[] data = input.split(",");
 				int id = Integer.parseInt(data[0]);
 				treatmentId = treatmentId < id ? id : treatmentId;   
-				TreatmentStatus status = TreatmentStatus.valueOf(data[1].toUpperCase());
+				TreatmentStatus status = TreatmentStatus.valueOf(data[1].toUpperCase().replace(" ", "_"));
 				CosmeticService service = services.get(data[2]);
 				CosmeticTreatment treatment = service.getTreatment(data[3]);
 				Beautician beautician = (Beautician)users.get(data[4]);
@@ -240,7 +241,7 @@ public class DataBase {
 						.setBonuses(Double.parseDouble(data[8]))
 						.setIncome(Double.parseDouble(data[9]))
 						.setInternship(Integer.parseInt(data[10]))
-						.setQulification(Integer.parseInt(data[11]))
+						.setQualification(Integer.parseInt(data[11]))
 						.setSalary(Double.parseDouble(data[12]))
 						.setName(data[3])
 						.setSurname(data[4])
@@ -268,7 +269,6 @@ public class DataBase {
 						.setPhoneNumber(data[6])
 						.setAddress(data[7])
 						.buildClient();
-						
 						client.setSpent(Double.parseDouble(data[8]));
 						client.setHasLoyalityCard(Boolean.parseBoolean(data[9]));
 						
@@ -285,7 +285,7 @@ public class DataBase {
 						.setBonuses(Double.parseDouble(data[8]))
 						.setIncome(Double.parseDouble(data[9]))
 						.setInternship(Integer.parseInt(data[10]))
-						.setQulification(Integer.parseInt(data[11]))
+						.setQualification(Integer.parseInt(data[11]))
 						.setSalary(Double.parseDouble(data[12]))
 						.setName(data[3])
 						.setSurname(data[4])
@@ -293,7 +293,7 @@ public class DataBase {
 						.setPhoneNumber(data[6])
 						.setAddress(data[7])
 						.buildBeautician();
-						if(data.length >= 13) {
+						if(data.length >= 14) {
 							String[] treatments = data[13].split(";");
 							for(int i = 0; i < treatments.length; ++i) {
 								beautician.addTreatment(DataBase.services.get(treatments[i]));

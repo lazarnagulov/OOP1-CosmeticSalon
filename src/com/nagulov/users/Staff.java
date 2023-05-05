@@ -13,17 +13,28 @@ public abstract class Staff extends User {
 	}
 	
 	public Staff(StaffBuilder builder) {
-		super(builder);
+		super.setUsername(builder.getUsername());
+		super.setAddress(builder.getAddress());
+		super.setGender(builder.getGender());
+		super.setName(builder.getName());
+		super.setSurname(builder.getSurname());
+		super.setPassword(builder.getPassword());
+		super.setPhoneNumber(builder.getPhoneNumber());
+		setQualification(builder.getQualification());
+		setIncome(builder.getIncome());
+		setInternship(builder.getInternship());
+		setBonuses(builder.getBonuses());
+		setSalary(builder.getSalary());
 	}
 	
 	public Staff(UserBuilder builder) {
 		super(builder);
 	}
 
-	public int getQulification() {
+	public int getQualification() {
 		return qualification;
 	}
-	public void setQulification(int qulification) {
+	public void setQualification(int qulification) {
 		this.qualification = qulification;
 	}
 	public int getInternship() {
@@ -35,14 +46,14 @@ public abstract class Staff extends User {
 	public double getBonuses() {
 		return bonuses;
 	}
-	public void setBonuses(int bonuses) {
-		this.bonuses = bonuses;
+	public void setBonuses(double d) {
+		this.bonuses = d;
 	}
 	public double getSalary() {
 		return salary;
 	}
-	public void setSalary(int salary) {
-		this.salary = salary;
+	public void setSalary(double d) {
+		this.salary = d;
 	}
 	public double getIncome() {
 		return income;
@@ -64,7 +75,7 @@ public abstract class Staff extends User {
 				.append(this.getBonuses()).append(",")
 				.append(this.getIncome()).append(",")
 				.append(this.getInternship()).append(",")
-				.append(this.getQulification()).append(",")
+				.append(this.getQualification()).append(",")
 				.append(this.getSalary()).append(",");
 		return data.toString();
 	}

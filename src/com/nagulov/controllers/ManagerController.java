@@ -88,13 +88,13 @@ public class ManagerController extends ReceptionistController {
 	
 	public Staff createStaff(String name, String surname, String gender, 
 			String phoneNumber, String address, String username, String password, 
-			double bonuses, double income, int internship, int qulification, double salary, Class<?> position) {
+			double bonuses, double income, int internship, int qualification, double salary, Class<?> position) {
 		if(position == Receptionist.class) {
 			Receptionist r = new StaffBuilder(username, password)
 					.setBonuses(bonuses)
 					.setIncome(income)
 					.setInternship(internship)
-					.setQulification(qulification)
+					.setQualification(qualification)
 					.setSalary(salary)
 					.setName(name)
 					.setSurname(surname)
@@ -110,7 +110,7 @@ public class ManagerController extends ReceptionistController {
 					.setBonuses(bonuses)
 					.setIncome(income)
 					.setInternship(internship)
-					.setQulification(qulification)
+					.setQualification(qualification)
 					.setSalary(salary)
 					.setName(name)
 					.setSurname(surname)
