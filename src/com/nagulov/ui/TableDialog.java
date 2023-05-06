@@ -128,7 +128,7 @@ public class TableDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				int row = table.getSelectedRow();
 				if(row == -1) {
-					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					
 					return;
 				}
 				CosmeticService service = DataBase.services.get(table.getValueAt(row, 0).toString());
@@ -141,7 +141,7 @@ public class TableDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				int row = table.getSelectedRow();
 				if(row == -1) {
-					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					new RemoveServiceDialog();
 					return;
 				}
 				String serviceName = table.getValueAt(row, 0).toString();
@@ -149,7 +149,7 @@ public class TableDialog extends JDialog {
 				CosmeticService service = DataBase.services.get(serviceName);
 				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete " + treatmentName + "?", "Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
-//					service.removeTreatment(treatmentName);
+					DataBase.services.remove(service.getName());
 					ServiceModel.removeService(row);
 					refreshService();
 				}
@@ -191,7 +191,7 @@ public class TableDialog extends JDialog {
 					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				int treatmentId = Integer.parseInt(table.getValueAt(row, 1).toString());
+				int treatmentId = Integer.parseInt(table.getValueAt(row, 0).toString());
 				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete", "Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
 					DataBase.treatments.remove(treatmentId);
@@ -200,8 +200,6 @@ public class TableDialog extends JDialog {
 				}
 			}
 		});
-		
-		
 	}
 	
 	private void init() {

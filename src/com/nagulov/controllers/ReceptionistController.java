@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
+import com.nagulov.treatments.Pricelist;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.treatments.TreatmentBuilder;
 import com.nagulov.treatments.TreatmentStatus;
@@ -37,24 +38,26 @@ public class ReceptionistController {
 				.setService(service)
 				.setStatus(status)
 				.setTreatment(treatment)
+				.setPrice(Pricelist.getInstance().getPrice(treatment))
 				.build();
-		DataBase.treatments.put(t.getId(), t);
+		DataBase.treatments.put(DataBase.treatmentId, t);
+		beautician.addIncome(t.getPrice());
 		return t;
 	}
 	
-	public Treatment updateTreatment(int id, TreatmentStatus status, CosmeticService service, CosmeticTreatment treatment,
+	public void updateTreatment(int id, TreatmentStatus status, CosmeticService service, CosmeticTreatment treatment,
 			Beautician beautician, LocalDateTime date, Client client) {
-		Treatment t = new TreatmentBuilder()
-				.setId(DataBase.treatmentId)
-				.setBeautician(beautician)
-				.setClient(client)
-				.setDate(date)
-				.setService(service)
-				.setStatus(status)
-				.setTreatment(treatment)
-				.build();
-		DataBase.treatments.put(t.getId(), t);
-		return t;
+		Treatment t = DataBase.treatments.get(id);
+		if(t == null) {
+			return;
+		}
+		t.setId(DataBase.treatmentId);
+		t.setBeautician(beautician);
+		t.setClient(client);
+		t.setDate(date);
+		t.setService(service);
+		t.setStatus(status);
+		t.setTreatment(treatment);
 	}
 
 	public void removeTreatment(Treatment treatment) {

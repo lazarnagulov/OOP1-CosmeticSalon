@@ -61,6 +61,9 @@ public abstract class Staff extends User {
 	public void setIncome(double income) {
 		this.income = income;
 	}
+	public void addIncome(double income) {
+		this.income += income;
+	}
 	
 	@Override
 	public String toString() {

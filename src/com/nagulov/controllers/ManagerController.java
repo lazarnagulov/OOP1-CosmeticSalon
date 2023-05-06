@@ -2,6 +2,8 @@ package com.nagulov.controllers;
 
 import java.time.LocalTime;
 
+import javax.swing.JTextField;
+
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
@@ -43,7 +45,6 @@ public class ManagerController extends ReceptionistController {
 					.setPhoneNumber(phoneNumber)
 					.setAddress(address)
 					.buildReceptionist(); 
-//			UserModel.addUser(r);
 			DataBase.users.put(username, r);
 			DataBase.saveUsers();
 			return r;
@@ -55,7 +56,6 @@ public class ManagerController extends ReceptionistController {
 					.setPhoneNumber(phoneNumber)
 					.setAddress(address)
 					.buildBeautician();
-//			UserModel.addUser(c);
 			DataBase.users.put(username, c);
 			return c;
 		}else if(position == Client.class) {
@@ -67,7 +67,6 @@ public class ManagerController extends ReceptionistController {
 					.setSurname(surname)
 					.buildClient();
 			DataBase.users.put(username, c);
-//			UserModel.addUser(c);
 			DataBase.saveUsers();
 			return c;
 		}else if(position == Manager.class){
@@ -79,7 +78,6 @@ public class ManagerController extends ReceptionistController {
 					.setSurname(surname)
 					.buildManager();
 			DataBase.users.put(username, c);
-//			UserModel.addUser(c);
 			DataBase.saveUsers();
 			return c;
 		}
@@ -134,9 +132,19 @@ public class ManagerController extends ReceptionistController {
 	}
 	
 	public void updateUser(User u, String name, String surname, String gender, String phoneNumber, String address, String username, String password, Class<?> position){
-		if(!username.equals(u.getUsername()))
+		if(!username.equals(u.getUsername()) || u.getClass() != position) {
 			removeUser(u);
-		createUser(name, surname, gender, phoneNumber, address, username, password, position);
+			UserModel.removeUser(u);
+			User nu = createUser(name, surname, gender, phoneNumber, address, username, password, position);
+			UserModel.addUser(nu);
+			return;
+		}
+		u.setName(name);
+		u.setAddress(address);
+		u.setGender(gender);
+		u.setPassword(password);
+		u.setPhoneNumber(phoneNumber);
+		u.setSurname(surname);
 	}
 	
 	public User[] getUsers(String...username) {
@@ -162,6 +170,29 @@ public class ManagerController extends ReceptionistController {
 		DataBase.saveUsers();
 	}
 	
+	public void updateStaff(Staff s, String name, String surname, String gender, String phoneNumber, String address,
+			String username, String password, double bonuses, double income, int internship, int qualification,
+			double salary, Class<?> role) {
+		if(!username.equals(s.getUsername()) || s.getClass() != role) {
+			removeUser(s);
+			UserModel.removeUser(s);
+			Staff ns = createStaff(name, surname, gender, phoneNumber, address, username, password, bonuses, income, internship, qualification, salary, role);
+			UserModel.addUser(ns);
+			return;
+		}
+		s.setName(name);
+		s.setAddress(address);
+		s.setGender(gender);
+		s.setPassword(password);
+		s.setPhoneNumber(phoneNumber);
+		s.setSurname(surname);
+		s.setBonuses(bonuses);
+		s.setSalary(salary);
+		s.setInternship(internship);
+		s.setQualification(qualification);
+		s.setIncome(income);
+	}
+
 
 	public void updateService(String service, String treatment, LocalTime duration, double price) {
 		CosmeticTreatment ct = new CosmeticTreatment(treatment, duration); 
@@ -200,5 +231,6 @@ public class ManagerController extends ReceptionistController {
 		DataBase.opening = opening;
 		DataBase.closing = closing;
 	}
+
 
 }

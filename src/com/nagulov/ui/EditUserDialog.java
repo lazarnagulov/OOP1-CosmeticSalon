@@ -69,6 +69,7 @@ public class EditUserDialog extends JDialog{
 		qualificationBox.addItem(8);
 		
 		JTextField bonusesField = new JTextField(20);
+		JTextField incomeField = new JTextField(20);
 		JTextField salaryField = new JTextField(20);
 		
 		JComboBox<String> roleComboBox = new JComboBox<String>();
@@ -122,9 +123,10 @@ public class EditUserDialog extends JDialog{
 			bonusesField.setText(Double.valueOf(s.getBonuses()).toString());
 			salaryField.setText(Double.valueOf(s.getSalary()).toString());
 			internshipField.setText(Integer.valueOf(s.getInternship()).toString());
+			incomeField.setText(Double.valueOf(s.getIncome()).toString());
 		}		
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][][][][][][][]20[]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][][][][][][][][]20[]"));
 		this.getContentPane().add(new JLabel("Register form"), "span 2");
 		this.getContentPane().add(new JLabel("Name"));
 		this.getContentPane().add(nameField);
@@ -140,24 +142,17 @@ public class EditUserDialog extends JDialog{
 		this.getContentPane().add(usernameField);
 		this.getContentPane().add(new JLabel("Password"));
 		this.getContentPane().add(passwordField);
-		
 		this.getContentPane().add(new JLabel("Role"));
-		
-		roleComboBox.addItem(DataBase.CLIENT);
-		roleComboBox.addItem(DataBase.MANAGER);
-		roleComboBox.addItem(DataBase.RECEPTIONIST);
-		roleComboBox.addItem(DataBase.BEAUTICIAN);
-		
 		this.getContentPane().add(roleComboBox);
-		
 		this.getContentPane().add(new JLabel("Staff only"), "span 2");
-		
 		this.getContentPane().add(new JLabel("Internship"));
 		this.getContentPane().add(internshipField);
 		this.getContentPane().add(new JLabel("Qualification"));
 		this.getContentPane().add(qualificationBox);
 		this.getContentPane().add(new JLabel("Bonuses"));
 		this.getContentPane().add(bonusesField);
+		this.getContentPane().add(new JLabel("Income"));
+		this.getContentPane().add(incomeField);
 		this.getContentPane().add(new JLabel("Salary"));
 		this.getContentPane().add(salaryField);
 		
@@ -179,32 +174,35 @@ public class EditUserDialog extends JDialog{
 				String password = new String(passwordField.getPassword());
 				String role = roleComboBox.getSelectedItem().toString();
 				
-				Staff staff = null;
 				
 				if(role.equals(DataBase.BEAUTICIAN) || role.equals(DataBase.RECEPTIONIST)) {
 					int internship = Integer.parseInt(internshipField.getText());
 					int qualification = Integer.parseInt(qualificationBox.getSelectedItem().toString());
 					double bonuses = Double.parseDouble(bonusesField.getText());
+					double income = Double.parseDouble(incomeField.getText());
 					double salary = Double.parseDouble(salaryField.getText());
 					
-					staff = managerController.createStaff(name, surname, gender, phoneNumber, address, username, password, bonuses, bonuses, internship, qualification, salary, getRole(role));
+					if(DataBase.users.get(username) instanceof Staff)	
+						managerController.updateStaff((Staff)DataBase.users.get(username), name, surname, gender, phoneNumber, address, username, password, bonuses, income, internship, qualification, salary, getRole(role));
+					else {
+						UserModel.removeUser(DataBase.users.get(username));
+						User u = managerController.createStaff(name, surname, gender, phoneNumber, address, username, password, bonuses, income, internship, qualification, salary, getRole(role));
+						UserModel.addUser(u);
+					}
 					
 					if (role == DataBase.BEAUTICIAN) {
 						for(JCheckBox cb : checkboxes) {
 							if(cb.isSelected()) {
 								CosmeticService service = DataBase.services.get(cb.getText());
-								Beautician b = (Beautician)DataBase.users.get(staff.getUsername());
+								Beautician b = (Beautician)DataBase.users.get(username);
 								b.addTreatment(service);
 							}
 						}
 					}
-				}
-				
-				UserModel.removeUser(user);
-				if(staff == null) {
+					
+				}else {
 					managerController.updateUser(user, name, surname, gender, phoneNumber, address, username, password, getRole(role));
 				}
-				UserModel.addUser(DataBase.users.get(username));
 				TableDialog.refreshUser();
 				setVisible(false);
 				dispose();

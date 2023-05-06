@@ -1,8 +1,7 @@
 Role,Username,Password,Name,Surname,Gender,Phone number,Address
-Beautician,sima_simic,simasimic,Sima,Simic,Male,0632131231,Sime Simica 23,0.0,0.0,0,0,0.0,Manikir;Masaza;
-Client,mikamikic,mikamikic,Mika,Mikic,Male,0633123123,Mike Mikica 51,0.0,false,
-Manager,nikolanikolic,sifra,Nikola,Nikolic,Male,0623123169,Nikole Nikolica 34
-Client,milicamilic,sifra,Milica,Milic,Female,065312369,Milice Milic 23,0.0,false,
+Client,mikamikic,sifra,Mika,Mikic,Male,0623213132,Mikina adresa 32,0.0,false,
+Client,milicamilic,sifra,Milica,Milic,Female,065323232,Milicina adresa 23,0.0,false,
 Manager,LazarNagulov,sifra,Lazar,Nagulov,Male,0612133213,Lazara Nagulov 3
-Receptionist,peraperic,sifra,Pera,Peric,Male,0641231223,Pere Perica 23,0.0,0.0,2,5,33500.0,
-Beautician,jovanovic,sifrica,Jovana,Jovanovic,Female,0642312369,Jovana Jovanovica Zmaja 23,0.0,0.0,1,4,35000.0,Manikir;Pedikir;
+Beautician,simasimic,sifra,Sima,Simic,Male,062312313,Simina Adresa,0.0,9100.0,0,4,25000.0,Manikir;Masaza;
+Receptionist,peraperic,perinasifra,Pera,Peric,Male,0623123123,Perina adresa 23,0.0,0.0,0,4,33500.0,
+Beautician,jovanovic,sifra,Jovana,Jovanovic,Female,0623123131,Jadrankina adresa 23,0.0,4000.0,0,4,25000.0,Manikir;

@@ -52,7 +52,6 @@ public class EditTreatmentDialog extends JDialog{
 	private JButton cancelButton = new JButton("Cancel");
 	
 	private void initEditServiceDialog() {
-		
 		if(treatment != null) {
 			statusBox = new JComboBox<String>();
 			statusBox.addItem(TreatmentStatus.SCHEDULED.getStatus());
@@ -72,7 +71,7 @@ public class EditTreatmentDialog extends JDialog{
 				serviceTreatmentGroup.add(btn);
 				stPanel.add(btn);
 				checkboxes.add(btn);
-				if(treatment != null && cs.equals(treatment.getService()) && cs.getTreatments().get(i).equals(treatment.getTreatment())) {
+				if(treatment != null && cs.getName().equals(treatment.getService().getName()) && cs.getTreatments().get(i).getName().equals(treatment.getTreatment().getName())) {
 					serviceTreatmentGroup.setSelected(btn.getModel(), true);
 				}
 			}
@@ -119,6 +118,9 @@ public class EditTreatmentDialog extends JDialog{
 				String status = statusBox == null ? TreatmentStatus.SCHEDULED.getStatus() : statusBox.getSelectedItem().toString();
 				String beautician = beauticianBox.getSelectedItem().toString();
 				Beautician b = (Beautician)DataBase.users.get(beautician);
+				if(b == null) {
+					return;
+				}
 				String service = null;
 				String ctreatment = null;
 				for(JRadioButton btn : checkboxes) {
@@ -139,14 +141,11 @@ public class EditTreatmentDialog extends JDialog{
 				}
 				
 				String client = clientBox.getSelectedItem().toString();
-				Treatment t = null;
 				if(treatment != null) {
-					TreatmentModel.removeTreatment(treatment);
-					t = ManagerController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, LocalDateTime.now().plusDays(1).withMinute(0).withHour(12), (Client)DataBase.users.get(client));
-					TreatmentModel.addTreatment(t);
+					ManagerController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, LocalDateTime.now().plusDays(1).withMinute(0).withHour(12), (Client)DataBase.users.get(client));
 				}
 				else {
-					t = ManagerController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, LocalDateTime.now().plusDays(1).withMinute(0).withHour(12), (Client)DataBase.users.get(client));
+					Treatment t = ManagerController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, LocalDateTime.now().plusDays(1).withMinute(0).withHour(12), (Client)DataBase.users.get(client));
 					TreatmentModel.addTreatment(t);
 				}
 				TableDialog.refreshTreatment();
@@ -166,6 +165,7 @@ public class EditTreatmentDialog extends JDialog{
 	}
 	
 	public EditTreatmentDialog() {
+		this.treatment = null;
 		this.setTitle(DataBase.salonName);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);

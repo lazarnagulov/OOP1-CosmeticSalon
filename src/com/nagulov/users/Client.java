@@ -70,10 +70,6 @@ public class Client extends User{
 			    .append(this.spent).append(",")
 			    .append(this.hasLoyalityCard).append(",");
 		
-		for(Treatment t : this.treatments) {
-			data.append(t).append(";");
-		}
-		
 		return data.toString();
 	}
 

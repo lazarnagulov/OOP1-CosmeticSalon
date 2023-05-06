@@ -39,7 +39,6 @@ public class EditServiceDialog extends JDialog {
 
 	
 	private void initEditServiceDialog() {
-		
 		serviceField = new JComboBox<String>();
 		for(Map.Entry<String, CosmeticService> entry : DataBase.services.entrySet()) {	
 			serviceField.addItem(entry.getKey());

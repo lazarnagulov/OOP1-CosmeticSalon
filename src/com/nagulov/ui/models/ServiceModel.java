@@ -35,6 +35,15 @@ public class ServiceModel extends AbstractTableModel{
 		}
 	}
 	
+	public static void removeService(CosmeticService service) {
+		for(int i = 0; i < services.size(); ++i) {
+			String s = services.get(i).split(",")[0];
+			if(s.equals(service.getName())) {
+				services.remove(i);
+			}
+		}
+	}
+	
 	public static void addService(CosmeticService service) {
 //		StringBuilder sb = new StringBuilder();
 //		if(services.isEmpty()) {

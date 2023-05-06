@@ -61,7 +61,6 @@ public class DataBase {
 	
 	public static HashMap<String, User> users = new HashMap<String,User>();
 	public static HashMap<String, CosmeticService> services = new HashMap<String, CosmeticService>();
-	public static HashMap<String, CosmeticService> deletedServices = new HashMap<String, CosmeticService>();
 	public static HashMap<Integer, Treatment> treatments = new HashMap<Integer, Treatment>();
 
 	public static User loggedUser;
@@ -72,6 +71,7 @@ public class DataBase {
 	
 	public static void saveTreatments(File file) {
 		PrintWriter out = null;
+		Debug.listTreatments();
 		try {
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
 			out.print(TREATMENT_HEADER);
@@ -100,15 +100,16 @@ public class DataBase {
 			in.readLine();
 			while((input = in.readLine()) != null) {
 				String[] data = input.split(",");
-				int id = Integer.parseInt(data[0]);
-				treatmentId = treatmentId < id ? id : treatmentId;   
-				TreatmentStatus status = TreatmentStatus.valueOf(data[1].toUpperCase().replace(" ", "_"));
-				CosmeticService service = services.get(data[2]);
-				CosmeticTreatment treatment = service.getTreatment(data[3]);
-				Beautician beautician = (Beautician)users.get(data[4]);
-				LocalDateTime date = LocalDateTime.parse(data[5], TREATMENTS_DATE);
-				Client client = (Client)users.get(data[6]);
-				treatments.put(id, new TreatmentBuilder()
+				try {
+					int id = Integer.parseInt(data[0]);
+					treatmentId = treatmentId < id ? id : treatmentId;   
+					TreatmentStatus status = TreatmentStatus.valueOf(data[1].toUpperCase().replace(" ", "_"));
+					CosmeticService service = services.get(data[2]);
+					CosmeticTreatment treatment = service.getTreatment(data[3]);
+					Beautician beautician = (Beautician)users.get(data[4]);
+					LocalDateTime date = LocalDateTime.parse(data[5], TREATMENTS_DATE);
+					Client client = (Client)users.get(data[6]);
+					treatments.put(id, new TreatmentBuilder()
 						.setId(id)
 						.setStatus(status)
 						.setService(service)
@@ -117,6 +118,11 @@ public class DataBase {
 						.setDate(date)
 						.setClient(client)
 						.build());
+					client.addTreatment(DataBase.treatments.get(id));
+				}
+				catch(Exception e){
+					
+				}
 			}
 			in.close();
 		} catch (UnsupportedEncodingException | FileNotFoundException e) {
@@ -272,12 +278,6 @@ public class DataBase {
 						client.setSpent(Double.parseDouble(data[8]));
 						client.setHasLoyalityCard(Boolean.parseBoolean(data[9]));
 						
-						if(data.length >= 11) {
-							String[] clientTreatments = data[10].split(";");
-							for(int i = 0; i < clientTreatments.length; ++i) {
-								client.addTreatment(ManagerController.getInstance().getTreatment(Integer.parseInt(clientTreatments[0])));
-							}
-						}
 						DataBase.users.put(client.getUsername(), client);
 						break;
 					case BEAUTICIAN:

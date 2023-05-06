@@ -9,6 +9,7 @@ import javax.swing.table.AbstractTableModel;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.Pricelist;
 import com.nagulov.treatments.Treatment;
+import com.nagulov.ui.TableDialog;
 
 public class TreatmentModel extends AbstractTableModel {
 	
@@ -58,11 +59,9 @@ public class TreatmentModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Treatment t = treatments.get(rowIndex);
-		double price = Pricelist.getInstance().getPrice(t.getTreatment());
-		if(t.getClient().isHasLoyalityCard()) {
-			price *= 0.9;
+		if(t == null) {
+			return "Deleted";
 		}
-		// "Id,Status,Service,Treatment,Beautician,Date,Client\n";
 		switch(columnIndex) {
 			case 0 -> {return t.getId(); }
 			case 1 -> {return t.getStatus();}
@@ -71,7 +70,7 @@ public class TreatmentModel extends AbstractTableModel {
 			case 4 -> {return t.getBeautician().getUsername();}
 			case 5 -> {return t.getDate();}
 			case 6 -> {return t.getClient().getUsername();}
-			case 7 -> {return price;}
+			case 7 -> {return t.getPrice();}
 			default -> {return null; }
 		}
 	}
