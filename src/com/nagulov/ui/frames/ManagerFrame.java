@@ -1,4 +1,4 @@
-package com.nagulov.ui;
+package com.nagulov.ui.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +14,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import com.nagulov.data.DataBase;
+import com.nagulov.ui.EditSalonDialog;
+import com.nagulov.ui.EditUserDialog;
+import com.nagulov.ui.LoginDialog;
+import com.nagulov.ui.Table;
+import com.nagulov.ui.TableDialog;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -25,48 +30,49 @@ public class ManagerFrame extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private JButton editInfoButton = new JButton("Edit user info");
+	private JButton logoutButton = new JButton("Logout");
+	private JButton editSalonButton = new JButton("Edit salon info");
+	
+	private JMenuBar menu = new JMenuBar();
+	
+	private JMenu dataMenu = new JMenu("Data");
+	private JMenuItem userItem = new JMenuItem("Users");
+	private JMenuItem serviceItem = new JMenuItem("Services");
+	private JMenuItem treatmentItem = new JMenuItem("Treatments");
+
+	private JMenu analyticsMenu = new JMenu("Analytics");
+	private JPanel userInfo = new JPanel();
+
 	private void initManagerFrame() {
-		JButton editInfoButton = new JButton("Edit user info");
-		JButton logoutButton = new JButton("Logout");
-		JButton editSalonButton = new JButton("Edit salon info");
-		
-		JMenuBar menu = new JMenuBar();
-		
-		JMenu dataMenu = new JMenu("Data");
-		JMenuItem userItem = new JMenuItem("Users");
-		JMenuItem serviceItem = new JMenuItem("Services");
-		JMenuItem treatmentItem = new JMenuItem("Treatments");
 		
 		dataMenu.add(userItem);
 		dataMenu.add(serviceItem);
 		dataMenu.add(treatmentItem);
 		
-		JMenu analyticsMenu = new JMenu("Analytics");
-
 		menu.add(analyticsMenu);
 		menu.add(dataMenu);
 		
-		JPanel userInfo = new JPanel();
-		userInfo.setLayout(new MigLayout("wrap", "[]", "[][][][][][]20[][]"));
-		userInfo.add(new JLabel("User info"));
+		userInfo.setLayout(new MigLayout("wrap", "[]", "[][][][][][]"));
+		userInfo.add(new JLabel("-- User info --"));
 		userInfo.add(new JLabel("Name: " + DataBase.loggedUser.getName()));
 		userInfo.add(new JLabel("Surname: " + DataBase.loggedUser.getSurname()));
 		userInfo.add(new JLabel("Gender: " + DataBase.loggedUser.getGender()));
 		userInfo.add(new JLabel("Phone number: " + DataBase.loggedUser.getPhoneNumber()));
 		userInfo.add(new JLabel("Address: " + DataBase.loggedUser.getAddress()));
-		userInfo.add(editInfoButton);
-		userInfo.add(editSalonButton);
 		
 //		JPanel beauticianChart = new XChartPanel<PieChart>(ReportChart.initBeauticianChart());
 //		JPanel treatmentChart = new XChartPanel<PieChart>(ReportChart.initTreatmentChart());
 //		JPanel serviceIncomeChart = new XChartPanel<XYChart>(ReportChart.initServiceIncomeChart());
 		
 		this.setJMenuBar(menu);
-		this.getContentPane().setLayout(new MigLayout("wrap 2, fillx", "[][]", "[]20[][][]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[]20[]"));
 		
 		this.getContentPane().add(new JLabel("Welcome, " + DataBase.loggedUser.getUsername() + "!"));	
 		this.getContentPane().add(logoutButton, "right");
 		this.getContentPane().add(userInfo, "wrap");
+		this.getContentPane().add(editInfoButton);
+		this.getContentPane().add(editSalonButton);
 //		this.getContentPane().add(beauticianChart);
 //		this.getContentPane().add(treatmentChart);
 //		this.getContentPane().add(serviceIncomeChart, "span 2");
@@ -76,7 +82,6 @@ public class ManagerFrame extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				new EditUserDialog(DataBase.loggedUser);
 			}
-			
 		});
 		
 		editSalonButton.addActionListener(new ActionListener() {
@@ -127,7 +132,6 @@ public class ManagerFrame extends JFrame{
 	
 	void managerFrame() {
 		this.setTitle(DataBase.salonName);
-		this.setSize(500,500);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.addWindowListener(new WindowAdapter() {
@@ -139,6 +143,7 @@ public class ManagerFrame extends JFrame{
 			}	
 		});
 		initManagerFrame();
+		this.pack();
 		this.setVisible(true);
 	}
 	

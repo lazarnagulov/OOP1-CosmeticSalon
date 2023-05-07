@@ -21,6 +21,7 @@ import com.nagulov.treatments.CosmeticService;
 import com.nagulov.ui.models.ServiceModel;
 import com.nagulov.ui.models.TreatmentModel;
 import com.nagulov.ui.models.UserModel;
+import com.nagulov.users.Receptionist;
 import com.nagulov.users.User;
 
 public class TableDialog extends JDialog {
@@ -213,12 +214,15 @@ public class TableDialog extends JDialog {
 		
 		addButton.setIcon(addIcon);
 		editButton.setIcon(editIcon);
-		removeButton.setIcon(removeIcon);
-		
 		toolbar = new JToolBar();
 		toolbar.add(addButton);
 		toolbar.add(editButton);
-		toolbar.add(removeButton);
+		
+		if(!(DataBase.loggedUser instanceof Receptionist)) {
+			removeButton.setIcon(removeIcon);
+			toolbar.add(removeButton);
+		}
+		
 		toolbar.setFloatable(false);		
 
 		this.getContentPane().add(toolbar, BorderLayout.NORTH);

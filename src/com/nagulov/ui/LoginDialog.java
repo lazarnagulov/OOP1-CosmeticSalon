@@ -14,6 +14,10 @@ import com.nagulov.controllers.ManagerController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.data.Validator;
+import com.nagulov.ui.frames.BeauticianFrame;
+import com.nagulov.ui.frames.ClientFrame;
+import com.nagulov.ui.frames.ManagerFrame;
+import com.nagulov.ui.frames.ReceptionistFrame;
 import com.nagulov.users.User;
 
 import net.miginfocom.swing.MigLayout;
@@ -63,9 +67,10 @@ public class LoginDialog extends JDialog{
 				User u = managerController.getUser(username);
 				
 				switch(u.getClass().getSimpleName()) {
-					case "Manager":
-						new ManagerFrame();
-						break;
+					case DataBase.MANAGER -> new ManagerFrame();
+					case DataBase.RECEPTIONIST -> new ReceptionistFrame();
+					case DataBase.CLIENT -> new ClientFrame();
+					case DataBase.BEAUTICIAN -> new BeauticianFrame();
 				}
 				d.setVisible(false);
 				d.dispose();

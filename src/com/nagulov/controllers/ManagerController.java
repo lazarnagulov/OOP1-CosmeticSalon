@@ -126,7 +126,6 @@ public class ManagerController extends ReceptionistController {
 	public CosmeticService createService(String name) {
 		CosmeticService service = new CosmeticService(name);
 		DataBase.services.put(name, service);
-		ServiceModel.addService(service);
 		return service;
 	}
 	

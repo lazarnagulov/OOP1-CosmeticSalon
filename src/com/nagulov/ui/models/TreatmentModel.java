@@ -57,19 +57,20 @@ public class TreatmentModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Treatment t = treatments.get(rowIndex);
-		if(t == null) {
+		try {
+			switch(columnIndex) {
+				case 0 -> {return t.getId(); }
+				case 1 -> {return t.getStatus();}
+				case 2 -> {return t.getService();} 
+				case 3 -> {return t.getTreatment().getName();}
+				case 4 -> {return t.getBeautician().getUsername();}
+				case 5 -> {return t.getDate().format(DataBase.TREATMENTS_DATE_FORMAT);}
+				case 6 -> {return t.getClient().getUsername();}
+				case 7 -> {return t.getPrice();}
+				default -> {return null; }
+			}
+		}catch(NullPointerException e) {
 			return "Deleted";
-		}
-		switch(columnIndex) {
-			case 0 -> {return t.getId(); }
-			case 1 -> {return t.getStatus();}
-			case 2 -> {return t.getService();} 
-			case 3 -> {return t.getTreatment().getName();}
-			case 4 -> {return t.getBeautician().getUsername();}
-			case 5 -> {return t.getDate();}
-			case 6 -> {return t.getClient().getUsername();}
-			case 7 -> {return t.getPrice();}
-			default -> {return null; }
 		}
 	}
 }

@@ -43,23 +43,7 @@ public class ServiceModel extends AbstractTableModel{
 			}
 		}
 	}
-	
-	public static void addService(CosmeticService service) {
-//		StringBuilder sb = new StringBuilder();
-//		if(services.isEmpty()) {
-//			sb.append(service).append(",");
-//			for(int i = 0; i < service.getTreatments().size(); ++i) {
-//				sb.append(service.getTreatments().get(i).getName()).append(",")
-//					.append(service.getTreatments().get(i).getDuration()).append(",")
-//					.append(Pricelist.getInstance().getPrice(service.getTreatments().get(i)));
-//				services.add(sb.toString());
-//				sb.delete(0, sb.length());
-//				sb.append(service).append(",");
-//			}
-//		}
-//		services.add(sb.toString());
-	}
-	
+
 	public static void addTreatment(CosmeticTreatment treatment) {
 		CosmeticService cs = DataBase.cosmeticTreatments.get(treatment);
 		services.add(new StringBuilder(cs.getName()).append(",")

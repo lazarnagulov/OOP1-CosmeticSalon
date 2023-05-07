@@ -2,19 +2,32 @@ package com.nagulov.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import com.nagulov.controllers.ManagerController;
 import com.nagulov.data.DataBase;
@@ -45,16 +58,53 @@ public class EditTreatmentDialog extends JDialog{
 	 * 
 	 * 
 	 */
+	
+	AbstractFormatter a;
 	//TODO: Datetime picker
 	private JComboBox<String> statusBox;
 	private JPanel stPanel = new JPanel();
+	private JTextField timeField = new JTextField(10);
 	private ButtonGroup serviceTreatmentGroup;
 	private JComboBox<String> beauticianBox;
 	private JComboBox<String> clientBox;
 	private JButton confirmButton = new JButton("Confirm");
 	private JButton cancelButton = new JButton("Cancel");
-	
+	private UtilDateModel model = new UtilDateModel();
+	private JDatePanelImpl datePanel;// = new JDatePanelImpl(model, null);
+	private JDatePickerImpl datePicker;// = new JDatePickerImpl(datePanel);
+
 	private void initEditServiceDialog() {
+		
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		datePanel = new JDatePanelImpl(model, p);
+		datePicker = new JDatePickerImpl(datePanel, new AbstractFormatter() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		    private String datePattern = "dd.MM.yyyy.";
+		    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+		    @Override
+		    public Object stringToValue(String text) throws ParseException {
+		        return dateFormatter.parseObject(text);
+		    }
+
+		    @Override
+		    public String valueToString(Object value) throws ParseException {
+		        if (value != null) {
+		            Calendar cal = (Calendar) value;
+		            return dateFormatter.format(cal.getTime());
+		        }
+
+		        return "";
+		    }
+		});
+		
 		if(treatment != null) {
 			statusBox = new JComboBox<String>();
 			statusBox.addItem(TreatmentStatus.SCHEDULED.getStatus());
@@ -63,9 +113,16 @@ public class EditTreatmentDialog extends JDialog{
 			statusBox.addItem(TreatmentStatus.CANCELED_BY_THE_SALON.getStatus());
 			statusBox.addItem(TreatmentStatus.CANCELED_BY_THE_CLIENT.getStatus());
 			statusBox.setSelectedItem(treatment.getStatus().getStatus());
+			timeField.setText(treatment.getDate().toLocalTime().toString());
+			LocalDateTime date = treatment.getDate();
+
+			model.setDate(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
+			model.setSelected(true);
+			System.out.println(model.getMonth());
 		}
 		
 		serviceTreatmentGroup = new ButtonGroup();
+		stPanel.setLayout(new MigLayout("wrap 2", "[][]"));
 		List<JRadioButton> checkboxes = new ArrayList<JRadioButton>();
 		for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
 			CosmeticService cs = service.getValue();
@@ -96,24 +153,29 @@ public class EditTreatmentDialog extends JDialog{
 				}
 			}
 		}
+
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(confirmButton);
+		buttonPanel.add(cancelButton);
 		
-		stPanel.setLayout(new MigLayout("wrap 2", "[][]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[fill][fill][fill][fill, grow][fill][fill]20[]"));
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][]20[]"));
-		
-		this.getContentPane().add(new JLabel("Edit treatment"), "span 2");
+		this.getContentPane().add(new JLabel("Edit treatment"), "center, span 2");
 		if(statusBox != null) {
 			this.getContentPane().add(new JLabel("Status"));
 			this.getContentPane().add(statusBox);
 		}
+		this.getContentPane().add(new JLabel("Date"));
+		this.getContentPane().add(datePicker);
+		this.getContentPane().add(new JLabel("Time"));
+		this.getContentPane().add(timeField);
 		this.getContentPane().add(new JLabel("Service and treatment:"));
-		this.getContentPane().add(stPanel);
+		this.getContentPane().add(stPanel, "center");
 		this.getContentPane().add(new JLabel("Beautician"));
 		this.getContentPane().add(beauticianBox);
 		this.getContentPane().add(new JLabel("Client"));
 		this.getContentPane().add(clientBox);
-		this.getContentPane().add(confirmButton);
-		this.getContentPane().add(cancelButton);
+		this.getContentPane().add(buttonPanel, "span 2, center");
 		
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
@@ -137,6 +199,11 @@ public class EditTreatmentDialog extends JDialog{
 					JOptionPane.showMessageDialog(null, ErrorMessage.NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+				String[] hm = timeField.getText().split(":");
+
+				LocalTime time = LocalTime.of(Integer.parseInt(hm[0]), Integer.parseInt(hm[1]));
+				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();;
+				LocalDateTime dateTime = LocalDateTime.of(date, time);
 				
 				if(!b.containsTreatment(DataBase.services.get(service))) {
 					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_WITHOUT_SERVICE.getError() + service, "Error", JOptionPane.ERROR_MESSAGE);
@@ -145,10 +212,10 @@ public class EditTreatmentDialog extends JDialog{
 				
 				String client = clientBox.getSelectedItem().toString();
 				if(treatment != null) {
-					ManagerController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, LocalDateTime.now().plusDays(1).withMinute(0).withHour(12), (Client)DataBase.users.get(client));
+					ManagerController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)DataBase.users.get(client));
 				}
 				else {
-					Treatment t = ManagerController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, LocalDateTime.now().plusDays(1).withMinute(0).withHour(12), (Client)DataBase.users.get(client));
+					Treatment t = ManagerController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)DataBase.users.get(client));
 					TreatmentModel.addTreatment(t);
 				}
 				TableDialog.refreshTreatment();

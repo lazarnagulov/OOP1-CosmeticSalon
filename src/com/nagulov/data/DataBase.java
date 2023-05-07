@@ -54,7 +54,8 @@ public class DataBase {
 	private static final File SERVICES_FILE = new File("src" + SEPARATOR + "com" + SEPARATOR + "nagulov" + SEPARATOR +"data" + SEPARATOR + "services.csv");
 	private static final File TREATMENTS_FILE = new File("src" + SEPARATOR + "com" + SEPARATOR + "nagulov" + SEPARATOR + "data" + SEPARATOR + "treatments.csv");
 	
-	public static final DateTimeFormatter TREATMENTS_DATE = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
+	public static final DateTimeFormatter TREATMENTS_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
+	public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 	
 	public static HashMap<CosmeticTreatment, CosmeticService> cosmeticTreatments = new HashMap<CosmeticTreatment, CosmeticService>();
 	
@@ -118,7 +119,7 @@ public class DataBase {
 				if(beautician == null) {
 					continue;
 				}
-				LocalDateTime date = LocalDateTime.parse(data[5], TREATMENTS_DATE);
+				LocalDateTime date = LocalDateTime.parse(data[5], TREATMENTS_DATE_FORMAT);
 				Client client = (Client)users.get(data[6]);
 				if(client == null) {
 					continue;
@@ -197,7 +198,10 @@ public class DataBase {
 				}
 				else {
 					services.put(service.getName(), service);
-					service = new CosmeticService(data[0]);
+					service = services.get(data[0]);
+					if(service == null) { 
+						service = new CosmeticService(data[0]);
+					}
 					CosmeticTreatment treatment = new CosmeticTreatment(data[1], LocalTime.parse(data[2])); 
 					service.addTreatment(treatment);
 					Pricelist.getInstance().setPrice(treatment, Double.parseDouble(data[3]));
@@ -205,6 +209,7 @@ public class DataBase {
 			}
 			if(service != null)
 				services.put(service.getName(), service);
+			
 			in.close();
 		} catch (UnsupportedEncodingException | FileNotFoundException e) {
 			e.printStackTrace();
@@ -306,7 +311,9 @@ public class DataBase {
 						if(data.length >= 14) {
 							String[] treatments = data[13].split(";");
 							for(int i = 0; i < treatments.length; ++i) {
-								beautician.addTreatment(DataBase.services.get(treatments[i]));
+								CosmeticService cs = DataBase.services.get(treatments[i]);
+								if(cs != null)
+									beautician.addTreatment(cs);
 							}
 						}
 						DataBase.users.put(beautician.getUsername(), beautician);

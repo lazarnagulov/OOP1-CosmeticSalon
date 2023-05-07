@@ -41,7 +41,7 @@ public class ReceptionistController {
 				.setPrice(Pricelist.getInstance().getPrice(treatment))
 				.build();
 		DataBase.treatments.put(DataBase.treatmentId, t);
-		beautician.addIncome(t.getPrice());
+//		beautician.addIncome(t.getPrice());
 		return t;
 	}
 	
@@ -65,7 +65,6 @@ public class ReceptionistController {
 
 	public void removeTreatment(int id) {
 		DataBase.treatments.remove(id);
-		--DataBase.treatmentId;
 	}
 	
 	public Treatment getTreatment(int id) {

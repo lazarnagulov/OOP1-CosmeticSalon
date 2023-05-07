@@ -10,4 +10,5 @@ module CosmeticSalon {
 	requires org.knowm.xchart;
 	requires miglayout;
 	requires org.junit.jupiter.api;
+	requires jdatepicker;
 }

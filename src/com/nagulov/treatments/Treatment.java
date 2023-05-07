@@ -95,7 +95,7 @@ public class Treatment {
 				.append(this.service.getName()).append(",")
 				.append(this.treatment.getName()).append(",")
 				.append(this.beautician.getUsername()).append(",")
-				.append(this.date.format(DataBase.TREATMENTS_DATE)).append(",")
+				.append(this.date.format(DataBase.TREATMENTS_DATE_FORMAT)).append(",")
 				.append(this.client.getUsername()).append(",")
 				.append(this.getPrice())
 				.toString();
