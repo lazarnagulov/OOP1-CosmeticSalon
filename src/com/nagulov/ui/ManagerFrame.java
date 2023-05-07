@@ -90,6 +90,9 @@ public class ManagerFrame extends JFrame{
 		logoutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				DataBase.saveServices();
+				DataBase.saveTreatments();
+				DataBase.saveUsers();
 				setVisible(false);
 				dispose();
 				new LoginDialog();

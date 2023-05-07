@@ -191,10 +191,11 @@ public class EditUserDialog extends JDialog{
 					}
 					
 					if (role == DataBase.BEAUTICIAN) {
+						Beautician b = (Beautician)DataBase.users.get(username);
+						b.getTreatments().clear();
 						for(JCheckBox cb : checkboxes) {
 							if(cb.isSelected()) {
 								CosmeticService service = DataBase.services.get(cb.getText());
-								Beautician b = (Beautician)DataBase.users.get(username);
 								b.addTreatment(service);
 							}
 						}

@@ -55,7 +55,7 @@ public class AddServiceDialog extends JDialog{
 		this.getContentPane().add(new JLabel("Add treatment"), "span 2");
 		this.getContentPane().add(new JLabel("Service"));
 		this.getContentPane().add(serviceField);
-		this.getContentPane().add(new JLabel("Treatments"));
+		this.getContentPane().add(new JLabel("Treatment"));
 		this.getContentPane().add(treatmentField);
 		this.getContentPane().add(new JLabel("Duration"));
 		this.getContentPane().add(durationField);

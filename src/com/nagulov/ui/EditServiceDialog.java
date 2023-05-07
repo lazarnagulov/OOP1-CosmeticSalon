@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import com.nagulov.controllers.ManagerController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
 import com.nagulov.ui.models.ServiceModel;
 
@@ -27,7 +28,7 @@ public class EditServiceDialog extends JDialog {
 	private static ManagerController managerController = ManagerController.getInstance();
 	
 	private CosmeticService service;
-	private String treatment;
+	private CosmeticTreatment treatment;
 	private int row;
 	private JComboBox<String> serviceField;
 	private JTextField treatmentField = new JTextField(20);
@@ -39,6 +40,7 @@ public class EditServiceDialog extends JDialog {
 
 	
 	private void initEditServiceDialog() {
+		
 		serviceField = new JComboBox<String>();
 		for(Map.Entry<String, CosmeticService> entry : DataBase.services.entrySet()) {	
 			serviceField.addItem(entry.getKey());
@@ -47,9 +49,9 @@ public class EditServiceDialog extends JDialog {
 			}
 		}
 		
-		treatmentField.setText(treatment);
-		durationField.setText(service.getTreatment(treatment).getDuration().toString());
-		Double price = Pricelist.getInstance().getPrice(service.getTreatment(treatment));
+		treatmentField.setText(treatment.getName());
+		durationField.setText(treatment.getDuration().toString());
+		Double price = Pricelist.getInstance().getPrice(treatment);
 		priceField.setText(price.toString());
 		
 		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][]20[]"));
@@ -69,12 +71,18 @@ public class EditServiceDialog extends JDialog {
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String service = serviceField.getSelectedItem().toString();
-				String treatment = treatmentField.getText();
+				String newService = serviceField.getSelectedItem().toString();
+				String newTreatment = treatmentField.getText();
 				double price = Double.parseDouble(priceField.getText());
-
-				ServiceModel.updateService(row, service, treatment, durationField.getText(), priceField.getText());
-				managerController.updateService(service, treatment, LocalTime.parse(durationField.getText()), price);
+				
+				CosmeticService cs = DataBase.services.get(newService);
+				if(!cs.equals(service)) {
+					service.removeTreatment(treatment);
+					cs.addTreatment(treatment);
+				}
+				
+				managerController.updateCosmeticTreatment(treatment, newTreatment, LocalTime.parse(durationField.getText()), price);
+				ServiceModel.updateService(row, newService, newTreatment, durationField.getText(), priceField.getText());
 				TableDialog.refreshService();
 				
 				setVisible(false);
@@ -92,7 +100,7 @@ public class EditServiceDialog extends JDialog {
 	
 	}
 	
-	public EditServiceDialog(CosmeticService service, String treatment, int row) {
+	public EditServiceDialog(CosmeticService service, CosmeticTreatment treatment, int row) {
 		this.service = service;
 		this.treatment = treatment;
 		this.row = row;

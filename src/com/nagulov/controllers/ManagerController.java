@@ -6,6 +6,7 @@ import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
+import com.nagulov.treatments.Treatment;
 import com.nagulov.ui.models.ServiceModel;
 import com.nagulov.ui.models.UserModel;
 import com.nagulov.users.Beautician;
@@ -192,11 +193,14 @@ public class ManagerController extends ReceptionistController {
 	}
 
 
-	public void updateService(String service, String treatment, LocalTime duration, double price) {
-		CosmeticTreatment ct = new CosmeticTreatment(treatment, duration); 
-		CosmeticService cs = DataBase.services.get(service);
-		cs.addTreatment(ct);
-		Pricelist.getInstance().setPrice(ct, price);
+	public void updateCosmeticTreatment(CosmeticTreatment treatment, String name, LocalTime duration, double price) {
+		treatment.setName(name);
+		treatment.setDuration(duration);
+		Pricelist.getInstance().setPrice(treatment, price);
+	}
+	
+	public void updateService(CosmeticService service, String name) {
+		service.setName(name);
 	}
 	
 	public CosmeticService getService(String service) {

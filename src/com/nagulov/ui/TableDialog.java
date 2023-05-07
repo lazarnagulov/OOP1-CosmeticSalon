@@ -128,11 +128,11 @@ public class TableDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				int row = table.getSelectedRow();
 				if(row == -1) {
-					
+					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				CosmeticService service = DataBase.services.get(table.getValueAt(row, 0).toString());
-				new EditServiceDialog(service, table.getValueAt(row, 1).toString(), row);
+				new EditServiceDialog(service, service.getTreatment(table.getValueAt(row, 1).toString()), row);
 			}
 		});
 		

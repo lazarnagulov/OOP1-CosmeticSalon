@@ -74,9 +74,14 @@ public class DataBase {
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
 			out.print(TREATMENT_HEADER);
 			for(Map.Entry<Integer, Treatment> treatment : treatments.entrySet()) {
-				out.print(treatment.getKey());
-				out.print(treatment.getValue());
-				out.println();
+				try {
+					out.print(treatment.getKey());
+					out.print(treatment.getValue());
+					out.println();
+				}catch(NullPointerException e) {
+					System.out.printf("Treatment with id: %d (%s) was modified and cannot be saved!", treatment.getKey(), treatment.getValue());
+					continue;
+				}
 			}
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -98,31 +103,38 @@ public class DataBase {
 			in.readLine();
 			while((input = in.readLine()) != null) {
 				String[] data = input.split(",");
-				try {
-					int id = Integer.parseInt(data[0]);
-					treatmentId = treatmentId < id ? id : treatmentId;   
-					TreatmentStatus status = TreatmentStatus.valueOf(data[1].toUpperCase().replace(" ", "_"));
-					CosmeticService service = services.get(data[2]);
-					CosmeticTreatment treatment = service.getTreatment(data[3]);
-					Beautician beautician = (Beautician)users.get(data[4]);
-					LocalDateTime date = LocalDateTime.parse(data[5], TREATMENTS_DATE);
-					Client client = (Client)users.get(data[6]);
-					double price = Double.parseDouble(data[7]);
-					treatments.put(id, new TreatmentBuilder()
-						.setId(id)
-						.setStatus(status)
-						.setService(service)
-						.setTreatment(treatment)
-						.setBeautician(beautician)
-						.setDate(date)
-						.setClient(client)
-						.setPrice(price)
-						.build());
-					client.addTreatment(DataBase.treatments.get(id));
+				int id = Integer.parseInt(data[0]);
+				treatmentId = treatmentId < id ? id : treatmentId;   
+				TreatmentStatus status = TreatmentStatus.valueOf(data[1].toUpperCase().replace(" ", "_"));
+				CosmeticService service = services.get(data[2]);
+				if(service == null) {
+					continue;
 				}
-				catch(Exception e){
-					
+				CosmeticTreatment treatment = service.getTreatment(data[3]);
+				if(treatment == null) {
+					continue;
 				}
+				Beautician beautician = (Beautician)users.get(data[4]);
+				if(beautician == null) {
+					continue;
+				}
+				LocalDateTime date = LocalDateTime.parse(data[5], TREATMENTS_DATE);
+				Client client = (Client)users.get(data[6]);
+				if(client == null) {
+					continue;
+				}
+				double price = Double.parseDouble(data[7]);
+				treatments.put(id, new TreatmentBuilder()
+					.setId(id)
+					.setStatus(status)
+					.setService(service)
+					.setTreatment(treatment)
+					.setBeautician(beautician)
+					.setDate(date)
+					.setClient(client)
+					.setPrice(price)
+					.build());
+				client.addTreatment(DataBase.treatments.get(id));
 			}
 			in.close();
 		} catch (UnsupportedEncodingException | FileNotFoundException e) {
@@ -147,11 +159,9 @@ public class DataBase {
 					out.append(service.getKey() + ",");
 					out.append(ct.getName() + ",");
 					out.append(ct.getDuration() + ",");
-					Double price = Pricelist.getInstance().getPrice(ct); 
-					out.append(price.toString());
+					out.append(Double.valueOf(Pricelist.getInstance().getPrice(ct)).toString());
 					out.println();
 				}
-				
 			}
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
