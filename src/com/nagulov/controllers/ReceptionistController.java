@@ -51,7 +51,6 @@ public class ReceptionistController {
 		if(t == null) {
 			return;
 		}
-		t.setId(DataBase.treatmentId);
 		t.setBeautician(beautician);
 		t.setClient(client);
 		t.setDate(date);

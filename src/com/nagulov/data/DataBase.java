@@ -17,7 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.nagulov.controllers.ManagerController;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
@@ -71,7 +70,6 @@ public class DataBase {
 	
 	public static void saveTreatments(File file) {
 		PrintWriter out = null;
-		Debug.listTreatments();
 		try {
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
 			out.print(TREATMENT_HEADER);
@@ -109,6 +107,7 @@ public class DataBase {
 					Beautician beautician = (Beautician)users.get(data[4]);
 					LocalDateTime date = LocalDateTime.parse(data[5], TREATMENTS_DATE);
 					Client client = (Client)users.get(data[6]);
+					double price = Double.parseDouble(data[7]);
 					treatments.put(id, new TreatmentBuilder()
 						.setId(id)
 						.setStatus(status)
@@ -117,6 +116,7 @@ public class DataBase {
 						.setBeautician(beautician)
 						.setDate(date)
 						.setClient(client)
+						.setPrice(price)
 						.build());
 					client.addTreatment(DataBase.treatments.get(id));
 				}

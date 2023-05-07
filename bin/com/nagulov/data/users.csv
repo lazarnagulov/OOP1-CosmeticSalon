@@ -1,7 +1,8 @@
 Role,Username,Password,Name,Surname,Gender,Phone number,Address
-Client,mikamikic,sifra,Mika,Mikic,Male,0623213132,Mikina adresa 32,0.0,false,
-Client,milicamilic,sifra,Milica,Milic,Female,065323232,Milicina adresa 23,0.0,false,
-Manager,LazarNagulov,sifra,Lazar,Nagulov,Male,0612133213,Lazara Nagulov 3
-Beautician,simasimic,sifra,Sima,Simic,Male,062312313,Simina Adresa,0.0,9100.0,0,4,25000.0,Manikir;Masaza;
-Receptionist,peraperic,perinasifra,Pera,Peric,Male,0623123123,Perina adresa 23,0.0,0.0,0,4,33500.0,
-Beautician,jovanovic,sifra,Jovana,Jovanovic,Female,0623123131,Jadrankina adresa 23,0.0,4000.0,0,4,25000.0,Manikir;
+Client,mikamikic,siframikas234,Mika,Mikic,Male,0623123123,Mikina adresa 94,0.0,false,
+Client,milicamilic,sifra2314,Milica,Milic,Female,065231323,Milicina adresa 53,0.0,false,
+Manager,nikolanikolic29,nikolinasifra,Nikola,Nikolic,Male,062312313,Nikolina adresa 32
+Manager,LazarNagulov,sifra,Lazar,Nagulov,Male,0623413242,Moja adresa 7
+Beautician,simasimic,siminasifra,Sima,Simic,Male,0623213123,Simina adresa 23,0.0,5100.0,0,4,33000.0,Masaza;Manikir;
+Receptionist,peraperic,perinasifra123,Pera,Peric,Male,062342424,Perina adresa 23,0.0,0.0,0,4,35000.0,
+Beautician,jovanovic,sifrajovanovic,Jovana,Jovanovic,Female,062423424,Adresa 24,0.0,4000.0,0,4,34000.0,Manikir;

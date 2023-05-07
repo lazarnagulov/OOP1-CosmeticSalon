@@ -149,7 +149,7 @@ public class TableDialog extends JDialog {
 				CosmeticService service = DataBase.services.get(serviceName);
 				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete " + treatmentName + "?", "Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
-					DataBase.services.remove(service.getName());
+					service.removeTreatment(treatmentName);
 					ServiceModel.removeService(row);
 					refreshService();
 				}

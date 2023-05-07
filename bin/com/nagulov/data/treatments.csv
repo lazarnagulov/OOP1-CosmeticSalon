@@ -1,1 +1,4 @@
 Id,Status,Service,Treatment,Beautician,Date,Client,Price
+0,Scheduled,Masaza,Relaks masaza,simasimic,08.05.2023. 12:00,milicamilic,2000.0
+2,Scheduled,Manikir,Francuski manikir,simasimic,08.05.2023. 12:00,mikamikic,1500.0
+3,Scheduled,Manikir,Spa manikir,jovanovic,08.05.2023. 12:00,mikamikic,2000.0

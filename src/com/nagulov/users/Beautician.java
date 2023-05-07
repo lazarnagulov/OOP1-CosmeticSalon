@@ -52,6 +52,10 @@ public class Beautician extends Staff {
 				.append(this.getSalary()).append(",");
 		
 		for(CosmeticService t : services) {
+			if(t == null) {
+				services.remove(t);
+				continue;
+			}
 			data.append(t.getName()).append(";");
 		}
 		

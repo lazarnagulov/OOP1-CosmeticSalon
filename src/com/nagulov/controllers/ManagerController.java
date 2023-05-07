@@ -2,8 +2,6 @@ package com.nagulov.controllers;
 
 import java.time.LocalTime;
 
-import javax.swing.JTextField;
-
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;

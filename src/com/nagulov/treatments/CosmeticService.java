@@ -29,6 +29,11 @@ public class CosmeticService {
 		treatments.remove(treatment);
 	}
 	
+	public void removeTreatment(String treatment) {
+		DataBase.cosmeticTreatments.remove(getTreatment(treatment));
+		treatments.remove(getTreatment(treatment));
+	}
+	
 	public List<CosmeticTreatment> getTreatments() {
 		return treatments;
 	}

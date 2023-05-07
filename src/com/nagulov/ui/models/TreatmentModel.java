@@ -7,9 +7,7 @@ import java.util.Map;
 import javax.swing.table.AbstractTableModel;
 
 import com.nagulov.data.DataBase;
-import com.nagulov.treatments.Pricelist;
 import com.nagulov.treatments.Treatment;
-import com.nagulov.ui.TableDialog;
 
 public class TreatmentModel extends AbstractTableModel {
 	

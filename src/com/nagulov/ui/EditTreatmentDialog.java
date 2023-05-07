@@ -21,7 +21,6 @@ import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Treatment;
-import com.nagulov.treatments.TreatmentBuilder;
 import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.ui.models.TreatmentModel;
 import com.nagulov.users.Beautician;
@@ -32,6 +31,10 @@ import net.miginfocom.swing.MigLayout;
 
 public class EditTreatmentDialog extends JDialog{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Treatment treatment;
 	/*	private TreatmentStatus status;
 		private CosmeticService service;
