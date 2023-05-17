@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import com.nagulov.data.DataBase;
 import com.nagulov.ui.EditUserDialog;
 import com.nagulov.ui.LoginDialog;
+import com.nagulov.users.Client;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -31,13 +32,16 @@ public class ClientFrame extends JFrame {
 	
 	private void initClientFrame() {
 	
+		Client c = (Client) DataBase.loggedUser;
+		
 		userInfo.setLayout(new MigLayout("wrap", "[]", "[][][][][][]"));
 		userInfo.add(new JLabel("-- User info --"));
-		userInfo.add(new JLabel("Name: " + DataBase.loggedUser.getName()));
-		userInfo.add(new JLabel("Surname: " + DataBase.loggedUser.getSurname()));
-		userInfo.add(new JLabel("Gender: " + DataBase.loggedUser.getGender()));
-		userInfo.add(new JLabel("Phone number: " + DataBase.loggedUser.getPhoneNumber()));
-		userInfo.add(new JLabel("Address: " + DataBase.loggedUser.getAddress()));
+		userInfo.add(new JLabel("Name: " + c.getName()));
+		userInfo.add(new JLabel("Surname: " + c.getSurname()));
+		userInfo.add(new JLabel("Gender: " + c.getGender()));
+		userInfo.add(new JLabel("Phone number: " + c.getPhoneNumber()));
+		userInfo.add(new JLabel("Address: " + c.getAddress()));
+		userInfo.add(new JLabel("Balance: " + c.getBalance()));
 		
 		this.getContentPane().setLayout(new MigLayout("wrap 2, fillx", "[][]", "[]20[]20[]"));
 		

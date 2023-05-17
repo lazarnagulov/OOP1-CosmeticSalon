@@ -10,6 +10,7 @@ public class Client extends User{
 
 	private List<Treatment> treatments = new ArrayList<Treatment>();
 	private double spent = 0;
+	private double balance = 0;
 	private boolean hasLoyalityCard = false;
 	
 	public Client() {
@@ -68,9 +69,18 @@ public class Client extends User{
 			    .append(this.getPhoneNumber()).append(",")
 			    .append(this.getAddress()).append(",")
 			    .append(this.spent).append(",")
-			    .append(this.hasLoyalityCard).append(",");
+			    .append(this.hasLoyalityCard).append(",")
+				.append(this.balance).append(",");
 		
 		return data.toString();
+	}
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
 	}
 
 }

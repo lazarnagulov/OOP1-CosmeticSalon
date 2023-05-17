@@ -180,9 +180,9 @@ public class TableDialog extends JDialog {
 					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				new EditTreatmentDialog(DataBase.treatments.get(table.getValueAt(row, 0)));
+				new EditTreatmentDialog(TreatmentModel.getTreatment(row));
 			}
-		});
+		});	
 		
 		removeButton.addActionListener(new ActionListener() {
 			@Override

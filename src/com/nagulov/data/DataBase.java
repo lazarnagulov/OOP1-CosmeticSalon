@@ -48,7 +48,7 @@ public class DataBase {
 	
 	public static final String USER_HEADER = "Role,Username,Password,Name,Surname,Gender,Phone number,Address\n"; 
 	public static final String SERVICE_HEADER = "Service,Treatment,Duration,Price\n";
-	public static final String TREATMENT_HEADER = "Id,Status,Service,Treatment,Beautician,Date,Client,Price\n";
+	public static final String TREATMENT_HEADER = "Status,Service,Treatment,Beautician,Date,Client,Price\n";
 	
 	private static final File USERS_FILE = new File("src" + SEPARATOR + "com"+ SEPARATOR + "nagulov" + SEPARATOR + "data"+ SEPARATOR + "users.csv");
 	private static final File SERVICES_FILE = new File("src" + SEPARATOR + "com" + SEPARATOR + "nagulov" + SEPARATOR +"data" + SEPARATOR + "services.csv");
@@ -292,7 +292,7 @@ public class DataBase {
 						.buildClient();
 						client.setSpent(Double.parseDouble(data[8]));
 						client.setHasLoyalityCard(Boolean.parseBoolean(data[9]));
-						
+						client.setBalance(Double.parseDouble(data[10]));
 						DataBase.users.put(client.getUsername(), client);
 						break;
 					case BEAUTICIAN:

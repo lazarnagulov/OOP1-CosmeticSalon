@@ -49,18 +49,6 @@ public class EditTreatmentDialog extends JDialog{
 	 */
 	private static final long serialVersionUID = 1L;
 	private Treatment treatment;
-	/*	private TreatmentStatus status;
-		private CosmeticService service;
-		private CosmeticTreatment treatment;
-		private Beautician beautician;
-		private LocalDateTime date;
-		private Client client;
-	 * 
-	 * 
-	 */
-	
-	AbstractFormatter a;
-	//TODO: Datetime picker
 	private JComboBox<String> statusBox;
 	private JPanel stPanel = new JPanel();
 	private JTextField timeField = new JTextField(10);
@@ -70,11 +58,10 @@ public class EditTreatmentDialog extends JDialog{
 	private JButton confirmButton = new JButton("Confirm");
 	private JButton cancelButton = new JButton("Cancel");
 	private UtilDateModel model = new UtilDateModel();
-	private JDatePanelImpl datePanel;// = new JDatePanelImpl(model, null);
-	private JDatePickerImpl datePicker;// = new JDatePickerImpl(datePanel);
+	private JDatePanelImpl datePanel;
+	private JDatePickerImpl datePicker;
 
 	private void initEditServiceDialog() {
-		
 		Properties p = new Properties();
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
@@ -115,10 +102,8 @@ public class EditTreatmentDialog extends JDialog{
 			statusBox.setSelectedItem(treatment.getStatus().getStatus());
 			timeField.setText(treatment.getDate().toLocalTime().toString());
 			LocalDateTime date = treatment.getDate();
-
 			model.setDate(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
 			model.setSelected(true);
-			System.out.println(model.getMonth());
 		}
 		
 		serviceTreatmentGroup = new ButtonGroup();
@@ -157,14 +142,17 @@ public class EditTreatmentDialog extends JDialog{
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(confirmButton);
 		buttonPanel.add(cancelButton);
-		
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[fill][fill][fill][fill, grow][fill][fill]20[]"));
-		
-		this.getContentPane().add(new JLabel("Edit treatment"), "center, span 2");
+			
 		if(statusBox != null) {
+			this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[fill][fill][fill, grow][fill][fill][fill]20[]"));
+			this.getContentPane().add(new JLabel("Edit treatment"), "center, span 2");
 			this.getContentPane().add(new JLabel("Status"));
 			this.getContentPane().add(statusBox);
+		}else {
+			this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[fill][fill, grow][fill][fill][fill]20[]"));
+			this.getContentPane().add(new JLabel("Edit treatment"), "center, span 2");
 		}
+		
 		this.getContentPane().add(new JLabel("Date"));
 		this.getContentPane().add(datePicker);
 		this.getContentPane().add(new JLabel("Time"));
@@ -200,9 +188,8 @@ public class EditTreatmentDialog extends JDialog{
 					return;
 				}
 				String[] hm = timeField.getText().split(":");
-
 				LocalTime time = LocalTime.of(Integer.parseInt(hm[0]), Integer.parseInt(hm[1]));
-				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();;
+				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 				LocalDateTime dateTime = LocalDateTime.of(date, time);
 				
 				if(!b.containsTreatment(DataBase.services.get(service))) {
@@ -220,7 +207,6 @@ public class EditTreatmentDialog extends JDialog{
 				}
 				TableDialog.refreshTreatment();
 				
-				setVisible(false);
 				dispose();
 			}
 		});

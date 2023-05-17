@@ -38,6 +38,9 @@ public class TreatmentModel extends AbstractTableModel {
 		treatments.remove(row);
 	}
 	
+	public static Treatment getTreatment(int row) {
+		return treatments.get(row);
+	}
 	
 	@Override
 	public String getColumnName(int column) {
@@ -59,14 +62,13 @@ public class TreatmentModel extends AbstractTableModel {
 		Treatment t = treatments.get(rowIndex);
 		try {
 			switch(columnIndex) {
-				case 0 -> {return t.getId(); }
-				case 1 -> {return t.getStatus();}
-				case 2 -> {return t.getService();} 
-				case 3 -> {return t.getTreatment().getName();}
-				case 4 -> {return t.getBeautician().getUsername();}
-				case 5 -> {return t.getDate().format(DataBase.TREATMENTS_DATE_FORMAT);}
-				case 6 -> {return t.getClient().getUsername();}
-				case 7 -> {return t.getPrice();}
+				case 0 -> {return t.getStatus();}
+				case 1 -> {return t.getService();} 
+				case 2 -> {return t.getTreatment().getName();}
+				case 3 -> {return t.getBeautician().getUsername();}
+				case 4 -> {return t.getDate().format(DataBase.TREATMENTS_DATE_FORMAT);}
+				case 5 -> {return t.getClient().getUsername();}
+				case 6 -> {return t.getPrice();}
 				default -> {return null; }
 			}
 		}catch(NullPointerException e) {

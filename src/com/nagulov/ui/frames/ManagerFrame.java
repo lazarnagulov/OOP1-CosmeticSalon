@@ -66,13 +66,13 @@ public class ManagerFrame extends JFrame{
 //		JPanel serviceIncomeChart = new XChartPanel<XYChart>(ReportChart.initServiceIncomeChart());
 		
 		this.setJMenuBar(menu);
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[]20[]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[grow][grow]", "[fill]20[grow, center]20[center]"));
 		
 		this.getContentPane().add(new JLabel("Welcome, " + DataBase.loggedUser.getUsername() + "!"));	
 		this.getContentPane().add(logoutButton, "right");
-		this.getContentPane().add(userInfo, "wrap");
-		this.getContentPane().add(editInfoButton);
-		this.getContentPane().add(editSalonButton);
+		this.getContentPane().add(userInfo, "wrap, span 2, center");
+		this.getContentPane().add(editInfoButton, "left");
+		this.getContentPane().add(editSalonButton, "right");
 //		this.getContentPane().add(beauticianChart);
 //		this.getContentPane().add(treatmentChart);
 //		this.getContentPane().add(serviceIncomeChart, "span 2");
@@ -90,7 +90,6 @@ public class ManagerFrame extends JFrame{
 				new EditSalonDialog();
 			}
 		});
-		
 		
 		logoutButton.addActionListener(new ActionListener() {
 			@Override

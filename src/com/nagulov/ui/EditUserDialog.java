@@ -116,8 +116,22 @@ public class EditUserDialog extends JDialog{
 		addressField.setText(user.getAddress());
 		passwordField.setText(user.getPassword());
 		usernameField.setText(user.getUsername());
-
-		if(user instanceof Manager) {
+		
+		if(roleComboBox.getSelectedItem() != DataBase.RECEPTIONIST && roleComboBox.getSelectedItem() != DataBase.BEAUTICIAN) {
+			internshipField.setEnabled(false);
+			qualificationBox.setEnabled(false);
+			bonusesField.setEnabled(false);
+			incomeField.setEnabled(false);
+			salaryField.setEnabled(false);
+			
+		}
+		if(roleComboBox.getSelectedItem() != DataBase.BEAUTICIAN) {
+			for(JCheckBox cb : checkboxes) {
+				cb.setEnabled(false);
+			}
+		}
+		
+		if(user instanceof Staff) {
 			try {
 				Staff s = (Staff)DataBase.users.get(user.getUsername());
 				qualificationBox.setSelectedItem(Integer.valueOf(s.getQualification()));
@@ -130,11 +144,12 @@ public class EditUserDialog extends JDialog{
 			}
 		}		
 		
-		if(user instanceof Manager) {
+		if(DataBase.loggedUser instanceof Manager) {
 			this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][][][][][][][][]20[]"));
 		}else {
-			this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][]20[]"));
+			this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][[][][][][][]20[]"));
 		}
+		
 		this.getContentPane().add(new JLabel("Register form"), "span 2");
 		this.getContentPane().add(new JLabel("Name"));
 		this.getContentPane().add(nameField);
@@ -150,7 +165,7 @@ public class EditUserDialog extends JDialog{
 		this.getContentPane().add(usernameField);
 		this.getContentPane().add(new JLabel("Password"));
 		this.getContentPane().add(passwordField);
-		if(user instanceof Manager) {
+		if(DataBase.loggedUser instanceof Manager) {
 			this.getContentPane().add(new JLabel("Role"));
 			this.getContentPane().add(roleComboBox);
 			this.getContentPane().add(new JLabel("Staff only"), "span 2");
@@ -164,11 +179,54 @@ public class EditUserDialog extends JDialog{
 			this.getContentPane().add(incomeField);
 			this.getContentPane().add(new JLabel("Salary"));
 			this.getContentPane().add(salaryField);
-			this.getContentPane().add(new JLabel("Treatments (Beautician only):"), "span 2");
+			this.getContentPane().add(new JLabel("Treatments:"), "span 2");
 			this.getContentPane().add(treatmentsPanel, "span 2");
 		}
 		this.getContentPane().add(cancelButton);
 		this.getContentPane().add(confirmButton);
+
+		roleComboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String role = roleComboBox.getSelectedItem().toString();
+				if(role == DataBase.BEAUTICIAN) {
+					for(JCheckBox cb : checkboxes) {
+						if(cb.isEnabled()) {
+							break;
+						}
+						cb.setEnabled(true);
+					}
+				}else {
+					for(JCheckBox cb : checkboxes) {
+						if(!cb.isEnabled()) {
+							break;
+						}
+						cb.setEnabled(false);
+					}
+				}
+				if(role == DataBase.BEAUTICIAN || role == DataBase.RECEPTIONIST) {
+					if(internshipField.isEnabled()) {
+						return;
+					}
+					internshipField.setEnabled(true);
+					qualificationBox.setEnabled(true);
+					bonusesField.setEnabled(true);
+					incomeField.setEnabled(true);
+					salaryField.setEnabled(true);
+				}else {
+					if(!internshipField.isEnabled()) {
+						return;
+					}
+					internshipField.setEnabled(false);
+					qualificationBox.setEnabled(false);
+					bonusesField.setEnabled(false);
+					incomeField.setEnabled(false);
+					salaryField.setEnabled(false);
+
+				}
+			}
+		});
+		
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -181,7 +239,7 @@ public class EditUserDialog extends JDialog{
 				String password = new String(passwordField.getPassword());
 				String role = roleComboBox.getSelectedItem().toString();
 				
-				if((user instanceof Manager) && (role.equals(DataBase.BEAUTICIAN) || role.equals(DataBase.RECEPTIONIST))) {
+				if((DataBase.loggedUser instanceof Manager) && (role.equals(DataBase.BEAUTICIAN) || role.equals(DataBase.RECEPTIONIST))) {
 					int internship = Integer.parseInt(internshipField.getText());
 					int qualification = Integer.parseInt(qualificationBox.getSelectedItem().toString());
 					double bonuses = Double.parseDouble(bonusesField.getText());
@@ -215,7 +273,6 @@ public class EditUserDialog extends JDialog{
 				}catch(NullPointerException ex) {
 					
 				}
-				setVisible(false);
 				dispose();
 			}
 		});
@@ -223,7 +280,6 @@ public class EditUserDialog extends JDialog{
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
 				dispose();
 			}
 		});
