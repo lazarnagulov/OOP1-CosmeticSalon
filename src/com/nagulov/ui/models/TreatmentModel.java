@@ -18,7 +18,9 @@ public class TreatmentModel extends AbstractTableModel {
 	public static void init() {
 		if(treatments.isEmpty()) {
 			for(Map.Entry<Integer, Treatment> entry : DataBase.treatments.entrySet()) {
-				treatments.add(entry.getValue());
+				if(!treatments.contains(entry.getValue())) {
+					treatments.add(entry.getValue());
+				}
 			}
 		}
 	}

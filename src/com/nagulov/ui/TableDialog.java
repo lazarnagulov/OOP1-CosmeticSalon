@@ -192,7 +192,7 @@ public class TableDialog extends JDialog {
 					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				int treatmentId = Integer.parseInt(table.getValueAt(row, 0).toString());
+				int treatmentId = TreatmentModel.getTreatment(row).getId();
 				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete", "Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
 					DataBase.treatments.remove(treatmentId);

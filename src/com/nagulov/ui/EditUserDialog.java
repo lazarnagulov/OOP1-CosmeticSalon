@@ -147,7 +147,7 @@ public class EditUserDialog extends JDialog{
 		if(DataBase.loggedUser instanceof Manager) {
 			this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][][][][][][][][]20[]"));
 		}else {
-			this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][[][][][][][]20[]"));
+			this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][][][][][]20[]"));
 		}
 		
 		this.getContentPane().add(new JLabel("Register form"), "span 2");

@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import com.nagulov.data.DataBase;
 import com.nagulov.ui.EditUserDialog;
 import com.nagulov.ui.LoginDialog;
+import com.nagulov.ui.ScheduleTreatmentDialog;
 import com.nagulov.users.Client;
 
 import net.miginfocom.swing.MigLayout;
@@ -25,6 +26,7 @@ public class ClientFrame extends JFrame {
 
 	private JButton editInfoButton = new JButton("Edit user info");
 	private JButton treatmentButton = new JButton("Schedule treatment");
+	private JButton cancelTreatmentButton = new JButton("Cancel treatment");
 	private JButton logoutButton = new JButton("Logout");
 	
 	
@@ -43,14 +45,31 @@ public class ClientFrame extends JFrame {
 		userInfo.add(new JLabel("Address: " + c.getAddress()));
 		userInfo.add(new JLabel("Balance: " + c.getBalance()));
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2, fillx", "[][]", "[]20[]20[]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2, fillx", "[][]", "[]20[][]20[]"));
 		
 		this.getContentPane().add(new JLabel("Welcome, " + DataBase.loggedUser.getUsername() + "!"));	
 		this.getContentPane().add(logoutButton, "right");
 		this.getContentPane().add(userInfo, "span 2");
-		this.getContentPane().add(editInfoButton);
 		this.getContentPane().add(treatmentButton);
-
+		this.getContentPane().add(cancelTreatmentButton);
+		
+		this.getContentPane().add(editInfoButton);
+		
+		cancelTreatmentButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		treatmentButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ScheduleTreatmentDialog();
+			}
+		});
 		
 		editInfoButton.addActionListener(new ActionListener() {
 			@Override

@@ -214,7 +214,6 @@ public class EditTreatmentDialog extends JDialog{
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
 				dispose();
 			}
 		});
