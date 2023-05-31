@@ -17,7 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
@@ -37,18 +37,23 @@ public class RegisterDialog extends JDialog{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static ManagerController managerController = ManagerController.getInstance();
+	private static UserController managerController = UserController.getInstance();
 	
 	private static Class<?> getRole(String string){
 		if(string == null) {
 			return Client.class;
 		}
 		switch(string) {
-			case DataBase.CLIENT -> {return Client.class;}
-			case DataBase.MANAGER -> {return Manager.class;}
-			case DataBase.BEAUTICIAN -> {return Beautician.class;}
-			case DataBase.RECEPTIONIST -> {return Receptionist.class;}
-			default -> { return Client.class; }
+			case DataBase.CLIENT:
+				return Client.class;
+			case DataBase.MANAGER:
+				return Manager.class;
+			case DataBase.BEAUTICIAN:
+				return Beautician.class;
+			case DataBase.RECEPTIONIST:
+				return Receptionist.class;
+			default:
+				return Client.class; 
 		}
 	}
 	
@@ -179,7 +184,7 @@ public class RegisterDialog extends JDialog{
 							for(JCheckBox cb : checkboxes) {
 								if(cb.isSelected()) {
 									CosmeticService service = DataBase.services.get(cb.getText());
-									Beautician b = (Beautician)DataBase.users.get(staff.getUsername());
+									Beautician b = (Beautician)UserController.getInstance().getUser(staff.getUsername());
 									b.addTreatment(service);
 								}
 							}
@@ -199,7 +204,7 @@ public class RegisterDialog extends JDialog{
 //				}
 				
 				if(isManager) {
-					UserModel.addUser(DataBase.users.get(username));
+					UserModel.addUser(UserController.getInstance().getUser(username));
 					TableDialog.refreshUser();
 				}
 				

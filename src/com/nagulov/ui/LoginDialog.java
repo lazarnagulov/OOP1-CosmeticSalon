@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.data.Validator;
@@ -28,7 +28,7 @@ public class LoginDialog extends JDialog{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static ManagerController managerController = ManagerController.getInstance();
+	private static UserController userController = UserController.getInstance();
 
 	void initLoginDialog(JDialog d) {
 		
@@ -58,19 +58,32 @@ public class LoginDialog extends JDialog{
 				String username = usernameField.getText();
 				String password = new String(passwordField.getPassword());
 				passwordField.setText("");
-				ErrorMessage message = Validator.loginUser(username,password);
-				if(message != ErrorMessage.SUCCESS) {
-					JOptionPane.showMessageDialog(null, message.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+		
+				User u = userController.getUser(username);
+				
+				if(u == null) {
 					return;
 				}
 				
-				User u = managerController.getUser(username);
+				if(!u.getPassword().equals(password)) {
+					return;
+				}
+				
+				DataBase.loggedUser = u;
 				
 				switch(u.getClass().getSimpleName()) {
-					case DataBase.MANAGER -> new ManagerFrame();
-					case DataBase.RECEPTIONIST -> new ReceptionistFrame();
-					case DataBase.CLIENT -> new ClientFrame();
-					case DataBase.BEAUTICIAN -> new BeauticianFrame();
+					case DataBase.MANAGER: 
+						new ManagerFrame();
+						break;
+					case DataBase.RECEPTIONIST: 
+						new ReceptionistFrame();
+						break;
+					case DataBase.CLIENT: 
+						new ClientFrame();
+						break;
+					case DataBase.BEAUTICIAN: 
+						new BeauticianFrame();
+						break;
 				}
 				d.setVisible(false);
 				d.dispose();

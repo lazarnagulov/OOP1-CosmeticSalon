@@ -11,7 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
@@ -25,7 +25,7 @@ public class EditServiceDialog extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static ManagerController managerController = ManagerController.getInstance();
+	private static UserController managerController = UserController.getInstance();
 	
 	private CosmeticService service;
 	private CosmeticTreatment treatment;

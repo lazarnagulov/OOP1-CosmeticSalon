@@ -11,7 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
@@ -89,7 +89,7 @@ public class AddServiceDialog extends JDialog{
 				LocalTime duration = LocalTime.parse(durationField.getText());
 				double price = Double.parseDouble(priceField.getText());
 				
-				CosmeticTreatment ct = ManagerController.getInstance().createCosmeticTreatment(service, treatment, duration);
+				CosmeticTreatment ct = UserController.getInstance().createCosmeticTreatment(service, treatment, duration);
 				Pricelist.getInstance().setPrice(ct, price);
 				
 				ServiceModel.addTreatment(ct);

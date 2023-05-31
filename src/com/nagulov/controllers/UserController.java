@@ -1,13 +1,12 @@
 package com.nagulov.controllers;
 
 import java.time.LocalTime;
+import java.util.HashMap;
 
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
-import com.nagulov.treatments.Treatment;
-import com.nagulov.ui.models.ServiceModel;
 import com.nagulov.ui.models.UserModel;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
@@ -18,19 +17,21 @@ import com.nagulov.users.StaffBuilder;
 import com.nagulov.users.User;
 import com.nagulov.users.UserBuilder;
 
-public class ManagerController extends ReceptionistController {
+public class UserController extends ReceptionistController {
 	
 	public static double loyaltyCardNeeded = 15000.0; 
 	
-	private static ManagerController instance = null;
+	private static UserController instance = null;
+	private HashMap<String, User> users = new HashMap<String,User>();
 	
-	private ManagerController() {
+	
+	private UserController() {
 		
 	}
 	
-	public static ManagerController getInstance() {
+	public static UserController getInstance() {
 		if(instance == null) {
-			instance = new ManagerController();
+			instance = new UserController();
 		}
 		return instance;
 	}
@@ -44,7 +45,7 @@ public class ManagerController extends ReceptionistController {
 					.setPhoneNumber(phoneNumber)
 					.setAddress(address)
 					.buildReceptionist(); 
-			DataBase.users.put(username, r);
+			users.put(username, r);
 			DataBase.saveUsers();
 			return r;
 		}else if(position == Beautician.class) {
@@ -55,7 +56,8 @@ public class ManagerController extends ReceptionistController {
 					.setPhoneNumber(phoneNumber)
 					.setAddress(address)
 					.buildBeautician();
-			DataBase.users.put(username, c);
+			users.put(username, c);
+			DataBase.saveUsers();
 			return c;
 		}else if(position == Client.class) {
 			Client c = new UserBuilder(username, password)
@@ -65,7 +67,7 @@ public class ManagerController extends ReceptionistController {
 					.setGender(gender)
 					.setSurname(surname)
 					.buildClient();
-			DataBase.users.put(username, c);
+			users.put(username, c);
 			DataBase.saveUsers();
 			return c;
 		}else if(position == Manager.class){
@@ -76,11 +78,15 @@ public class ManagerController extends ReceptionistController {
 					.setGender(gender)
 					.setSurname(surname)
 					.buildManager();
-			DataBase.users.put(username, c);
+			users.put(username, c);
 			DataBase.saveUsers();
 			return c;
 		}
 		return null;
+	}
+
+	public HashMap<String, User> getUsers(){
+		return users;
 	}
 	
 	public Staff createStaff(String name, String surname, String gender, 
@@ -99,7 +105,7 @@ public class ManagerController extends ReceptionistController {
 					.setPhoneNumber(phoneNumber)
 					.setAddress(address)
 					.buildReceptionist();
-			DataBase.users.put(username, r);
+			users.put(username, r);
 			DataBase.saveUsers();
 			return r;
 		}else if(position == Beautician.class) {
@@ -116,7 +122,7 @@ public class ManagerController extends ReceptionistController {
 					.setAddress(address)
 					.buildBeautician();
 			
-			DataBase.users.put(username, c);
+			users.put(username, c);
 			DataBase.saveUsers();
 			return c;
 		}
@@ -127,6 +133,10 @@ public class ManagerController extends ReceptionistController {
 		CosmeticService service = new CosmeticService(name);
 		DataBase.services.put(name, service);
 		return service;
+	}
+	
+	public void addUser(User u) {
+		users.put(u.getUsername(), u);
 	}
 	
 	public void updateUser(User u, String name, String surname, String gender, String phoneNumber, String address, String username, String password, Class<?> position){
@@ -144,9 +154,9 @@ public class ManagerController extends ReceptionistController {
 		u.setPhoneNumber(phoneNumber);
 		u.setSurname(surname);
 		if(!username.equals(u.getUsername())) {
-			DataBase.users.remove(u.getUsername());
+			users.remove(u.getUsername());
 			u.setUsername(username);
-			DataBase.users.put(username, u);
+			users.put(username, u);
 		}
 	}
 	
@@ -154,22 +164,22 @@ public class ManagerController extends ReceptionistController {
 		int len = username.length;
 		User[] ret = new User[len];
  		for(int i = 0; i < len; ++i) {
- 			ret[i] = DataBase.users.get(username[i]);
+ 			ret[i] = users.get(username[i]);
  		}
  		return ret;
 	}
 	
 	public User getUser(String username) {
-		return DataBase.users.get(username);
+		return users.get(username);
 	}
 	
 	public void removeUser(String username){
-		DataBase.users.remove(username);
+		users.remove(username);
 		DataBase.saveUsers();
 	}
 	
 	public void removeUser(User user){
-		DataBase.users.remove(user.getUsername());
+		users.remove(user.getUsername());
 		DataBase.saveUsers();
 	}
 	
@@ -191,14 +201,13 @@ public class ManagerController extends ReceptionistController {
 		s.setPhoneNumber(phoneNumber);
 		s.setSurname(surname);
 		s.setBonuses(bonuses);
-		s.setSalary(salary);
 		s.setInternship(internship);
 		s.setQualification(qualification);
 		s.setIncome(income);
 		if(!username.equals(s.getUsername())) {
-			DataBase.users.remove(s.getUsername());
+			users.remove(s.getUsername());
 			s.setUsername(username);
-			DataBase.users.put(username, s);
+			users.put(username, s);
 		}
 	}
 

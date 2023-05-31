@@ -17,7 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.ui.models.UserModel;
@@ -36,15 +36,19 @@ public class EditUserDialog extends JDialog{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static ManagerController managerController = ManagerController.getInstance();
+	private static UserController managerController = UserController.getInstance();
 	private User user;
 	
 	private Class<?> getRole(String string){
 		switch(string) {
-			case DataBase.CLIENT -> {return Client.class;}
-			case DataBase.MANAGER -> {return Manager.class;}
-			case DataBase.BEAUTICIAN -> {return Beautician.class;}
-			case DataBase.RECEPTIONIST -> {return Receptionist.class;}
+			case DataBase.CLIENT:
+				return Client.class;
+			case DataBase.MANAGER:
+				return Manager.class;
+			case DataBase.BEAUTICIAN:
+				return Beautician.class;
+			case DataBase.RECEPTIONIST:
+				return Receptionist.class;
 		}
 		return null;
 	}
@@ -96,7 +100,7 @@ public class EditUserDialog extends JDialog{
 		roleComboBox.addItem(DataBase.MANAGER);
 		roleComboBox.addItem(DataBase.BEAUTICIAN);
 		roleComboBox.addItem(DataBase.RECEPTIONIST);
-		roleComboBox.setSelectedItem(DataBase.users.get(user.getUsername()).getClass().getSimpleName());
+		roleComboBox.setSelectedItem(UserController.getInstance().getUser(user.getUsername()).getClass().getSimpleName());
 		
 		JPanel treatmentsPanel = new JPanel();
 		treatmentsPanel.setLayout(new MigLayout("wrap 2", "[][]"));
@@ -105,7 +109,7 @@ public class EditUserDialog extends JDialog{
 			JCheckBox btn = new JCheckBox(service.getValue().getName());
 			treatmentsPanel.add(btn);
 			checkboxes.add(btn);
-			if(user instanceof Beautician && ((Beautician)DataBase.users.get(user.getUsername())).containsTreatment(service.getValue())) {
+			if(user instanceof Beautician && ((Beautician)UserController.getInstance().getUser(user.getUsername())).containsTreatment(service.getValue())) {
 				btn.setSelected(true);
 			}
 		}
@@ -133,7 +137,7 @@ public class EditUserDialog extends JDialog{
 		
 		if(user instanceof Staff) {
 			try {
-				Staff s = (Staff)DataBase.users.get(user.getUsername());
+				Staff s = (Staff)UserController.getInstance().getUser(user.getUsername());
 				qualificationBox.setSelectedItem(Integer.valueOf(s.getQualification()));
 				bonusesField.setText(Double.valueOf(s.getBonuses()).toString());
 				salaryField.setText(Double.valueOf(s.getSalary()).toString());
@@ -246,16 +250,16 @@ public class EditUserDialog extends JDialog{
 					double income = Double.parseDouble(incomeField.getText());
 					double salary = Double.parseDouble(salaryField.getText());
 					
-					if(DataBase.users.get(username) instanceof Staff)	
-						managerController.updateStaff((Staff)DataBase.users.get(username), name, surname, gender, phoneNumber, address, username, password, bonuses, income, internship, qualification, salary, getRole(role));
+					if(UserController.getInstance().getUser(username) instanceof Staff)	
+						managerController.updateStaff((Staff)UserController.getInstance().getUser(username), name, surname, gender, phoneNumber, address, username, password, bonuses, income, internship, qualification, salary, getRole(role));
 					else {
-						UserModel.removeUser(DataBase.users.get(username));
+						UserModel.removeUser(UserController.getInstance().getUser(username));
 						User u = managerController.createStaff(name, surname, gender, phoneNumber, address, username, password, bonuses, income, internship, qualification, salary, getRole(role));
 						UserModel.addUser(u);
 					}
 					
 					if (role.equals(DataBase.BEAUTICIAN)) {
-						Beautician b = (Beautician)DataBase.users.get(username);
+						Beautician b = (Beautician)UserController.getInstance().getUser(username);
 						b.getTreatments().clear();
 						for(JCheckBox cb : checkboxes) {
 							if(cb.isSelected()) {

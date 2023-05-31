@@ -29,7 +29,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
@@ -124,7 +124,7 @@ public class EditTreatmentDialog extends JDialog{
 		
 		beauticianBox = new JComboBox<String>();
 		clientBox = new JComboBox<String>();
-		for(Map.Entry<String, User> user : DataBase.users.entrySet()) {
+		for(Map.Entry<String, User> user : UserController.getInstance().getUsers().entrySet()) {
 			if(user.getValue() instanceof Beautician) {
 				beauticianBox.addItem(user.getValue().getUsername());
 				if(treatment != null && user.getValue().getUsername().equals(treatment.getBeautician().getUsername())) {
@@ -170,7 +170,7 @@ public class EditTreatmentDialog extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				String status = statusBox == null ? TreatmentStatus.SCHEDULED.getStatus() : statusBox.getSelectedItem().toString();
 				String beautician = beauticianBox.getSelectedItem().toString();
-				Beautician b = (Beautician)DataBase.users.get(beautician);
+				Beautician b = (Beautician)UserController.getInstance().getUser(beautician);
 				if(b == null) {
 					return;
 				}
@@ -199,10 +199,10 @@ public class EditTreatmentDialog extends JDialog{
 				
 				String client = clientBox.getSelectedItem().toString();
 				if(treatment != null) {
-					ManagerController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)DataBase.users.get(client));
+					UserController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
 				}
 				else {
-					Treatment t = ManagerController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)DataBase.users.get(client));
+					Treatment t = UserController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
 					TreatmentModel.addTreatment(t);
 				}
 				TableDialog.refreshTreatment();

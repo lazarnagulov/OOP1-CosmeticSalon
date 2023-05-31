@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.nagulov.controllers.UserController;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
@@ -59,7 +60,7 @@ public class DataBase {
 	
 	public static HashMap<CosmeticTreatment, CosmeticService> cosmeticTreatments = new HashMap<CosmeticTreatment, CosmeticService>();
 	
-	public static HashMap<String, User> users = new HashMap<String,User>();
+	
 	public static HashMap<String, CosmeticService> services = new HashMap<String, CosmeticService>();
 	public static HashMap<Integer, Treatment> treatments = new HashMap<Integer, Treatment>();
 
@@ -115,12 +116,12 @@ public class DataBase {
 				if(treatment == null) {
 					continue;
 				}
-				Beautician beautician = (Beautician)users.get(data[4]);
+				Beautician beautician = (Beautician)UserController.getInstance().getUser(data[4]);
 				if(beautician == null) {
 					continue;
 				}
 				LocalDateTime date = LocalDateTime.parse(data[5], TREATMENTS_DATE_FORMAT);
-				Client client = (Client)users.get(data[6]);
+				Client client = (Client)UserController.getInstance().getUser(data[6]);
 				if(client == null) {
 					continue;
 				}
@@ -231,9 +232,9 @@ public class DataBase {
 		try {
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), "UTF-8")));
 			out.append(USER_HEADER);
-			for(String username : users.keySet()) {
-				out.append(users.get(username).toString());
-				out.println();
+			for(String username : UserController.getInstance().getUsers().keySet()) {
+				out.append(UserController.getInstance().getUser(username).toString());
+				out.println(); 
 			}
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -269,7 +270,7 @@ public class DataBase {
 						.setPhoneNumber(data[6])
 						.setAddress(data[7])
 						.buildReceptionist();
-						DataBase.users.put(receptionist.getUsername(), receptionist);
+						UserController.getInstance().addUser(receptionist);
 						break;
 					case MANAGER:
 						Manager manager = new UserBuilder(data[1], data[2])
@@ -279,7 +280,7 @@ public class DataBase {
 						.setPhoneNumber(data[6])
 						.setAddress(data[7])
 						.buildManager();
-						DataBase.users.put(manager.getUsername(), manager);
+						UserController.getInstance().addUser(manager);
 						break;
 					case CLIENT:
 						Client client = new UserBuilder(data[1], data[2])
@@ -292,7 +293,7 @@ public class DataBase {
 						client.setSpent(Double.parseDouble(data[8]));
 						client.setHasLoyalityCard(Boolean.parseBoolean(data[9]));
 						client.setBalance(Double.parseDouble(data[10]));
-						DataBase.users.put(client.getUsername(), client);
+						UserController.getInstance().addUser(client);
 						break;
 					case BEAUTICIAN:
 						Beautician beautician = new StaffBuilder(data[1], data[2])
@@ -315,7 +316,7 @@ public class DataBase {
 									beautician.addTreatment(cs);
 							}
 						}
-						DataBase.users.put(beautician.getUsername(), beautician);
+						UserController.getInstance().addUser(beautician);
 						break;
 				}
 			}

@@ -30,7 +30,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import com.nagulov.controllers.ClientController;
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
@@ -143,7 +143,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 					return;
 				}
 				
-				for(Map.Entry<String, User> entry : DataBase.users.entrySet()) {
+				for(Map.Entry<String, User> entry : UserController.getInstance().getUsers().entrySet()) {
 					if(!(entry.getValue() instanceof Beautician)) {
 						continue;
 					}
@@ -163,7 +163,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String beautician = beauticianBox.getSelectedItem().toString();
-				Beautician b = (Beautician)DataBase.users.get(beautician);
+				Beautician b = (Beautician)UserController.getInstance().getUser(beautician);
 				if(b == null) {
 					return;
 				}
@@ -199,7 +199,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 				
 				int choice = JOptionPane.showConfirmDialog(null, treatmentStr, "Confirm Treatment", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
-					Treatment t = ManagerController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, DataBase.services.get(service), DataBase.services.get(service).getTreatment(treatment), b, dateTime, (Client)DataBase.loggedUser);
+					Treatment t = UserController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, DataBase.services.get(service), DataBase.services.get(service).getTreatment(treatment), b, dateTime, (Client)DataBase.loggedUser);
 					ClientController.getInstance().scheduleTreatment(t);
 					TreatmentModel.addTreatment(t);
 				}

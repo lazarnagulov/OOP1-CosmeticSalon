@@ -3,7 +3,7 @@ package com.nagulov.users;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.treatments.Treatment;
 
 public class Client extends User{
@@ -53,7 +53,7 @@ public class Client extends User{
 	
 	public void addSpent(double spent) {
 		this.spent += spent;
-		if(!this.hasLoyalityCard && this.spent >= ManagerController.loyaltyCardNeeded) {
+		if(!this.hasLoyalityCard && this.spent >= UserController.loyaltyCardNeeded) {
 			this.hasLoyalityCard = true;
 		}
 	}

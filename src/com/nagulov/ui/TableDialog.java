@@ -14,7 +14,7 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
@@ -30,7 +30,7 @@ public class TableDialog extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static ManagerController managerController = ManagerController.getInstance();
+	private static UserController managerController = UserController.getInstance();
 	
 	protected JToolBar toolbar;
 	protected static JTable table;

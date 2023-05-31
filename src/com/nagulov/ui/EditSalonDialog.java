@@ -9,7 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 
 import net.miginfocom.swing.MigLayout;
@@ -50,8 +50,8 @@ public class EditSalonDialog extends JDialog {
 				LocalTime opening = LocalTime.parse(openingTimeField.getText());
 				LocalTime closing = LocalTime.parse(closingTimeField.getText());
 				
-				ManagerController.getInstance().updateSalonName(salonName);
-				ManagerController.getInstance().updateWorkingTime(opening, closing);
+				UserController.getInstance().updateSalonName(salonName);
+				UserController.getInstance().updateWorkingTime(opening, closing);
 				
 				setVisible(false);
 				dispose();

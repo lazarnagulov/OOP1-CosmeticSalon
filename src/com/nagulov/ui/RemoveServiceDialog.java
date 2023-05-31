@@ -10,7 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import com.nagulov.controllers.ManagerController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.ui.models.ServiceModel;
@@ -50,7 +50,7 @@ public class RemoveServiceDialog extends JDialog {
 				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete " + service + "?", "Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
 					ServiceModel.removeService(DataBase.services.get(service));
-					ManagerController.getInstance().removeService(DataBase.services.get(service));
+					UserController.getInstance().removeService(DataBase.services.get(service));
 				}
 				TableDialog.refreshService();
 				setVisible(false);

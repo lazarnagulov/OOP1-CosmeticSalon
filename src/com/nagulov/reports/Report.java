@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.TreatmentStatus;
@@ -71,7 +72,7 @@ public class Report {
 	
 	public static List<Client> getLoyalityReport() {
 		if(loyalityReport.isEmpty()) {
-			for(Map.Entry<String, User> entry : DataBase.users.entrySet()) {
+			for(Map.Entry<String, User> entry : UserController.getInstance().getUsers().entrySet()) {
 				User u = entry.getValue(); 
 				if(u instanceof Client && ((Client) u).isHasLoyalityCard()) {
 					loyalityReport.add((Client)u);

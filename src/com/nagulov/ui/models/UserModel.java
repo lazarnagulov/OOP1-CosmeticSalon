@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.users.User;
 
@@ -20,7 +21,7 @@ public class UserModel extends AbstractTableModel{
 	
 	public static void init() {
 		if(users.isEmpty()) {
-			for(Map.Entry<String, User> entry : DataBase.users.entrySet()) {
+			for(Map.Entry<String, User> entry : UserController.getInstance().getUsers().entrySet()) {
 				users.add(entry.getValue());
 			}
 		}
@@ -53,7 +54,7 @@ public class UserModel extends AbstractTableModel{
 	
 	@Override
 	public int getRowCount() {
-		return DataBase.users.size();
+		return UserController.getInstance().getUsers().size();
 	}
 
 	@Override
@@ -65,14 +66,22 @@ public class UserModel extends AbstractTableModel{
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		User u = users.get(rowIndex);
 		switch (columnIndex) {
-		case 0 -> {return u.getClass().getSimpleName();}
-		case 1 -> {return u.getUsername();}
-		case 2 -> {return u.getPassword();}
-		case 3 -> {return u.getName();}
-		case 4 -> {return u.getSurname();}
-		case 5 -> {return u.getGender();}
-		case 6 -> {return u.getPhoneNumber();}
-		case 7 -> {return u.getAddress();}
+		case 0:
+			return u.getClass().getSimpleName();
+		case 1:
+			return u.getUsername();
+		case 2:
+			return u.getPassword();
+		case 3:
+			return u.getName();
+		case 4:
+			return u.getSurname();
+		case 5:
+			return u.getGender();
+		case 6:
+			return u.getPhoneNumber();
+		case 7:
+			return u.getAddress();
 		}
 		return null;
 	}
