@@ -16,11 +16,9 @@ public class TreatmentModel extends AbstractTableModel {
 	private static List<Treatment> treatments = new ArrayList<Treatment>();
 	
 	public static void init() {
-		if(treatments.isEmpty()) {
-			for(Map.Entry<Integer, Treatment> entry : DataBase.treatments.entrySet()) {
-				if(!treatments.contains(entry.getValue())) {
-					treatments.add(entry.getValue());
-				}
+		for(Map.Entry<Integer, Treatment> entry : DataBase.treatments.entrySet()) {
+			if(!treatments.contains(entry.getValue())) {
+				treatments.add(entry.getValue());
 			}
 		}
 	}

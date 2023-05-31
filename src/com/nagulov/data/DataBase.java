@@ -80,7 +80,7 @@ public class DataBase {
 					out.print(treatment.getValue());
 					out.println();
 				}catch(NullPointerException e) {
-					System.out.printf("Treatment with id: %d (%s) was modified and cannot be saved!", treatment.getKey(), treatment.getValue());
+					System.err.printf("Treatment with id: %d (%s) was modified and cannot be saved!", treatment.getKey(), treatment.getValue());
 					continue;
 				}
 			}
@@ -209,7 +209,6 @@ public class DataBase {
 			}
 			if(service != null)
 				services.put(service.getName(), service);
-			
 			in.close();
 		} catch (UnsupportedEncodingException | FileNotFoundException e) {
 			e.printStackTrace();

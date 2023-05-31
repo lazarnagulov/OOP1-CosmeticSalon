@@ -2,3 +2,7 @@ Status,Service,Treatment,Beautician,Date,Client,Price
 0,Scheduled,Masaza,Relaks masaza,simasimic,08.05.2023. 12:00,milicamilic,2000.0
 1,Scheduled,Manikir,Spa manikir,simasimic,08.05.2023. 12:00,mikamikic,1500.0
 2,Scheduled,Manikir,Gel lak,jovanovic,08.05.2023. 12:00,mikamikic,1600.0
+3,Scheduled,Masaza,Sportska masaza,simasimic,20.05.2023. 13:00,milicamilic,2500.0
+4,Scheduled,Manikir,Spa manikir,simasimic,25.05.2023. 15:00,milicamilic,2000.0
+5,Scheduled,Masaza,Relaks masaza,simasimic,26.05.2023. 19:00,milicamilic,1700.0
+6,Scheduled,Masaza,Relaks masaza,simasimic,31.05.2023. 20:00,milicamilic,1700.0

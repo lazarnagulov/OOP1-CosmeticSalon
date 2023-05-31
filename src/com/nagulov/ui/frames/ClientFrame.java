@@ -50,16 +50,15 @@ public class ClientFrame extends JFrame {
 		this.getContentPane().add(new JLabel("Welcome, " + DataBase.loggedUser.getUsername() + "!"));	
 		this.getContentPane().add(logoutButton, "right");
 		this.getContentPane().add(userInfo, "span 2");
+		this.getContentPane().add(editInfoButton, "center, span 2");
 		this.getContentPane().add(treatmentButton);
 		this.getContentPane().add(cancelTreatmentButton);
 		
-		this.getContentPane().add(editInfoButton);
 		
 		cancelTreatmentButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				dispose();
 			}
 			
 		});

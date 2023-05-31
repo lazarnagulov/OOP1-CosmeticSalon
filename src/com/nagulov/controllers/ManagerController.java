@@ -130,7 +130,7 @@ public class ManagerController extends ReceptionistController {
 	}
 	
 	public void updateUser(User u, String name, String surname, String gender, String phoneNumber, String address, String username, String password, Class<?> position){
-		if(!username.equals(u.getUsername()) || u.getClass() != position) {
+		if(u.getClass() != position) {
 			removeUser(u);
 			UserModel.removeUser(u);
 			User nu = createUser(name, surname, gender, phoneNumber, address, username, password, position);
@@ -143,6 +143,11 @@ public class ManagerController extends ReceptionistController {
 		u.setPassword(password);
 		u.setPhoneNumber(phoneNumber);
 		u.setSurname(surname);
+		if(!username.equals(u.getUsername())) {
+			DataBase.users.remove(u.getUsername());
+			u.setUsername(username);
+			DataBase.users.put(username, u);
+		}
 	}
 	
 	public User[] getUsers(String...username) {
@@ -171,13 +176,14 @@ public class ManagerController extends ReceptionistController {
 	public void updateStaff(Staff s, String name, String surname, String gender, String phoneNumber, String address,
 			String username, String password, double bonuses, double income, int internship, int qualification,
 			double salary, Class<?> role) {
-		if(!username.equals(s.getUsername()) || s.getClass() != role) {
+		if(s.getClass() != role) {
 			removeUser(s);
 			UserModel.removeUser(s);
 			Staff ns = createStaff(name, surname, gender, phoneNumber, address, username, password, bonuses, income, internship, qualification, salary, role);
 			UserModel.addUser(ns);
 			return;
 		}
+	
 		s.setName(name);
 		s.setAddress(address);
 		s.setGender(gender);
@@ -189,6 +195,11 @@ public class ManagerController extends ReceptionistController {
 		s.setInternship(internship);
 		s.setQualification(qualification);
 		s.setIncome(income);
+		if(!username.equals(s.getUsername())) {
+			DataBase.users.remove(s.getUsername());
+			s.setUsername(username);
+			DataBase.users.put(username, s);
+		}
 	}
 
 

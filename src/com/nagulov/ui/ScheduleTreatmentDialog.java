@@ -18,17 +18,18 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.JFormattedTextField.AbstractFormatter;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import com.nagulov.controllers.ClientController;
 import com.nagulov.controllers.ManagerController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
@@ -88,7 +89,6 @@ public class ScheduleTreatmentDialog extends JDialog{
 		            Calendar cal = (Calendar) value;
 		            return dateFormatter.format(cal.getTime());
 		        }
-
 		        return "";
 		    }
 		});
@@ -185,9 +185,24 @@ public class ScheduleTreatmentDialog extends JDialog{
 				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 				LocalDateTime dateTime = LocalDateTime.of(date, time);
 				
-				Treatment t = ManagerController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, DataBase.services.get(service), DataBase.services.get(service).getTreatment(treatment), b, dateTime, (Client)DataBase.loggedUser);
-				TreatmentModel.addTreatment(t);
+				String treatmentStr = new StringBuilder("Service: ")
+						.append(service).append("\n")
+						.append("Treatment: ")
+						.append(treatment).append("\n")
+						.append("Beautician: ")
+						.append(beautician).append("\n")
+						.append("Date: ")
+						.append(date.format(DataBase.DATE_FORMAT)).append("\n")
+						.append("Time: ")
+						.append(time)
+						.toString();
 				
+				int choice = JOptionPane.showConfirmDialog(null, treatmentStr, "Confirm Treatment", JOptionPane.YES_NO_OPTION);
+				if(choice == JOptionPane.OK_OPTION) {
+					Treatment t = ManagerController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, DataBase.services.get(service), DataBase.services.get(service).getTreatment(treatment), b, dateTime, (Client)DataBase.loggedUser);
+					ClientController.getInstance().scheduleTreatment(t);
+					TreatmentModel.addTreatment(t);
+				}
 				dispose();
 			}
 		});
