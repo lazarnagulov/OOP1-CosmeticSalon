@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.nagulov.controllers.TreatmentController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.Treatment;
 
@@ -16,7 +17,7 @@ public class TreatmentModel extends AbstractTableModel {
 	private static List<Treatment> treatments = new ArrayList<Treatment>();
 	
 	public static void init() {
-		for(Map.Entry<Integer, Treatment> entry : DataBase.treatments.entrySet()) {
+		for(Map.Entry<Integer, Treatment> entry : TreatmentController.getInstance().getTreatments().entrySet()) {
 			if(!treatments.contains(entry.getValue())) {
 				treatments.add(entry.getValue());
 			}

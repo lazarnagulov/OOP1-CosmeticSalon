@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 
+import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
@@ -197,7 +198,7 @@ public class TableDialog extends JDialog {
 				int treatmentId = TreatmentModel.getTreatment(row).getId();
 				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete", "Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
-					DataBase.treatments.remove(treatmentId);
+					TreatmentController.getInstance().removeTreatment(treatmentId);
 					TreatmentModel.removeTreatment(row);
 					refreshTreatment();
 				}

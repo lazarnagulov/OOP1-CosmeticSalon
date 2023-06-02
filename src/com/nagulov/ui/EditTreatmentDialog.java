@@ -29,6 +29,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
@@ -191,7 +192,6 @@ public class EditTreatmentDialog extends JDialog{
 				LocalTime time = LocalTime.of(Integer.parseInt(hm[0]), Integer.parseInt(hm[1]));
 				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 				LocalDateTime dateTime = LocalDateTime.of(date, time);
-				
 				if(!b.containsTreatment(DataBase.services.get(service))) {
 					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_WITHOUT_SERVICE.getError() + service, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
@@ -199,13 +199,15 @@ public class EditTreatmentDialog extends JDialog{
 				
 				String client = clientBox.getSelectedItem().toString();
 				if(treatment != null) {
-					UserController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
+					TreatmentController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
 				}
 				else {
-					Treatment t = UserController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
+					Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
 					TreatmentModel.addTreatment(t);
+					t.getClient().addSpent(t.getPrice());
 				}
 				TableDialog.refreshTreatment();
+
 				
 				dispose();
 			}

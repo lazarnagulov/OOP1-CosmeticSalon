@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
@@ -25,7 +26,7 @@ public class Report {
 		return !(checkDate.isAfter(endDate) || checkDate.isBefore(startDate));
 	}
 	
-	public static List<Client> getLoyalityReport() {
+	public static List<Client> calculateLoyalityReport() {
 		List<Client> loyalityReport = new ArrayList<Client>();
 		for(Map.Entry<String, User> entry : UserController.getInstance().getUsers().entrySet()) {
 			User u = entry.getValue(); 
@@ -45,7 +46,7 @@ public class Report {
 		treatmentReport.put(TreatmentStatus.PERFORMED, 0);
 		treatmentReport.put(TreatmentStatus.SCHEDULED, 0);
 		
-		for(Map.Entry<Integer, Treatment> treatment : DataBase.treatments.entrySet()) {
+		for(Map.Entry<Integer, Treatment> treatment : TreatmentController.getInstance().getTreatments().entrySet()) {
 			LocalDate treatmentDate = treatment.getValue().getDate().toLocalDate();
 			if(isInInterval(startDate, endDate, treatmentDate)) {
 				if(treatment.getValue().getStatus().equals(TreatmentStatus.CANCELED_BY_THE_CLIENT)) {
@@ -68,7 +69,7 @@ public class Report {
 	public static HashMap<Beautician, ArrayList<Double>> calculateBeauticianReport(LocalDate startDate, LocalDate endDate){
 		beauticianReport.clear();
 		
-		for(Map.Entry<Integer, Treatment> treatment : DataBase.treatments.entrySet()) {
+		for(Map.Entry<Integer, Treatment> treatment : TreatmentController.getInstance().getTreatments().entrySet()) {
 			LocalDate treatmentDate = treatment.getValue().getDate().toLocalDate();
 			if(isInInterval(startDate, endDate, treatmentDate) && treatment.getValue().getStatus().equals(TreatmentStatus.PERFORMED)) {
 				if(!beauticianReport.containsKey(treatment.getValue().getBeautician())) {

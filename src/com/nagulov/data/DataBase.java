@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
@@ -62,7 +63,7 @@ public class DataBase {
 	
 	
 	public static HashMap<String, CosmeticService> services = new HashMap<String, CosmeticService>();
-	public static HashMap<Integer, Treatment> treatments = new HashMap<Integer, Treatment>();
+	
 
 	public static User loggedUser;
 	
@@ -75,7 +76,7 @@ public class DataBase {
 		try {
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
 			out.print(TREATMENT_HEADER);
-			for(Map.Entry<Integer, Treatment> treatment : treatments.entrySet()) {
+			for(Map.Entry<Integer, Treatment> treatment : TreatmentController.getInstance().getTreatments().entrySet()) {
 				try {
 					out.print(treatment.getKey());
 					out.print(treatment.getValue());
@@ -126,7 +127,7 @@ public class DataBase {
 					continue;
 				}
 				double price = Double.parseDouble(data[7]);
-				treatments.put(id, new TreatmentBuilder()
+				TreatmentController.getInstance().getTreatments().put(id, new TreatmentBuilder()
 					.setId(id)
 					.setStatus(status)
 					.setService(service)
@@ -136,7 +137,7 @@ public class DataBase {
 					.setClient(client)
 					.setPrice(price)
 					.build());
-				client.addTreatment(DataBase.treatments.get(id));
+				client.addTreatment(TreatmentController.getInstance().getTreatments().get(id));
 			}
 			in.close();
 		} catch (UnsupportedEncodingException | FileNotFoundException e) {

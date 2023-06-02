@@ -18,7 +18,7 @@ public class LoyalityCardModel extends AbstractTableModel{
 	private static List<Client> clients; 
 	
 	public static void init() {
-		clients = Report.getLoyalityReport();
+		clients = Report.calculateLoyalityReport();
 	}
 	
 	@Override

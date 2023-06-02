@@ -30,6 +30,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import com.nagulov.controllers.ClientController;
+import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
@@ -199,7 +200,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 				
 				int choice = JOptionPane.showConfirmDialog(null, treatmentStr, "Confirm Treatment", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
-					Treatment t = UserController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, DataBase.services.get(service), DataBase.services.get(service).getTreatment(treatment), b, dateTime, (Client)DataBase.loggedUser);
+					Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, DataBase.services.get(service), DataBase.services.get(service).getTreatment(treatment), b, dateTime, (Client)DataBase.loggedUser);
 					ClientController.getInstance().scheduleTreatment(t);
 					TreatmentModel.addTreatment(t);
 				}

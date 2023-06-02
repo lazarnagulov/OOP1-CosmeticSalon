@@ -1,5 +1,6 @@
 package com.nagulov.data;
 
+import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 
 public class Debug {
@@ -12,6 +13,6 @@ public class Debug {
 	}
 	
 	public static void listTreatments() {
-		System.out.println(DataBase.treatments);
+		System.out.println(TreatmentController.getInstance().getTreatments());
 	}
 }
