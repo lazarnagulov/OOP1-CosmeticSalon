@@ -35,25 +35,34 @@ public class Client extends User{
 		this.treatments = treatments;
 	}
 
-	public boolean isHasLoyalityCard() {
+	public boolean hasLoyalityCard() {
+		if(this.spent >= UserController.getInstance().loyaltyCardNeeded) {
+			this.hasLoyalityCard = true;
+		}else {
+			this.hasLoyalityCard = false;
+		}
 		return hasLoyalityCard;
 	}
 
 	public void setHasLoyalityCard(boolean hasLoyalityCard) {
 		this.hasLoyalityCard = hasLoyalityCard;
 	}
+	
 
 	public double getSpent() {
 		return spent;
 	}
 
 	public void setSpent(double spent) {
+		if(!this.hasLoyalityCard && this.spent >= UserController.getInstance().loyaltyCardNeeded) {
+			this.hasLoyalityCard = true;
+		}
 		this.spent = spent;
 	}
 	
 	public void addSpent(double spent) {
 		this.spent += spent;
-		if(!this.hasLoyalityCard && this.spent >= UserController.loyaltyCardNeeded) {
+		if(!this.hasLoyalityCard && this.spent >= UserController.getInstance().loyaltyCardNeeded) {
 			this.hasLoyalityCard = true;
 		}
 	}

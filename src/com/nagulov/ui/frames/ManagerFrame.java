@@ -14,6 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import com.nagulov.data.DataBase;
+import com.nagulov.reports.BeauticianIncomeDialog;
 import com.nagulov.ui.EditSalonDialog;
 import com.nagulov.ui.EditUserDialog;
 import com.nagulov.ui.LoginDialog;
@@ -34,7 +35,7 @@ public class ManagerFrame extends JFrame{
 	
 	private JButton editInfoButton = new JButton("Edit user info");
 	private JButton logoutButton = new JButton("Logout");
-	private JButton editSalonButton = new JButton("Edit salon info");
+	private JButton editSalonButton = new JButton("Salon options");
 	
 	private JMenuBar menu = new JMenuBar();
 	
@@ -46,6 +47,13 @@ public class ManagerFrame extends JFrame{
 	private JMenu analyticsMenu = new JMenu("Analytics");
 	private JMenuItem analyticsTreatment = new JMenuItem("Treatments in past 30 days");
 	private JMenuItem analyticsBeautician = new JMenuItem("Beauticians in past 30 days");
+	
+	private JMenu reportsMenu = new JMenu("Reports");
+	private JMenuItem loyalityCardReport = new JMenuItem("Loyality Card");
+	private JMenuItem treatmentsReport = new JMenuItem("Treaments status");
+	private JMenuItem beauticianIncomeReport = new JMenuItem("Beautician income");
+	private JMenuItem cosmeticServicesReport = new JMenuItem("Service");
+	
 	private JPanel userInfo = new JPanel();
 
 	private void initManagerFrame() {
@@ -57,8 +65,14 @@ public class ManagerFrame extends JFrame{
 		analyticsMenu.add(analyticsTreatment);
 		analyticsMenu.add(analyticsBeautician);
 		
+		reportsMenu.add(loyalityCardReport);
+		reportsMenu.add(treatmentsReport);
+		reportsMenu.add(beauticianIncomeReport);
+		reportsMenu.add(cosmeticServicesReport);
+		
 		menu.add(analyticsMenu);
 		menu.add(dataMenu);
+		menu.add(reportsMenu);
 		
 		userInfo.setLayout(new MigLayout("wrap", "[]", "[][][][][][]"));
 		userInfo.add(new JLabel("-- User info --"));
@@ -145,6 +159,21 @@ public class ManagerFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new BeauticianChartDialog();
+			}
+		});
+		
+		beauticianIncomeReport.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new BeauticianIncomeDialog();
+			}
+			
+		});
+		
+		loyalityCardReport.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new TableDialog(Table.LOYALITY_CARD);
 			}
 		});
 	

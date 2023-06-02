@@ -19,7 +19,7 @@ import com.nagulov.users.UserBuilder;
 
 public class UserController extends ReceptionistController {
 	
-	public static double loyaltyCardNeeded = 15000.0; 
+	public double loyaltyCardNeeded = 15000.0; 
 	
 	private static UserController instance = null;
 	private HashMap<String, User> users = new HashMap<String,User>();

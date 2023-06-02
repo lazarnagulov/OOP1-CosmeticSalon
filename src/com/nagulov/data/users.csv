@@ -1,8 +1,8 @@
 Role,Username,Password,Name,Surname,Gender,Phone number,Address
-Client,mikamikic,siframikas234,Mika,Mikic,Male,0623123123,Mikina adresa 94,0.0,false,0.0,
+Client,mikamikic,siframikas234,Mika,Mikic,Male,0623123123,Mikina adresa 94,100000.0,true,0.0,
 Client,milicamilic,123sifra,Milica,Milic,Female,065231323,Milicina adresa 53,0.0,false,0.0,
 Manager,nikolanikolic29,nikolinasifra,Nikola,Nikolic,Male,062312313,Nikolina adresa 32
 Manager,LazarNagulov,sifra,Lazar,Nagulov,Male,0623413242,Moja adresa 69
-Beautician,simasimic,siminasifra,Sima,Simic,Male,0623213123,Simina adresa 23,0.0,0.0,0,4,33000.0,Manikir;Masaza;
+Beautician,simasimic,siminasifra,Sima,Simic,Male,0623213123,Simina adresa 23,0.0,5700.0,0,4,33000.0,Manikir;Masaza;
 Receptionist,peraperic,12345,Pera,Peric,Male,062342424,Perina adresa 23,0.0,0.0,0,4,35000.0,
-Beautician,jovanovic,123,Jovana,Jovanovic,Female,062423424,Adresa 24,0.0,0.0,0,4,34000.0,Manikir;
+Beautician,jovanovic,123,Jovana,Jovanovic,Female,062423424,Adresa 24,0.0,1600.0,0,4,34000.0,Manikir;

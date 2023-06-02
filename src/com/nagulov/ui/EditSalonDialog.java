@@ -24,6 +24,7 @@ public class EditSalonDialog extends JDialog {
 	private JTextField salonNameField = new JTextField(20);
 	private JTextField openingTimeField = new JTextField(20);
 	private JTextField closingTimeField = new JTextField(20);
+	private JTextField loyalityCardRequirementField = new JTextField(20);
 	
 	private JButton confirmButton = new JButton("Confirm");
 	private JButton cancelButton = new JButton("Cancel");
@@ -32,14 +33,17 @@ public class EditSalonDialog extends JDialog {
 		salonNameField.setText(DataBase.salonName);
 		openingTimeField.setText(DataBase.opening.toString());
 		closingTimeField.setText(DataBase.closing.toString());
+		loyalityCardRequirementField.setText(Double.valueOf(UserController.getInstance().loyaltyCardNeeded).toString());
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[][][][]20[]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[][][][][]20[]"));
 		
 		this.getContentPane().add(new JLabel("Salon name"), "span 2");
 		this.getContentPane().add(salonNameField, "span 2");
 		this.getContentPane().add(new JLabel("Working time"), "span 2");
 		this.getContentPane().add(openingTimeField);
 		this.getContentPane().add(closingTimeField);
+		this.getContentPane().add(new JLabel("Loyality Card requirement"));
+		this.getContentPane().add(loyalityCardRequirementField);
 		this.add(cancelButton, "right");
 		this.add(confirmButton);	
 		
@@ -49,9 +53,10 @@ public class EditSalonDialog extends JDialog {
 				String salonName = salonNameField.getText();
 				LocalTime opening = LocalTime.parse(openingTimeField.getText());
 				LocalTime closing = LocalTime.parse(closingTimeField.getText());
-				
+				double loyalityCard = Double.parseDouble(loyalityCardRequirementField.getText());
 				UserController.getInstance().updateSalonName(salonName);
 				UserController.getInstance().updateWorkingTime(opening, closing);
+				UserController.getInstance().loyaltyCardNeeded = loyalityCard;
 				
 				setVisible(false);
 				dispose();

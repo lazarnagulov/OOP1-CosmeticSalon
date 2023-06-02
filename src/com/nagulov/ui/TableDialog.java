@@ -18,6 +18,8 @@ import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.ui.models.BeauticianIncomeModel;
+import com.nagulov.ui.models.LoyalityCardModel;
 import com.nagulov.ui.models.ServiceModel;
 import com.nagulov.ui.models.TreatmentModel;
 import com.nagulov.ui.models.UserModel;
@@ -203,6 +205,38 @@ public class TableDialog extends JDialog {
 		});
 	}
 	
+	private void initBeauticianIncome() {
+		this.setTitle("Beautician income");	
+		table = new JTable(new BeauticianIncomeModel());
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
+		this.setSize(500,300);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		this.setLocationRelativeTo(null);
+		JScrollPane sc = new JScrollPane(table);
+		add(sc, BorderLayout.CENTER);
+		
+		this.setVisible(true);
+	}
+	
+	private void initLoyalityCard() {
+		this.setTitle("Loyality card");	
+		table = new JTable(new LoyalityCardModel());
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
+		this.setSize(500,300);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		this.setLocationRelativeTo(null);
+		JScrollPane sc = new JScrollPane(table);
+		add(sc, BorderLayout.CENTER);
+		
+		this.setVisible(true);
+	}
+	
 	private void init() {
 		this.setSize(500,300);
 		this.setLocationRelativeTo(null);
@@ -245,6 +279,14 @@ public class TableDialog extends JDialog {
 			case TREATMENT:
 				TreatmentModel.init();
 				initTreatmentModel();
+				break;
+			case BEAUTICIAN_INCOME:
+				BeauticianIncomeModel.init();
+				initBeauticianIncome();
+				break;
+			case LOYALITY_CARD:
+				LoyalityCardModel.init();
+				initLoyalityCard();
 				break;
 		}
 		

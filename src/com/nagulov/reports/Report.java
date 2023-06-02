@@ -29,16 +29,11 @@ public class Report {
 		List<Client> loyalityReport = new ArrayList<Client>();
 		for(Map.Entry<String, User> entry : UserController.getInstance().getUsers().entrySet()) {
 			User u = entry.getValue(); 
-			if(u instanceof Client && ((Client) u).isHasLoyalityCard()) {
+			if(u instanceof Client && ((Client) u).hasLoyalityCard()) {
 				loyalityReport.add((Client)u);
 			}
 		}
 		return loyalityReport;
-	}
-	
-
-	public static HashMap<LocalDate, HashMap<Beautician, HashMap<ReportOption, Double>>> getBeauticianReport(LocalDate startDate, LocalDate endDate) {
-		return null;
 	}
 
 	
@@ -79,12 +74,14 @@ public class Report {
 				if(!beauticianReport.containsKey(treatment.getValue().getBeautician())) {
 					ArrayList<Double> data = new ArrayList<Double>();
 					data.add(treatment.getValue().getPrice());
+					treatment.getValue().getBeautician().setIncome(treatment.getValue().getPrice());
 					data.add(1.0);
 					beauticianReport.put(treatment.getValue().getBeautician(), data);
 				}else {
 					double count = beauticianReport.get(treatment.getValue().getBeautician()).get(1) + 1.0;
 					double price = beauticianReport.get(treatment.getValue().getBeautician()).get(0) + treatment.getValue().getPrice();
 					beauticianReport.get(treatment.getValue().getBeautician()).set(0, price);
+					treatment.getValue().getBeautician().setIncome(price);
 					beauticianReport.get(treatment.getValue().getBeautician()).set(1, count);
 				}
 			}
