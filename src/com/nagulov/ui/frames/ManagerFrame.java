@@ -19,6 +19,8 @@ import com.nagulov.ui.EditUserDialog;
 import com.nagulov.ui.LoginDialog;
 import com.nagulov.ui.Table;
 import com.nagulov.ui.TableDialog;
+import com.nagulov.ui.charts.BeauticianChartDialog;
+import com.nagulov.ui.charts.TreatmentChartDialog;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -42,6 +44,8 @@ public class ManagerFrame extends JFrame{
 	private JMenuItem treatmentItem = new JMenuItem("Treatments");
 
 	private JMenu analyticsMenu = new JMenu("Analytics");
+	private JMenuItem analyticsTreatment = new JMenuItem("Treatments in past 30 days");
+	private JMenuItem analyticsBeautician = new JMenuItem("Beauticians in past 30 days");
 	private JPanel userInfo = new JPanel();
 
 	private void initManagerFrame() {
@@ -49,6 +53,9 @@ public class ManagerFrame extends JFrame{
 		dataMenu.add(userItem);
 		dataMenu.add(serviceItem);
 		dataMenu.add(treatmentItem);
+		
+		analyticsMenu.add(analyticsTreatment);
+		analyticsMenu.add(analyticsBeautician);
 		
 		menu.add(analyticsMenu);
 		menu.add(dataMenu);
@@ -62,7 +69,7 @@ public class ManagerFrame extends JFrame{
 		userInfo.add(new JLabel("Address: " + DataBase.loggedUser.getAddress()));
 		
 //		JPanel beauticianChart = new XChartPanel<PieChart>(ReportChart.initBeauticianChart());
-//		JPanel treatmentChart = new XChartPanel<PieChart>(ReportChart.initTreatmentChart());
+		
 //		JPanel serviceIncomeChart = new XChartPanel<XYChart>(ReportChart.initServiceIncomeChart());
 		
 		this.setJMenuBar(menu);
@@ -124,6 +131,20 @@ public class ManagerFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new TableDialog(Table.TREATMENT);
+			}
+		});
+		
+		analyticsTreatment.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new TreatmentChartDialog();
+			}
+		});
+		
+		analyticsBeautician.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new BeauticianChartDialog();
 			}
 		});
 	

@@ -9,85 +9,89 @@ import java.util.Map;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.Treatment;
 import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
 import com.nagulov.users.User;
 
 public class Report {
-	private static HashMap<LocalDate, HashMap<Beautician, HashMap<ReportOption, Double>>> beauticianReport = new HashMap<LocalDate, HashMap<Beautician, HashMap<ReportOption, Double>>>();
-	private static HashMap<LocalDate, HashMap<TreatmentStatus, Integer>> treatmentsReport = new HashMap<LocalDate, HashMap<TreatmentStatus, Integer>>();
+//	private static HashMap<LocalDate, HashMap<Beautician, HashMap<ReportOption, Double>>> beauticianReport = new HashMap<LocalDate, HashMap<Beautician, HashMap<ReportOption, Double>>>();
 	private static HashMap<CosmeticService, HashMap<String, Integer>> servicesReport = new HashMap<CosmeticService, HashMap<String, Integer>>();
-	private static List<Client> loyalityReport = new ArrayList<Client>();
-
-	public static void updateCosmetologistReport(LocalDate date, Beautician c, double income) {
-		HashMap<Beautician, HashMap<ReportOption, Double>> report = new HashMap<Beautician, HashMap<ReportOption, Double>>();
-		if(beauticianReport.get(date) == null) {
-			HashMap<ReportOption, Double> data = new HashMap<ReportOption, Double>();
-			data.put(ReportOption.INCOME, income);
-			data.put(ReportOption.TREATMENT, 1.0);
-			report.put(c, data);
-			beauticianReport.put(date, report);	
-			return;
-		}
-		
-		if(beauticianReport.get(date).get(c) == null) {
-			HashMap<ReportOption, Double> data = new HashMap<ReportOption, Double>();
-			data.put(ReportOption.INCOME, income);
-			data.put(ReportOption.TREATMENT, 1.0);
-			beauticianReport.get(date).put(c, data);	
-			return;
-		}
-		
-		double newIncome = beauticianReport.get(date).get(c).get(ReportOption.INCOME) + income;
-		beauticianReport.get(date).get(c).put(ReportOption.INCOME, newIncome);
-		double newTreatmentsCount = beauticianReport.get(date).get(c).get(ReportOption.TREATMENT) + 1;
-		beauticianReport.get(date).get(c).put(ReportOption.TREATMENT, newTreatmentsCount);
-	}
 	
-	public static void updateServicesReport() {
-		
-	}
-	
-	public static void updateLoyalityReport(Client client) {
-		if(!loyalityReport.contains(client)) {
-			loyalityReport.add(client);
-		}
-	}
-		
-	public static void updateTreatmentsReport(TreatmentStatus status, LocalDate date) {
-		if(treatmentsReport.containsKey(date)) {
-			if(treatmentsReport.get(date).containsKey(status)) {
-				treatmentsReport.get(date).put(status, treatmentsReport.get(date).get(status) + 1);
-			}
-			else {
-				treatmentsReport.get(date).put(status, 1);
-			}
-			return;
-		}
-		HashMap<TreatmentStatus, Integer> treatmentStatus = new HashMap<TreatmentStatus, Integer>();
-		treatmentStatus.put(status, 1);
-		treatmentsReport.put(date, treatmentStatus);
+	public static HashMap<TreatmentStatus, Integer> treatmentReport = new HashMap<TreatmentStatus, Integer>();
+	public static HashMap<Beautician, ArrayList<Double>> beauticianReport = new HashMap<Beautician, ArrayList<Double>>();
+	private static boolean isInInterval(LocalDate startDate, LocalDate endDate, LocalDate checkDate) {
+		return !(checkDate.isAfter(endDate) || checkDate.isBefore(startDate));
 	}
 	
 	public static List<Client> getLoyalityReport() {
-		if(loyalityReport.isEmpty()) {
-			for(Map.Entry<String, User> entry : UserController.getInstance().getUsers().entrySet()) {
-				User u = entry.getValue(); 
-				if(u instanceof Client && ((Client) u).isHasLoyalityCard()) {
-					loyalityReport.add((Client)u);
-				}
+		List<Client> loyalityReport = new ArrayList<Client>();
+		for(Map.Entry<String, User> entry : UserController.getInstance().getUsers().entrySet()) {
+			User u = entry.getValue(); 
+			if(u instanceof Client && ((Client) u).isHasLoyalityCard()) {
+				loyalityReport.add((Client)u);
 			}
 		}
 		return loyalityReport;
 	}
+	
 
-	public static HashMap<LocalDate, HashMap<Beautician, HashMap<ReportOption, Double>>> getBeauticianReport() {
-		return beauticianReport;
+	public static HashMap<LocalDate, HashMap<Beautician, HashMap<ReportOption, Double>>> getBeauticianReport(LocalDate startDate, LocalDate endDate) {
+		return null;
 	}
 
-	public static HashMap<LocalDate, HashMap<TreatmentStatus, Integer>> getTreatmentsReport() {
-		return treatmentsReport;
+	
+	public static HashMap<TreatmentStatus, Integer> calculateTreatmentsReport(LocalDate startDate, LocalDate endDate) {
+		treatmentReport.clear();
+		treatmentReport.put(TreatmentStatus.CANCELED_BY_THE_CLIENT, 0);
+		treatmentReport.put(TreatmentStatus.CANCELED_BY_THE_SALON, 0);
+		treatmentReport.put(TreatmentStatus.DID_NOT_SHOW_UP, 0);
+		treatmentReport.put(TreatmentStatus.PERFORMED, 0);
+		treatmentReport.put(TreatmentStatus.SCHEDULED, 0);
+		
+		for(Map.Entry<Integer, Treatment> treatment : DataBase.treatments.entrySet()) {
+			LocalDate treatmentDate = treatment.getValue().getDate().toLocalDate();
+			if(isInInterval(startDate, endDate, treatmentDate)) {
+				if(treatment.getValue().getStatus().equals(TreatmentStatus.CANCELED_BY_THE_CLIENT)) {
+					treatmentReport.put(TreatmentStatus.CANCELED_BY_THE_CLIENT, treatmentReport.get(TreatmentStatus.CANCELED_BY_THE_CLIENT) + 1);
+				}else if(treatment.getValue().getStatus().equals(TreatmentStatus.CANCELED_BY_THE_SALON)) {	
+					treatmentReport.put(TreatmentStatus.CANCELED_BY_THE_SALON, treatmentReport.get(TreatmentStatus.CANCELED_BY_THE_SALON) + 1);
+				}else if(treatment.getValue().getStatus().equals(TreatmentStatus.DID_NOT_SHOW_UP)) {
+					treatmentReport.put(TreatmentStatus.DID_NOT_SHOW_UP, treatmentReport.get(TreatmentStatus.DID_NOT_SHOW_UP) + 1);
+				}else if(treatment.getValue().getStatus().equals(TreatmentStatus.PERFORMED)) {
+					treatmentReport.put(TreatmentStatus.PERFORMED, treatmentReport.get(TreatmentStatus.PERFORMED) + 1);
+				}else {
+					treatmentReport.put(TreatmentStatus.SCHEDULED, treatmentReport.get(TreatmentStatus.SCHEDULED) + 1);
+				}
+			}
+		}
+		
+		return treatmentReport;
+	}
+	
+	public static HashMap<Beautician, ArrayList<Double>> calculateBeauticianReport(LocalDate startDate, LocalDate endDate){
+		beauticianReport.clear();
+		
+		for(Map.Entry<Integer, Treatment> treatment : DataBase.treatments.entrySet()) {
+			LocalDate treatmentDate = treatment.getValue().getDate().toLocalDate();
+			if(isInInterval(startDate, endDate, treatmentDate) && treatment.getValue().getStatus().equals(TreatmentStatus.PERFORMED)) {
+				if(!beauticianReport.containsKey(treatment.getValue().getBeautician())) {
+					ArrayList<Double> data = new ArrayList<Double>();
+					data.add(treatment.getValue().getPrice());
+					data.add(1.0);
+					beauticianReport.put(treatment.getValue().getBeautician(), data);
+				}else {
+					double count = beauticianReport.get(treatment.getValue().getBeautician()).get(1) + 1.0;
+					double price = beauticianReport.get(treatment.getValue().getBeautician()).get(0) + treatment.getValue().getPrice();
+					beauticianReport.get(treatment.getValue().getBeautician()).set(0, price);
+					beauticianReport.get(treatment.getValue().getBeautician()).set(1, count);
+				}
+			}
+		}
+		
+		
+		return beauticianReport;
 	}
 	
 	public static HashMap<CosmeticService, HashMap<String, Integer>> getServicesReport() {

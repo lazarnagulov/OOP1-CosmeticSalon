@@ -66,22 +66,14 @@ public class UserModel extends AbstractTableModel{
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		User u = users.get(rowIndex);
 		switch (columnIndex) {
-		case 0:
-			return u.getClass().getSimpleName();
-		case 1:
-			return u.getUsername();
-		case 2:
-			return u.getPassword();
-		case 3:
-			return u.getName();
-		case 4:
-			return u.getSurname();
-		case 5:
-			return u.getGender();
-		case 6:
-			return u.getPhoneNumber();
-		case 7:
-			return u.getAddress();
+			case 0: return u.getClass().getSimpleName();
+			case 1: return u.getUsername();
+			case 2: return u.getPassword();
+			case 3: return u.getName();
+			case 4: return u.getSurname();
+			case 5: return u.getGender();
+			case 6: return u.getPhoneNumber();
+			case 7: return u.getAddress();
 		}
 		return null;
 	}

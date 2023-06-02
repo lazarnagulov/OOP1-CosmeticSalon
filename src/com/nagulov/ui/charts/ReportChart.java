@@ -1,6 +1,7 @@
 package com.nagulov.ui.charts;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 
 import com.nagulov.reports.Report;
-import com.nagulov.reports.ReportOption;
+import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.users.Beautician;
 
 public class ReportChart{
@@ -47,25 +48,10 @@ public class ReportChart{
 				.height(300)
 				.build();
 		
-		HashMap<Beautician, Integer> beauticians = new HashMap<Beautician, Integer>();
-		LocalDate endDate = LocalDate.now().plusDays(1);
+		HashMap<Beautician, ArrayList<Double>> data = Report.calculateBeauticianReport(LocalDate.now().minusDays(30), LocalDate.now());
 		
-		for(LocalDate start = LocalDate.now().minusDays(30); start.isBefore(endDate); start = start.plusDays(1)) {
-			if(Report.getBeauticianReport().containsKey(start)){
-				for(Map.Entry<Beautician, HashMap<ReportOption, Double>> entry : Report.getBeauticianReport().get(start).entrySet()) {
-					if(beauticians.containsKey(entry.getKey())) {
-						beauticians.put(entry.getKey(), (int) (beauticians.get(entry.getKey()) + entry.getValue().get(ReportOption.TREATMENT)));
-					}
-					else {
-						beauticians.put(entry.getKey(), (int) (0 + entry.getValue().get(ReportOption.TREATMENT)));
-					}
-				}
-			}
-		}
-		
-		
-		for(Map.Entry<Beautician, Integer> entry : beauticians.entrySet()) {
-			beauticianChart.addSeries(entry.getKey().getUsername(), entry.getValue());
+		for(Map.Entry<Beautician, ArrayList<Double>> entry : data.entrySet()) {
+			beauticianChart.addSeries(entry.getKey().getUsername(), entry.getValue().get(1));
 		}
 		
 		return beauticianChart;
@@ -73,12 +59,17 @@ public class ReportChart{
 	
 	public static PieChart initTreatmentChart() {
 		PieChart treatmentChart = new PieChartBuilder()
-				.title("Status of treatments in past 30 days")
+				.title("Treatments in past 30 days")
 				.width(400)
 				.height(300)
 				.build();
+
+		HashMap<TreatmentStatus, Integer> data = Report.calculateTreatmentsReport(LocalDate.now().minusDays(30), LocalDate.now());
+		for(Map.Entry<TreatmentStatus, Integer> entry : data.entrySet()) {
+			treatmentChart.addSeries(entry.getKey().toString().replace("_", " "), entry.getValue());
+		}
 		
-				return treatmentChart;
+		return treatmentChart;
 	}
 	
 	public static XYChart initServiceIncomeChart() {
