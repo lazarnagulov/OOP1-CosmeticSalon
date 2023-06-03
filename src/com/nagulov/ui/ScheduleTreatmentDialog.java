@@ -35,6 +35,7 @@ import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.Salon;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.ui.models.TreatmentModel;
@@ -108,7 +109,10 @@ public class ScheduleTreatmentDialog extends JDialog{
 		
 		beauticianBox.setEnabled(false);
 		skipButton.setEnabled(false);
+		datePicker.setEnabled(false);
 		confirmBeauticianButton.setEnabled(false);
+		timeField.setEnabled(false);
+		confirmButton.setEnabled(false);
 		
 		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][]20[][][][]20[]"));
 		this.getContentPane().add(new JLabel("Schedule treatment"), "span 2, center");
@@ -143,7 +147,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 					JOptionPane.showMessageDialog(null, ErrorMessage.NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
+				beauticianBox.addItem("");
 				for(Map.Entry<String, User> entry : UserController.getInstance().getUsers().entrySet()) {
 					if(!(entry.getValue() instanceof Beautician)) {
 						continue;
@@ -156,18 +160,35 @@ public class ScheduleTreatmentDialog extends JDialog{
 				beauticianBox.setEnabled(true);
 				skipButton.setEnabled(true);
 				confirmBeauticianButton.setEnabled(true);
+				datePicker.setEnabled(false);
 			}
 			
+		});
+
+		skipButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				beauticianBox.setSelectedItem("");
+				beauticianBox.setEnabled(false);
+				skipButton.setEnabled(false);
+				confirmBeauticianButton.setEnabled(false);
+				timeField.setEnabled(true);
+				confirmButton.setEnabled(true);
+			}
+		});
+		
+		confirmBeauticianButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				beauticianBox.setEnabled(false);
+				confirmButton.setEnabled(true);
+				timeField.setEnabled(true);
+			}
 		});
 		
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String beautician = beauticianBox.getSelectedItem().toString();
-				Beautician b = (Beautician)UserController.getInstance().getUser(beautician);
-				if(b == null) {
-					return;
-				}
 				String service = null;
 				String treatment = null;
 				for(JRadioButton btn : checkboxes) {
@@ -177,21 +198,31 @@ public class ScheduleTreatmentDialog extends JDialog{
 						break;
 					}
 				}
-				if(service == null || treatment == null) {
-					JOptionPane.showMessageDialog(null, ErrorMessage.NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
 				String[] hm = timeField.getText().split(":");
 				LocalTime time = LocalTime.of(Integer.parseInt(hm[0]), Integer.parseInt(hm[1]));
 				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 				LocalDateTime dateTime = LocalDateTime.of(date, time);
 				
+				String beautician = beauticianBox.getSelectedItem().toString();
+				Beautician b = (Beautician)UserController.getInstance().getUser(beautician);
+				if(b == null) {
+					b = UserController.getInstance().findAvailableBeautician(dateTime, DataBase.services.get(service));
+					if(b == null) {
+						JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+						timeField.setText("");
+						return;
+					}
+				}
+				if(!b.canOperate(dateTime)) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				String treatmentStr = new StringBuilder("Service: ")
 						.append(service).append("\n")
 						.append("Treatment: ")
 						.append(treatment).append("\n")
 						.append("Beautician: ")
-						.append(beautician).append("\n")
+						.append(b.getUsername()).append("\n")
 						.append("Date: ")
 						.append(date.format(DataBase.DATE_FORMAT)).append("\n")
 						.append("Time: ")
@@ -208,12 +239,9 @@ public class ScheduleTreatmentDialog extends JDialog{
 			}
 		});
 
-		
-		
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
 				dispose();
 			}
 		});
@@ -222,7 +250,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 	
 	
 	public ScheduleTreatmentDialog() {
-		this.setTitle(DataBase.salonName);
+		this.setTitle(Salon.getInstance().getSalonName());
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.initScheduleTreatmentDialog();

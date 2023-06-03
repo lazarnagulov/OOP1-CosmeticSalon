@@ -2,6 +2,7 @@ package com.nagulov.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import javax.swing.JButton;
@@ -9,8 +10,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import com.nagulov.controllers.SalonController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
+import com.nagulov.treatments.Salon;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -30,15 +33,20 @@ public class EditSalonDialog extends JDialog {
 	private JButton cancelButton = new JButton("Cancel");
 	
 	private void initEditSalonDialog() {
-		salonNameField.setText(DataBase.salonName);
-		openingTimeField.setText(DataBase.opening.toString());
-		closingTimeField.setText(DataBase.closing.toString());
+		salonNameField.setText(Salon.getInstance().getSalonName());
+		openingTimeField.setText(Salon.getInstance().getOpening().toString());
+		closingTimeField.setText(Salon.getInstance().getClosing().toString());
 		loyalityCardRequirementField.setText(Double.valueOf(UserController.getInstance().loyaltyCardNeeded).toString());
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[][][][][]20[]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[][][][][][][][]20[]"));
 		
 		this.getContentPane().add(new JLabel("Salon name"), "span 2");
 		this.getContentPane().add(salonNameField, "span 2");
+		this.getContentPane().add(new JLabel("Income and expenditure " + LocalDate.now().withDayOfMonth(1).format(DataBase.DATE_FORMAT) + " - " + LocalDate.now().format(DataBase.DATE_FORMAT)), "span 2");
+		this.getContentPane().add(new JLabel("Income: "));
+		this.getContentPane().add(new JLabel(Double.valueOf(SalonController.getInstance().calculateIncome(LocalDate.now().withDayOfMonth(1), LocalDate.now())).toString()));
+		this.getContentPane().add(new JLabel("Expenditure: "));
+		this.getContentPane().add(new JLabel(Double.valueOf(SalonController.getInstance().calculateExpenditure(LocalDate.now().withDayOfMonth(1), LocalDate.now())).toString()));
 		this.getContentPane().add(new JLabel("Working time"), "span 2");
 		this.getContentPane().add(openingTimeField);
 		this.getContentPane().add(closingTimeField);
@@ -54,8 +62,9 @@ public class EditSalonDialog extends JDialog {
 				LocalTime opening = LocalTime.parse(openingTimeField.getText());
 				LocalTime closing = LocalTime.parse(closingTimeField.getText());
 				double loyalityCard = Double.parseDouble(loyalityCardRequirementField.getText());
-				UserController.getInstance().updateSalonName(salonName);
-				UserController.getInstance().updateWorkingTime(opening, closing);
+				Salon.getInstance().setSalonName(salonName);
+				Salon.getInstance().setOpening(opening);
+				Salon.getInstance().setClosing(closing);
 				UserController.getInstance().loyaltyCardNeeded = loyalityCard;
 				
 				setVisible(false);
@@ -73,7 +82,7 @@ public class EditSalonDialog extends JDialog {
 	}
 	
 	public EditSalonDialog() {
-		this.setTitle(DataBase.salonName);
+		this.setTitle(Salon.getInstance().getSalonName());
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.initEditSalonDialog();

@@ -16,6 +16,7 @@ import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
+import com.nagulov.treatments.Salon;
 import com.nagulov.ui.models.ServiceModel;
 
 import net.miginfocom.swing.MigLayout;
@@ -104,7 +105,7 @@ public class EditServiceDialog extends JDialog {
 		this.service = service;
 		this.treatment = treatment;
 		this.row = row;
-		setTitle(DataBase.salonName);
+		setTitle(Salon.getInstance().getSalonName());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		initEditServiceDialog();

@@ -10,7 +10,6 @@ public class Client extends User{
 
 	private List<Treatment> treatments = new ArrayList<Treatment>();
 	private double spent = 0;
-	private double balance = 0;
 	private boolean hasLoyalityCard = false;
 	
 	public Client() {
@@ -23,6 +22,7 @@ public class Client extends User{
 	
 	public void addTreatment(Treatment t) {
 		if(!treatments.contains(t)) {
+			spent += t.getPrice();
 			treatments.add(t);
 		}
 	}
@@ -50,6 +50,23 @@ public class Client extends User{
 	
 
 	public double getSpent() {
+		double s = 0;
+		for(Treatment t : treatments) {
+			switch(t.getStatus()) {
+				case CANCELED_BY_THE_CLIENT:
+					s += t.getPrice() * 0.1;
+					break;
+				case DID_NOT_SHOW_UP:
+				case PERFORMED:
+				case SCHEDULED:
+					s += t.getPrice();
+					break;
+				case CANCELED_BY_THE_SALON:
+					break;
+			
+			}
+		}
+		spent = s;
 		return spent;
 	}
 
@@ -78,18 +95,9 @@ public class Client extends User{
 			    .append(this.getPhoneNumber()).append(",")
 			    .append(this.getAddress()).append(",")
 			    .append(this.spent).append(",")
-			    .append(this.hasLoyalityCard).append(",")
-				.append(this.balance).append(",");
+			    .append(this.hasLoyalityCard).append(",");
 		
 		return data.toString();
-	}
-
-	public double getBalance() {
-		return balance;
-	}
-
-	public void setBalance(double balance) {
-		this.balance = balance;
 	}
 
 }

@@ -13,6 +13,7 @@ import org.knowm.xchart.XChartPanel;
 
 import com.nagulov.data.DataBase;
 import com.nagulov.reports.Report;
+import com.nagulov.treatments.Salon;
 import com.nagulov.treatments.TreatmentStatus;
 
 import net.miginfocom.swing.MigLayout;
@@ -38,7 +39,7 @@ public class BeauticianChartDialog extends JDialog{
 	
 
 	public BeauticianChartDialog() {
-		setTitle(DataBase.salonName);
+		setTitle(Salon.getInstance().getSalonName());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		initChartDialog();

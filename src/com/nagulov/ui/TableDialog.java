@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -19,13 +20,19 @@ import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.ui.models.BeauticianIncomeModel;
 import com.nagulov.ui.models.LoyalityCardModel;
 import com.nagulov.ui.models.ServiceModel;
+import com.nagulov.ui.models.TimeTableModel;
 import com.nagulov.ui.models.TreatmentModel;
 import com.nagulov.ui.models.UserModel;
+import com.nagulov.users.Beautician;
+import com.nagulov.users.Client;
 import com.nagulov.users.Receptionist;
 import com.nagulov.users.User;
+
+import net.miginfocom.swing.MigLayout;
 
 public class TableDialog extends JDialog {
 	
@@ -227,7 +234,7 @@ public class TableDialog extends JDialog {
 		table = new JTable(new LoyalityCardModel());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getTableHeader().setReorderingAllowed(false);
-		this.setSize(500,300);
+		this.setSize(800,300);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
@@ -238,8 +245,110 @@ public class TableDialog extends JDialog {
 		this.setVisible(true);
 	}
 	
+	private void initBeauticianTreatment() {
+		this.setTitle("Treatments");	
+		table = new JTable(new TreatmentModel());
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
+		this.setSize(800,300);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		JButton performTreatment = new JButton("Perform treatment");
+		
+		this.setLocationRelativeTo(null);
+		this.getContentPane().setLayout(new MigLayout("wrap", "[grow,fill]", "[center]20[grow,fill][]"));
+		JScrollPane sc = new JScrollPane(table);
+		this.getContentPane().add(new JLabel("Treatments list:"), "center");
+		this.getContentPane().add(sc, "center");
+		this.getContentPane().add(performTreatment, "center");
+		
+		this.setVisible(true);
+	
+		performTreatment.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				if(row == -1) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				int treatmentId = TreatmentModel.getTreatment(row).getId();
+				TreatmentStatus status = TreatmentController.getInstance().getTreatment(treatmentId).getStatus();
+				if(status.equals(TreatmentStatus.SCHEDULED)) {
+					TreatmentController.getInstance().getTreatment(treatmentId).setStatus(TreatmentStatus.PERFORMED);
+					refreshTreatment();
+				}else {
+					JOptionPane.showMessageDialog(null, ErrorMessage.CANNOT_PERFORM.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+	}
+	
+	private void initClientTreatment() {
+		this.setTitle("Treatments");	
+		table = new JTable(new TreatmentModel());
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
+		this.setSize(800,300);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		JButton cancelTreatment = new JButton("Cancel treatment");
+		
+		this.setLocationRelativeTo(null);
+		this.getContentPane().setLayout(new MigLayout("wrap", "[grow,fill]", "[]20[grow,fill][]"));
+		JScrollPane sc = new JScrollPane(table);
+		this.getContentPane().add(new JLabel("Treatments list:"), "center");
+		this.getContentPane().add(sc, "center");
+		this.getContentPane().add(cancelTreatment, "center");
+		
+		this.setVisible(true);
+	
+		cancelTreatment.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				if(row == -1) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				int treatmentId = TreatmentModel.getTreatment(row).getId(); 
+				TreatmentStatus status = TreatmentController.getInstance().getTreatment(treatmentId).getStatus();
+				if(status.equals(TreatmentStatus.SCHEDULED)) {
+					int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to cancel treatment?", "Confirm", JOptionPane.YES_NO_OPTION);
+					if(choice == JOptionPane.OK_OPTION) {	
+						TreatmentController.getInstance().getTreatment(treatmentId).setStatus(TreatmentStatus.CANCELED_BY_THE_CLIENT);
+						refreshTreatment();
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, ErrorMessage.CANNOT_CANCEL.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+	}
+	
+	private void initTimeTable() {
+		this.setTitle("Timetable");	
+		table = new JTable(new TimeTableModel());
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
+		this.setSize(800,300);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		
+		this.setLocationRelativeTo(null);
+		JScrollPane sc = new JScrollPane(table);
+		this.getContentPane().add(sc, BorderLayout.CENTER);
+		
+		this.setVisible(true);
+	
+	}
+	
 	private void init() {
-		this.setSize(500,300);
+		this.setSize(800,300);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
@@ -289,8 +398,33 @@ public class TableDialog extends JDialog {
 				LoyalityCardModel.init();
 				initLoyalityCard();
 				break;
+			case TIMETABLE:
+			default:
+				break;
 		}
 		
+	}
+	
+	public TableDialog(Table table, User user) {
+		if(table.equals(Table.TREATMENT)) {
+			if(user instanceof Client) {
+				TreatmentModel.init((Client)user);
+				initClientTreatment();
+				return;
+			}else if(user instanceof Beautician) {
+				TreatmentModel.init((Beautician)user);
+				initBeauticianTreatment();
+				return;
+			}
+		}
+		
+		if(table.equals(Table.TIMETABLE)) {
+			if(user instanceof Beautician) {
+				TimeTableModel.init((Beautician)user);
+				initTimeTable();
+				return;
+			}
+		}
 	}
 	
 	

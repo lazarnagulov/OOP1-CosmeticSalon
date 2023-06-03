@@ -21,6 +21,7 @@ import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.Salon;
 import com.nagulov.ui.models.UserModel;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
@@ -224,7 +225,7 @@ public class RegisterDialog extends JDialog{
 	}
 
 	public RegisterDialog(boolean isManager) {
-		this.setTitle(DataBase.salonName);
+		this.setTitle(Salon.getInstance().getSalonName());
 		this.setSize(724,540);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

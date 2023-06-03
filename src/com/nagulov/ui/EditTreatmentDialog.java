@@ -34,6 +34,8 @@ import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.Pricelist;
+import com.nagulov.treatments.Salon;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.ui.models.TreatmentModel;
@@ -113,7 +115,7 @@ public class EditTreatmentDialog extends JDialog{
 		for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
 			CosmeticService cs = service.getValue();
 			for(int i = 0; i < cs.getTreatments().size(); ++i) {
-				JRadioButton btn = new JRadioButton(cs.getName() + "-" + cs.getTreatments().get(i));
+				JRadioButton btn = new JRadioButton(cs.getName() + "-" + cs.getTreatments().get(i) + "-" + Pricelist.getInstance().getPrice(cs.getTreatments().get(i)));
 				serviceTreatmentGroup.add(btn);
 				stPanel.add(btn);
 				checkboxes.add(btn);
@@ -175,6 +177,10 @@ public class EditTreatmentDialog extends JDialog{
 				if(b == null) {
 					return;
 				}
+				if(treatment != null && !b.equals(treatment.getBeautician())) {
+					treatment.getBeautician().removeTreatment(treatment);
+					b.addTreatment(treatment);
+				}
 				String service = null;
 				String ctreatment = null;
 				for(JRadioButton btn : checkboxes) {
@@ -196,19 +202,27 @@ public class EditTreatmentDialog extends JDialog{
 					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_WITHOUT_SERVICE.getError() + service, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+				if(treatment != null && !treatment.getDate().equals(dateTime) && !b.canOperate(dateTime)) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				
 				String client = clientBox.getSelectedItem().toString();
 				if(treatment != null) {
 					TreatmentController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
 				}
 				else {
+					if(!b.canOperate(dateTime)) {
+						JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 					Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
 					TreatmentModel.addTreatment(t);
+					t.getBeautician().addTreatment(t);
 					t.getClient().addSpent(t.getPrice());
 				}
 				TableDialog.refreshTreatment();
 
-				
 				dispose();
 			}
 		});
@@ -223,7 +237,7 @@ public class EditTreatmentDialog extends JDialog{
 	
 	public EditTreatmentDialog() {
 		this.treatment = null;
-		this.setTitle(DataBase.salonName);
+		this.setTitle(Salon.getInstance().getSalonName());
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		initEditServiceDialog();
@@ -234,7 +248,7 @@ public class EditTreatmentDialog extends JDialog{
 	
 	public EditTreatmentDialog(Treatment treatment) {
 		this.treatment = treatment;
-		this.setTitle(DataBase.salonName);
+		this.setTitle(Salon.getInstance().getSalonName());
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		initEditServiceDialog();

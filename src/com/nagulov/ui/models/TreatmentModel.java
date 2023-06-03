@@ -9,6 +9,8 @@ import javax.swing.table.AbstractTableModel;
 import com.nagulov.controllers.TreatmentController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.Treatment;
+import com.nagulov.users.Beautician;
+import com.nagulov.users.Client;
 
 public class TreatmentModel extends AbstractTableModel {
 	
@@ -17,7 +19,32 @@ public class TreatmentModel extends AbstractTableModel {
 	private static List<Treatment> treatments = new ArrayList<Treatment>();
 	
 	public static void init() {
+		treatments.clear();
 		for(Map.Entry<Integer, Treatment> entry : TreatmentController.getInstance().getTreatments().entrySet()) {
+			if(!treatments.contains(entry.getValue())) {
+				treatments.add(entry.getValue());
+			}
+		}
+	}
+
+	public static void init(Beautician b) {
+		treatments.clear();
+		for(Map.Entry<Integer, Treatment> entry : TreatmentController.getInstance().getTreatments().entrySet()) {
+			if(!entry.getValue().getBeautician().equals(b)) {
+				continue;
+			}
+			if(!treatments.contains(entry.getValue())) {
+				treatments.add(entry.getValue());
+			}
+		}
+	}
+	
+	public static void init(Client c) {
+		treatments.clear();
+		for(Map.Entry<Integer, Treatment> entry : TreatmentController.getInstance().getTreatments().entrySet()) {
+			if(!entry.getValue().getClient().equals(c)) {
+				continue;
+			}
 			if(!treatments.contains(entry.getValue())) {
 				treatments.add(entry.getValue());
 			}
@@ -63,25 +90,19 @@ public class TreatmentModel extends AbstractTableModel {
 		Treatment t = treatments.get(rowIndex);
 		try {
 			switch(columnIndex) {
-				case 0:
-					return t.getStatus();
-				case 1:
-					return t.getService();
-				case 2:
-					return t.getTreatment().getName();
-				case 3:
-					return t.getBeautician().getUsername();
-				case 4:
-					return t.getDate().format(DataBase.TREATMENTS_DATE_FORMAT);
-				case 5:
-					return t.getClient().getUsername();
-				case 6:
-					return t.getPrice();
-				default:
-					return null; 
+				case 0: return t.getStatus();
+				case 1: return t.getService();
+				case 2: return t.getTreatment().getName();
+				case 3: return t.getBeautician().getUsername();
+				case 4: return t.getDate().format(DataBase.TREATMENTS_DATE_FORMAT);
+				case 5: return t.getClient().getUsername();
+				case 6: return t.getPrice();
+				default: return null; 
 			}
 		}catch(NullPointerException e) {
-			return "Deleted";
+			return null;
 		}
 	}
+
+
 }

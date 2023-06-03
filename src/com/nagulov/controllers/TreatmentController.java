@@ -43,6 +43,9 @@ public class TreatmentController {
 				.setTreatment(treatment)
 				.setPrice(Pricelist.getInstance().getPrice(treatment))
 				.build();
+		if(t.getClient().hasLoyalityCard()) {
+			t.setPrice(t.getPrice() * 0.9);
+		}
 		treatments.put(DataBase.treatmentId, t);
 		return t;
 	}

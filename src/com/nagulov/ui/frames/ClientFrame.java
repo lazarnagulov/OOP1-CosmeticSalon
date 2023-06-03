@@ -10,10 +10,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
+import com.nagulov.treatments.Salon;
 import com.nagulov.ui.EditUserDialog;
 import com.nagulov.ui.LoginDialog;
 import com.nagulov.ui.ScheduleTreatmentDialog;
+import com.nagulov.ui.Table;
+import com.nagulov.ui.TableDialog;
 import com.nagulov.users.Client;
 
 import net.miginfocom.swing.MigLayout;
@@ -43,7 +47,7 @@ public class ClientFrame extends JFrame {
 		userInfo.add(new JLabel("Gender: " + c.getGender()));
 		userInfo.add(new JLabel("Phone number: " + c.getPhoneNumber()));
 		userInfo.add(new JLabel("Address: " + c.getAddress()));
-		userInfo.add(new JLabel("Balance: " + c.getBalance()));
+		userInfo.add(new JLabel("Loyality card status: " + c.getSpent() + "/" + UserController.getInstance().loyaltyCardNeeded));
 		
 		this.getContentPane().setLayout(new MigLayout("wrap 2, fillx", "[][]", "[]20[][]20[]"));
 		
@@ -58,7 +62,7 @@ public class ClientFrame extends JFrame {
 		cancelTreatmentButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				new TableDialog(Table.TREATMENT, (Client)DataBase.loggedUser);
 			}
 			
 		});
@@ -92,7 +96,7 @@ public class ClientFrame extends JFrame {
 	}
 
 	public ClientFrame() {
-		this.setTitle(DataBase.salonName);
+		this.setTitle(Salon.getInstance().getSalonName());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.addWindowListener(new WindowAdapter() {

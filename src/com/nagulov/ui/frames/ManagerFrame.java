@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import com.nagulov.data.DataBase;
 import com.nagulov.reports.BeauticianIncomeDialog;
+import com.nagulov.treatments.Salon;
 import com.nagulov.ui.EditSalonDialog;
 import com.nagulov.ui.EditUserDialog;
 import com.nagulov.ui.LoginDialog;
@@ -118,7 +119,6 @@ public class ManagerFrame extends JFrame{
 				DataBase.saveServices();
 				DataBase.saveTreatments();
 				DataBase.saveUsers();
-				setVisible(false);
 				dispose();
 				new LoginDialog();
 			}
@@ -180,7 +180,7 @@ public class ManagerFrame extends JFrame{
 	}
 	
 	void managerFrame() {
-		this.setTitle(DataBase.salonName);
+		this.setTitle(Salon.getInstance().getSalonName());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.addWindowListener(new WindowAdapter() {

@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.Salon;
 import com.nagulov.ui.models.UserModel;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
@@ -142,7 +143,11 @@ public class EditUserDialog extends JDialog{
 				bonusesField.setText(Double.valueOf(s.getBonuses()).toString());
 				salaryField.setText(Double.valueOf(s.getSalary()).toString());
 				internshipField.setText(Integer.valueOf(s.getInternship()).toString());
-				incomeField.setText(Double.valueOf(s.getIncome()).toString());
+				if(s instanceof Beautician) {
+					incomeField.setText(Double.valueOf(((Beautician)s).calculateIncome()).toString());
+				}else {
+					incomeField.setText(Double.valueOf(s.getIncome()).toString());
+				}
 			}catch(ClassCastException e) {
 				
 			}
@@ -260,7 +265,7 @@ public class EditUserDialog extends JDialog{
 					
 					if (role.equals(DataBase.BEAUTICIAN)) {
 						Beautician b = (Beautician)UserController.getInstance().getUser(username);
-						b.getTreatments().clear();
+						b.getServices().clear();
 						for(JCheckBox cb : checkboxes) {
 							if(cb.isSelected()) {
 								CosmeticService service = DataBase.services.get(cb.getText());
@@ -291,7 +296,7 @@ public class EditUserDialog extends JDialog{
 
 	public EditUserDialog(User user) {
 		this.user = user;
-		setTitle(DataBase.salonName);
+		setTitle(Salon.getInstance().getSalonName());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		initEditUserDialog();

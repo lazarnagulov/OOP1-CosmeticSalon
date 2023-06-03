@@ -1,7 +1,9 @@
 package com.nagulov.controllers;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
@@ -17,7 +19,7 @@ import com.nagulov.users.StaffBuilder;
 import com.nagulov.users.User;
 import com.nagulov.users.UserBuilder;
 
-public class UserController extends ReceptionistController {
+public class UserController{
 	
 	public double loyaltyCardNeeded = 15000.0; 
 	
@@ -29,11 +31,21 @@ public class UserController extends ReceptionistController {
 		
 	}
 	
+	
 	public static UserController getInstance() {
 		if(instance == null) {
 			instance = new UserController();
 		}
 		return instance;
+	}
+
+	public Beautician findAvailableBeautician(LocalDateTime dateTime, CosmeticService service) {
+		for(Map.Entry<String, User> entry : users.entrySet()) {
+			if(entry.getValue() instanceof Beautician && ((Beautician)entry.getValue()).canOperate(dateTime) && ((Beautician)entry.getValue()).hasService(service)) {
+				return (Beautician)entry.getValue();
+			}
+		}
+		return null;
 	}
 	
 	public User createUser(String name, String surname, String gender, String phoneNumber, String address, String username, String password, Class<?> position) {
@@ -243,15 +255,5 @@ public class UserController extends ReceptionistController {
 	public CosmeticTreatment getCosmeticTreatment(CosmeticService service, String name) {
 		return service.getTreatment(name);
 	}
-	
-	public void updateSalonName(String newName) {
-		DataBase.salonName = newName;
-	}
-	
-	public void updateWorkingTime(LocalTime opening, LocalTime closing) {
-		DataBase.opening = opening;
-		DataBase.closing = closing;
-	}
-
 
 }

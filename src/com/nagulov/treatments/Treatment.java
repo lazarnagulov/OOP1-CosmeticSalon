@@ -49,11 +49,11 @@ public class Treatment {
 	}
 	
 	public void setBeautician(Beautician beautician) {
-		if(beautician.getTreatments().contains(service)) {
+		if(beautician.getServices().contains(service)) {
 			this.beautician = beautician;
 		}
 		else {
-			System.out.printf("Beautician %s does not have %s service\n", beautician.getUsername(), service);
+			System.err.printf("Beautician %s does not have %s service\n", beautician.getUsername(), service);
 		}
 	}
 

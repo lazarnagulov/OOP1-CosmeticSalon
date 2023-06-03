@@ -39,10 +39,6 @@ public class DataBase {
 	
 	public static int treatmentId = -1;
 	
-	public static String salonName = "Comsetic Salon Nagulov";
-	public static LocalTime opening = LocalTime.of(8, 0);
-	public static LocalTime closing = LocalTime.of(20, 0);
-	
 	public static final String CLIENT = "Client";
 	public static final String BEAUTICIAN = "Beautician";
 	public static final String MANAGER = "Manager";
@@ -58,6 +54,7 @@ public class DataBase {
 	
 	public static final DateTimeFormatter TREATMENTS_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
 	public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+	public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 	
 	public static HashMap<CosmeticTreatment, CosmeticService> cosmeticTreatments = new HashMap<CosmeticTreatment, CosmeticService>();
 	
@@ -138,6 +135,7 @@ public class DataBase {
 					.setPrice(price)
 					.build());
 				client.addTreatment(TreatmentController.getInstance().getTreatments().get(id));
+				beautician.addTreatment(TreatmentController.getInstance().getTreatments().get(id));
 			}
 			in.close();
 		} catch (UnsupportedEncodingException | FileNotFoundException e) {
@@ -293,7 +291,6 @@ public class DataBase {
 						.buildClient();
 						client.setSpent(Double.parseDouble(data[8]));
 						client.setHasLoyalityCard(Boolean.parseBoolean(data[9]));
-						client.setBalance(Double.parseDouble(data[10]));
 						UserController.getInstance().addUser(client);
 						break;
 					case BEAUTICIAN:

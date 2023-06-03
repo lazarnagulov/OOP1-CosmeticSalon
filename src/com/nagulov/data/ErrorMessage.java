@@ -8,8 +8,11 @@ public enum ErrorMessage {
 	USERNAME_ALREADY_EXISTS("Username already exists!"),
 	SUCCESS("Success"),
 	BEAUTICIAN_WITHOUT_SERVICE("Beautician does not have service: "),
+	BEAUTICIAN_IS_NOT_AVAILABLE("Beautician is not available!"),
 	NOT_SELECTED("Please fill all required data!"),
-	ROW_NOT_SELECTED("You did not select row!");
+	ROW_NOT_SELECTED("You did not select row!"),
+	CANNOT_PERFORM("Treatment is performed or canceled!"),
+	CANNOT_CANCEL("Treatment is canceled or performed!");
 
 	private final String error;
 	

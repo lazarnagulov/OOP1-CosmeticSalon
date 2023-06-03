@@ -1,10 +1,7 @@
 Status,Service,Treatment,Beautician,Date,Client,Price
-0,Performed,Masaza,Relaks masaza,simasimic,08.05.2023. 12:00,milicamilic,2000.0
-1,Canceled by the client,Manikir,Spa manikir,simasimic,08.05.2023. 12:00,mikamikic,1500.0
-2,Performed,Manikir,Gel lak,jovanovic,08.05.2023. 12:00,mikamikic,1600.0
-3,Canceled by the salon,Masaza,Sportska masaza,simasimic,20.05.2023. 13:00,milicamilic,2500.0
-4,Performed,Manikir,Spa manikir,simasimic,25.05.2023. 15:00,milicamilic,2000.0
-5,Did not show up,Masaza,Relaks masaza,simasimic,26.05.2023. 19:00,milicamilic,1700.0
-6,Performed,Masaza,Relaks masaza,simasimic,31.05.2023. 20:00,milicamilic,1700.0
-8,Performed,Manikir,Gel lak,jovanovic,01.06.2023. 12:00,milicamilic,1600.0
-9,Scheduled,Masaza,Sportska masaza,simasimic,05.06.2023. 14:00,mikamikic,2500.0
+0,Performed,Manikir,Francuski manikir,simasimic,01.06.2023. 14:00,mikamikic,1500.0
+1,Canceled by the client,Manikir,Spa manikir,simasimic,02.06.2023. 16:00,milicamilic,2000.0
+2,Performed,Masaza,Sportska masaza,simasimic,03.06.2023. 20:00,mikamikic,2250.0
+3,Canceled by the client,Manikir,Gel lak,simasimic,02.06.2023. 23:00,mikamikic,1600.0
+4,Canceled by the client,Masaza,Relaks masaza,simasimic,06.06.2023. 15:00,milicamilic,1700.0
+5,Scheduled,Manikir,Gel lak,jovanovic,06.06.2023. 16:00,milicamilic,1600.0

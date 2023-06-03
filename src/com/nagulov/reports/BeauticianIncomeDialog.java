@@ -19,6 +19,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import com.nagulov.data.DataBase;
+import com.nagulov.treatments.Salon;
 import com.nagulov.ui.Table;
 import com.nagulov.ui.TableDialog;
 
@@ -112,7 +113,7 @@ public class BeauticianIncomeDialog extends JDialog{
 	}
 	
 	public BeauticianIncomeDialog() {
-		setTitle(DataBase.salonName);
+		setTitle(Salon.getInstance().getSalonName());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		initBeauticianDialog();

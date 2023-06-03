@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.Salon;
 import com.nagulov.ui.models.ServiceModel;
 
 import net.miginfocom.swing.MigLayout;
@@ -71,7 +72,7 @@ public class RemoveServiceDialog extends JDialog {
 	
 	
 	public RemoveServiceDialog() {
-		setTitle(DataBase.salonName);
+		setTitle(Salon.getInstance().getSalonName());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		initRemoveServiceDialog();

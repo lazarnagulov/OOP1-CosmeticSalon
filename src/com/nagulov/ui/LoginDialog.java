@@ -14,6 +14,7 @@ import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.data.Validator;
+import com.nagulov.treatments.Salon;
 import com.nagulov.ui.frames.BeauticianFrame;
 import com.nagulov.ui.frames.ClientFrame;
 import com.nagulov.ui.frames.ManagerFrame;
@@ -109,7 +110,7 @@ public class LoginDialog extends JDialog{
 	}
 
 	private void loginDialog() {
-		this.setTitle(DataBase.salonName);
+		this.setTitle(Salon.getInstance().getSalonName());
 		this.setSize(724,540);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

@@ -66,23 +66,39 @@ public class Report {
 		return treatmentReport;
 	}
 	
+	private static double getPrice(Treatment treatment) {
+		double price = 0;
+		switch(treatment.getStatus()) {
+			case PERFORMED:
+			case SCHEDULED:
+			case DID_NOT_SHOW_UP:
+				price += treatment.getPrice();
+				break;
+			case CANCELED_BY_THE_CLIENT:
+				price += treatment.getPrice() * 0.1;
+				break;
+			case CANCELED_BY_THE_SALON:
+			default:
+				break;
+		}
+		return price;
+	}
+	
 	public static HashMap<Beautician, ArrayList<Double>> calculateBeauticianReport(LocalDate startDate, LocalDate endDate){
 		beauticianReport.clear();
 		
 		for(Map.Entry<Integer, Treatment> treatment : TreatmentController.getInstance().getTreatments().entrySet()) {
 			LocalDate treatmentDate = treatment.getValue().getDate().toLocalDate();
-			if(isInInterval(startDate, endDate, treatmentDate) && treatment.getValue().getStatus().equals(TreatmentStatus.PERFORMED)) {
+			if(isInInterval(startDate, endDate, treatmentDate)) {
 				if(!beauticianReport.containsKey(treatment.getValue().getBeautician())) {
 					ArrayList<Double> data = new ArrayList<Double>();
-					data.add(treatment.getValue().getPrice());
-					treatment.getValue().getBeautician().setIncome(treatment.getValue().getPrice());
+					data.add(getPrice(treatment.getValue()));
 					data.add(1.0);
 					beauticianReport.put(treatment.getValue().getBeautician(), data);
 				}else {
 					double count = beauticianReport.get(treatment.getValue().getBeautician()).get(1) + 1.0;
-					double price = beauticianReport.get(treatment.getValue().getBeautician()).get(0) + treatment.getValue().getPrice();
+					double price = beauticianReport.get(treatment.getValue().getBeautician()).get(0) + getPrice(treatment.getValue());
 					beauticianReport.get(treatment.getValue().getBeautician()).set(0, price);
-					treatment.getValue().getBeautician().setIncome(price);
 					beauticianReport.get(treatment.getValue().getBeautician()).set(1, count);
 				}
 			}

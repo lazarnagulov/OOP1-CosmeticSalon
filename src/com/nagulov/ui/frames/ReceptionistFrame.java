@@ -13,6 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import com.nagulov.data.DataBase;
+import com.nagulov.treatments.Salon;
 import com.nagulov.ui.EditUserDialog;
 import com.nagulov.ui.LoginDialog;
 import com.nagulov.ui.Table;
@@ -79,7 +80,7 @@ public class ReceptionistFrame extends JFrame {
 	}
 
 	public ReceptionistFrame() {
-		this.setTitle(DataBase.salonName);
+		this.setTitle(Salon.getInstance().getSalonName());
 //		this.setSize(500,500);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
