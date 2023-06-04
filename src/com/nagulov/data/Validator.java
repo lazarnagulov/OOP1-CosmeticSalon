@@ -2,10 +2,7 @@ package com.nagulov.data;
 
 import com.nagulov.controllers.UserController;
 import com.nagulov.treatments.Treatment;
-import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
-import com.nagulov.users.Manager;
-import com.nagulov.users.Receptionist;
 
 public class Validator {
 	

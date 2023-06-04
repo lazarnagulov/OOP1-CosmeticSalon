@@ -30,7 +30,7 @@ public class ClientFrame extends JFrame {
 
 	private JButton editInfoButton = new JButton("Edit user info");
 	private JButton treatmentButton = new JButton("Schedule treatment");
-	private JButton cancelTreatmentButton = new JButton("Cancel treatment");
+	private JButton cancelTreatmentButton = new JButton("Treatments");
 	private JButton logoutButton = new JButton("Logout");
 	
 	
@@ -84,6 +84,7 @@ public class ClientFrame extends JFrame {
 		logoutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				DataBase.saveSalon();
 				DataBase.saveServices();
 				DataBase.saveTreatments();
 				DataBase.saveUsers();

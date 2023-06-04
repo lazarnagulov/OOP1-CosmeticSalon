@@ -2,6 +2,7 @@ package com.nagulov.treatments;
 
 import java.time.LocalTime;
 
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 
 public class Salon {
@@ -45,5 +46,14 @@ public class Salon {
 
 	public void setSalonName(String salonName) {
 		this.salonName = salonName;
+	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder(this.salonName).append(",")
+				.append(this.opening.format(DataBase.TIME_FORMAT)).append(",")
+				.append(this.closing.format(DataBase.TIME_FORMAT)).append(",")
+				.append(UserController.getInstance().loyaltyCardNeeded)
+				.toString();
 	}
 }

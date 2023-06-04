@@ -36,6 +36,7 @@ public class Client extends User{
 	}
 
 	public boolean hasLoyalityCard() {
+		getSpent();
 		if(this.spent >= UserController.getInstance().loyaltyCardNeeded) {
 			this.hasLoyalityCard = true;
 		}else {
@@ -71,10 +72,10 @@ public class Client extends User{
 	}
 
 	public void setSpent(double spent) {
+		this.spent = spent;
 		if(!this.hasLoyalityCard && this.spent >= UserController.getInstance().loyaltyCardNeeded) {
 			this.hasLoyalityCard = true;
 		}
-		this.spent = spent;
 	}
 	
 	public void addSpent(double spent) {
@@ -94,7 +95,7 @@ public class Client extends User{
 			    .append(this.getGender()).append(",")
 			    .append(this.getPhoneNumber()).append(",")
 			    .append(this.getAddress()).append(",")
-			    .append(this.spent).append(",")
+			    .append(getSpent()).append(",")
 			    .append(this.hasLoyalityCard).append(",");
 		
 		return data.toString();

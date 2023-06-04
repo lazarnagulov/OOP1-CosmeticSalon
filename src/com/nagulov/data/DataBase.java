@@ -22,6 +22,7 @@ import com.nagulov.controllers.UserController;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
+import com.nagulov.treatments.Salon;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.treatments.TreatmentBuilder;
 import com.nagulov.treatments.TreatmentStatus;
@@ -51,13 +52,13 @@ public class DataBase {
 	private static final File USERS_FILE = new File("src" + SEPARATOR + "com"+ SEPARATOR + "nagulov" + SEPARATOR + "data"+ SEPARATOR + "users.csv");
 	private static final File SERVICES_FILE = new File("src" + SEPARATOR + "com" + SEPARATOR + "nagulov" + SEPARATOR +"data" + SEPARATOR + "services.csv");
 	private static final File TREATMENTS_FILE = new File("src" + SEPARATOR + "com" + SEPARATOR + "nagulov" + SEPARATOR + "data" + SEPARATOR + "treatments.csv");
+	private static final File SALON_FILE = new File("src" + SEPARATOR + "com" + SEPARATOR + "nagulov" + SEPARATOR + "data" + SEPARATOR + "salon.csv");
 	
 	public static final DateTimeFormatter TREATMENTS_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
 	public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 	public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 	
 	public static HashMap<CosmeticTreatment, CosmeticService> cosmeticTreatments = new HashMap<CosmeticTreatment, CosmeticService>();
-	
 	
 	public static HashMap<String, CosmeticService> services = new HashMap<String, CosmeticService>();
 	
@@ -136,6 +137,49 @@ public class DataBase {
 					.build());
 				client.addTreatment(TreatmentController.getInstance().getTreatments().get(id));
 				beautician.addTreatment(TreatmentController.getInstance().getTreatments().get(id));
+			}
+			in.close();
+		} catch (UnsupportedEncodingException | FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void saveSalon() {
+		saveSalon(SALON_FILE);
+	}
+	
+	public static void saveSalon(File file) {
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
+			out.append("Name, Opening, Closing, Loyality Card requirement\n");
+			out.append(Salon.getInstance().toString());
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally {
+			if(out != null) {
+				out.close();
+			}
+		}
+	}
+	
+	public static void loadSalon() {
+		loadSalon(SALON_FILE);
+	}
+	
+	public static void loadSalon(File file) {
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+			String input;
+			in.readLine();
+			while((input = in.readLine()) != null) {
+				String[] data = input.split(",");
+				Salon.getInstance().setSalonName(data[0]);
+				Salon.getInstance().setOpening(LocalTime.parse(data[1]));
+				Salon.getInstance().setOpening(LocalTime.parse(data[2]));
+				UserController.getInstance().loyaltyCardNeeded = Double.parseDouble(data[3]);
 			}
 			in.close();
 		} catch (UnsupportedEncodingException | FileNotFoundException e) {

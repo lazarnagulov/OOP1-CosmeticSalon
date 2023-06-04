@@ -35,6 +35,7 @@ import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.Pricelist;
 import com.nagulov.treatments.Salon;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.treatments.TreatmentStatus;
@@ -100,7 +101,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 		for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
 			CosmeticService cs = service.getValue();
 			for(int i = 0; i < cs.getTreatments().size(); ++i) {
-				JRadioButton btn = new JRadioButton(cs.getName() + "-" + cs.getTreatments().get(i));
+				JRadioButton btn = new JRadioButton(cs.getName() + "-" + cs.getTreatments().get(i) + "-" + Pricelist.getInstance().getPrice(cs.getTreatments().get(i)));
 				serviceTreatmentGroup.add(btn);
 				stPanel.add(btn);
 				checkboxes.add(btn);
@@ -234,8 +235,9 @@ public class ScheduleTreatmentDialog extends JDialog{
 					Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, DataBase.services.get(service), DataBase.services.get(service).getTreatment(treatment), b, dateTime, (Client)DataBase.loggedUser);
 					ClientController.getInstance().scheduleTreatment(t);
 					TreatmentModel.addTreatment(t);
+					dispose();
 				}
-				dispose();
+				
 			}
 		});
 

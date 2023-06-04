@@ -1,7 +1,7 @@
 Role,Username,Password,Name,Surname,Gender,Phone number,Address
 Beautician,zikazikic,1234,Zika,Zikic,Male,0611234567,Zikina adresa 23,0.0,0.0,1,5,35000.0,Manikir;Pedikir;Masaza;
-Client,mikamikic,siframikas234,Mika,Mikic,Male,0623123123,Mikina adresa 94,3910.0,false,
-Client,milicamilic,123sifra,Milica,Milic,Female,065231323,Milicina adresa 53,4200.0,false,
+Client,mikamikic,siframikas234,Mika,Mikic,Male,0623123123,Mikina adresa 94,1800.0,false,
+Client,milicamilic,123sifra,Milica,Milic,Female,065231323,Milicina adresa 53,180.0,false,
 Manager,nikolanikolic29,nikolinasifra,Nikola,Nikolic,Male,062312313,Nikolina adresa 32
 Manager,LazarNagulov,sifra,Lazar,Nagulov,Male,0623413242,Moja adresa 69
 Beautician,simasimic,kozmeticar,Sima,Simic,Male,0623213123,Simina adresa 23,0.0,4110.0,0,4,33000.0,Manikir;Masaza;

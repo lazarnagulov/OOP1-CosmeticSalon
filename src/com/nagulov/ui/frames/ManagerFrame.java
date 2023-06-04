@@ -14,7 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import com.nagulov.data.DataBase;
-import com.nagulov.reports.BeauticianIncomeDialog;
+import com.nagulov.reports.ReportsDateDialog;
 import com.nagulov.treatments.Salon;
 import com.nagulov.ui.EditSalonDialog;
 import com.nagulov.ui.EditUserDialog;
@@ -53,7 +53,7 @@ public class ManagerFrame extends JFrame{
 	private JMenuItem loyalityCardReport = new JMenuItem("Loyality Card");
 	private JMenuItem treatmentsReport = new JMenuItem("Treaments status");
 	private JMenuItem beauticianIncomeReport = new JMenuItem("Beautician income");
-	private JMenuItem cosmeticServicesReport = new JMenuItem("Service");
+	private JMenuItem cosmeticTreatmentReport = new JMenuItem("Cosmetic Treatment");
 	
 	private JPanel userInfo = new JPanel();
 
@@ -69,7 +69,7 @@ public class ManagerFrame extends JFrame{
 		reportsMenu.add(loyalityCardReport);
 		reportsMenu.add(treatmentsReport);
 		reportsMenu.add(beauticianIncomeReport);
-		reportsMenu.add(cosmeticServicesReport);
+		reportsMenu.add(cosmeticTreatmentReport);
 		
 		menu.add(analyticsMenu);
 		menu.add(dataMenu);
@@ -98,6 +98,20 @@ public class ManagerFrame extends JFrame{
 //		this.getContentPane().add(beauticianChart);
 //		this.getContentPane().add(treatmentChart);
 //		this.getContentPane().add(serviceIncomeChart, "span 2");
+	
+		treatmentsReport.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ReportsDateDialog(Table.TREATMENTS_STATUS);
+			}
+		});
+		
+		cosmeticTreatmentReport.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ReportsDateDialog(Table.COSMETIC_TREATMENT_STATUS);
+			}
+		});
 		
 		editInfoButton.addActionListener(new ActionListener() {
 			@Override
@@ -116,6 +130,7 @@ public class ManagerFrame extends JFrame{
 		logoutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				DataBase.saveSalon();
 				DataBase.saveServices();
 				DataBase.saveTreatments();
 				DataBase.saveUsers();
@@ -165,7 +180,7 @@ public class ManagerFrame extends JFrame{
 		beauticianIncomeReport.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new BeauticianIncomeDialog();
+				new ReportsDateDialog(Table.BEAUTICIAN_INCOME);
 			}
 			
 		});
@@ -186,6 +201,7 @@ public class ManagerFrame extends JFrame{
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				DataBase.saveSalon();
 				DataBase.saveServices();
 				DataBase.saveTreatments();
 				DataBase.saveUsers();

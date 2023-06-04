@@ -46,6 +46,8 @@ public class TreatmentController {
 		if(t.getClient().hasLoyalityCard()) {
 			t.setPrice(t.getPrice() * 0.9);
 		}
+		t.getBeautician().addTreatment(t);
+		
 		treatments.put(DataBase.treatmentId, t);
 		return t;
 	}

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -42,11 +43,11 @@ public class EditSalonDialog extends JDialog {
 		
 		this.getContentPane().add(new JLabel("Salon name"), "span 2");
 		this.getContentPane().add(salonNameField, "span 2");
-		this.getContentPane().add(new JLabel("Income and expenditure " + LocalDate.now().withDayOfMonth(1).format(DataBase.DATE_FORMAT) + " - " + LocalDate.now().format(DataBase.DATE_FORMAT)), "span 2");
+		this.getContentPane().add(new JLabel("Income and expenditure " + LocalDate.now().withDayOfMonth(1).format(DataBase.DATE_FORMAT) + " - " + LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).format(DataBase.DATE_FORMAT)), "span 2");
 		this.getContentPane().add(new JLabel("Income: "));
-		this.getContentPane().add(new JLabel(Double.valueOf(SalonController.getInstance().calculateIncome(LocalDate.now().withDayOfMonth(1), LocalDate.now())).toString()));
+		this.getContentPane().add(new JLabel(Double.valueOf(SalonController.getInstance().calculateIncome(LocalDate.now().withDayOfMonth(1), LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()))).toString()));
 		this.getContentPane().add(new JLabel("Expenditure: "));
-		this.getContentPane().add(new JLabel(Double.valueOf(SalonController.getInstance().calculateExpenditure(LocalDate.now().withDayOfMonth(1), LocalDate.now())).toString()));
+		this.getContentPane().add(new JLabel(Double.valueOf(SalonController.getInstance().calculateExpenditure(LocalDate.now().withDayOfMonth(1), LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()))).toString()));
 		this.getContentPane().add(new JLabel("Working time"), "span 2");
 		this.getContentPane().add(openingTimeField);
 		this.getContentPane().add(closingTimeField);

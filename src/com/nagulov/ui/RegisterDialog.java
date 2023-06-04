@@ -77,8 +77,6 @@ public class RegisterDialog extends JDialog{
 		qualificationBox.addItem(7);
 		qualificationBox.addItem(8);
 		
-		
-		
 		JTextField bonusesField = new JTextField(20);
 		JTextField salaryField = new JTextField(20);
 		

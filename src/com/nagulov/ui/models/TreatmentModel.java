@@ -15,7 +15,7 @@ import com.nagulov.users.Client;
 public class TreatmentModel extends AbstractTableModel {
 	
 	private static final long serialVersionUID = 1L;
-	protected String[] columnNames = DataBase.TREATMENT_HEADER.split(",");
+	private String[] columnNames = DataBase.TREATMENT_HEADER.split(",");
 	private static List<Treatment> treatments = new ArrayList<Treatment>();
 	
 	public static void init() {
@@ -96,7 +96,7 @@ public class TreatmentModel extends AbstractTableModel {
 				case 3: return t.getBeautician().getUsername();
 				case 4: return t.getDate().format(DataBase.TREATMENTS_DATE_FORMAT);
 				case 5: return t.getClient().getUsername();
-				case 6: return t.getPrice();
+				case 6: return t.getIncome();
 				default: return null; 
 			}
 		}catch(NullPointerException e) {

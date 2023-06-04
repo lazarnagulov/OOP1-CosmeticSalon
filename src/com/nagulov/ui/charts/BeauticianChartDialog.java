@@ -1,8 +1,6 @@
 package com.nagulov.ui.charts;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -12,9 +10,7 @@ import org.knowm.xchart.PieChart;
 import org.knowm.xchart.XChartPanel;
 
 import com.nagulov.data.DataBase;
-import com.nagulov.reports.Report;
 import com.nagulov.treatments.Salon;
-import com.nagulov.treatments.TreatmentStatus;
 
 import net.miginfocom.swing.MigLayout;
 

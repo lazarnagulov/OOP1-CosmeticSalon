@@ -27,6 +27,20 @@ public class Treatment {
 		this.setClient(builder.getClient());
 		this.setPrice(builder.getPrice());
 	}
+	
+	public double getIncome() {
+		switch(this.getStatus()) {
+			case CANCELED_BY_THE_CLIENT:
+				return this.getPrice() * 0.1;
+			case DID_NOT_SHOW_UP:
+			case PERFORMED:
+			case SCHEDULED:
+				return this.getPrice();
+			case CANCELED_BY_THE_SALON:
+			default:
+				return 0;
+		}
+	}
 
 	public LocalDateTime getDate() {
 		return date;

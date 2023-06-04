@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
@@ -20,12 +21,15 @@ import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.ui.models.BeauticianIncomeModel;
+import com.nagulov.ui.models.CosmeticTreatmentModel;
 import com.nagulov.ui.models.LoyalityCardModel;
 import com.nagulov.ui.models.ServiceModel;
 import com.nagulov.ui.models.TimeTableModel;
 import com.nagulov.ui.models.TreatmentModel;
+import com.nagulov.ui.models.TreatmentStatusModel;
 import com.nagulov.ui.models.UserModel;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
@@ -334,6 +338,23 @@ public class TableDialog extends JDialog {
 		table = new JTable(new TimeTableModel());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getTableHeader().setReorderingAllowed(false);
+		JScrollPane sc = new JScrollPane(table);
+		this.setSize(800,300);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		
+		this.getContentPane().add(sc, BorderLayout.CENTER);
+		
+		this.setVisible(true);
+	
+	}
+	
+	private void initTreatmentStatus() {
+		this.setTitle("Treatment report");	
+		table = new JTable(new TreatmentStatusModel());
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
 		this.setSize(800,300);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -344,7 +365,36 @@ public class TableDialog extends JDialog {
 		this.getContentPane().add(sc, BorderLayout.CENTER);
 		
 		this.setVisible(true);
+		
+	}
 	
+	private void initCosmeticTreatment(CosmeticTreatment treatment) {
+		this.setTitle("Cosmetic Treatment report");	
+		table = new JTable(new CosmeticTreatmentModel());
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
+		this.setSize(300,300);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		this.getContentPane().setLayout(new MigLayout("wrap", "[grow,fill]", "[]20[grow,fill]"));
+
+		
+		JPanel info = new JPanel();
+		info.setLayout(new MigLayout("wrap", "[grow,fill]", "[]20[grow,fill][grow,fill][grow,fill]"));
+		info.add(new JLabel("Cosmetic Treatment info:"), "span 2");
+		info.add(new JLabel("Service: " + DataBase.cosmeticTreatments.get(treatment).getName()));
+		info.add(new JLabel("Name: " + treatment.getName()));
+		info.add(new JLabel("Duration: " + treatment.getDuration().format(DataBase.TIME_FORMAT)));
+		
+		this.setLocationRelativeTo(null);
+		JScrollPane sc = new JScrollPane(table);
+		
+		this.getContentPane().add(info, "span 2, center");
+		this.getContentPane().add(sc, BorderLayout.CENTER);
+		
+		this.setVisible(true);
+		
 	}
 	
 	private void init() {
@@ -376,6 +426,9 @@ public class TableDialog extends JDialog {
 		this.setVisible(true);
 	}
 	
+	
+	
+	
 	public TableDialog(Table table) {
 		switch(table) {
 			case USER:
@@ -398,6 +451,11 @@ public class TableDialog extends JDialog {
 				LoyalityCardModel.init();
 				initLoyalityCard();
 				break;
+			case TREATMENTS_STATUS:
+				TreatmentStatusModel.init();
+				initTreatmentStatus();
+				break;
+			case COSMETIC_TREATMENT_STATUS:
 			case TIMETABLE:
 			default:
 				break;
@@ -405,6 +463,8 @@ public class TableDialog extends JDialog {
 		
 	}
 	
+	
+
 	public TableDialog(Table table, User user) {
 		if(table.equals(Table.TREATMENT)) {
 			if(user instanceof Client) {
@@ -427,5 +487,8 @@ public class TableDialog extends JDialog {
 		}
 	}
 	
-	
+	public TableDialog(CosmeticTreatment treatment) {
+		CosmeticTreatmentModel.init();
+		initCosmeticTreatment(treatment);
+	}
 }

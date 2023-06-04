@@ -28,7 +28,7 @@ public class BeauticianFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	private JButton editInfoButton = new JButton("Edit user info");
-	private JButton treatmentButton = new JButton("Schedule treatment");
+	private JButton treatmentButton = new JButton("Perform treatment");
 	private JButton timeTableButton = new JButton("Time table");
 	private JButton logoutButton = new JButton("Logout");
 	

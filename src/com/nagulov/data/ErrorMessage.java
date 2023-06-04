@@ -12,7 +12,8 @@ public enum ErrorMessage {
 	NOT_SELECTED("Please fill all required data!"),
 	ROW_NOT_SELECTED("You did not select row!"),
 	CANNOT_PERFORM("Treatment is performed or canceled!"),
-	CANNOT_CANCEL("Treatment is canceled or performed!");
+	CANNOT_CANCEL("Treatment is canceled or performed!"),
+	INVALID_DATE_INTERVAL("Invalid date interval!");
 
 	private final String error;
 	

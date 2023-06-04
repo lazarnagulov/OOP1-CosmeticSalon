@@ -218,7 +218,6 @@ public class EditTreatmentDialog extends JDialog{
 					}
 					Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
 					TreatmentModel.addTreatment(t);
-					t.getBeautician().addTreatment(t);
 					t.getClient().addSpent(t.getPrice());
 				}
 				TableDialog.refreshTreatment();

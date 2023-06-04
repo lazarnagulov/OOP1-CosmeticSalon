@@ -8,8 +8,7 @@ import java.util.Map;
 
 import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
-import com.nagulov.data.DataBase;
-import com.nagulov.treatments.CosmeticService;
+import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.users.Beautician;
@@ -17,13 +16,29 @@ import com.nagulov.users.Client;
 import com.nagulov.users.User;
 
 public class Report {
-//	private static HashMap<LocalDate, HashMap<Beautician, HashMap<ReportOption, Double>>> beauticianReport = new HashMap<LocalDate, HashMap<Beautician, HashMap<ReportOption, Double>>>();
-	private static HashMap<CosmeticService, HashMap<String, Integer>> servicesReport = new HashMap<CosmeticService, HashMap<String, Integer>>();
-	
+
+	public static List<Double> cosmeticTreatmentReport = new ArrayList<Double>();
 	public static HashMap<TreatmentStatus, Integer> treatmentReport = new HashMap<TreatmentStatus, Integer>();
 	public static HashMap<Beautician, ArrayList<Double>> beauticianReport = new HashMap<Beautician, ArrayList<Double>>();
+	
 	private static boolean isInInterval(LocalDate startDate, LocalDate endDate, LocalDate checkDate) {
 		return !(checkDate.isAfter(endDate) || checkDate.isBefore(startDate));
+	}
+	
+	public static List<Double> calculateComseticTreatmentReport(CosmeticTreatment cosmeticTreatment, LocalDate startDate, LocalDate endDate) {
+		cosmeticTreatmentReport.clear();
+		for(Map.Entry<Integer, Treatment> entry : TreatmentController.getInstance().getTreatments().entrySet()) {
+			if(isInInterval(startDate, endDate, entry.getValue().getDate().toLocalDate()) && entry.getValue().getTreatment().equals(cosmeticTreatment)) {
+				if(cosmeticTreatmentReport.size() == 0) {
+					cosmeticTreatmentReport.add(1.0);
+					cosmeticTreatmentReport.add(entry.getValue().getIncome());
+				}else {
+					cosmeticTreatmentReport.set(0, cosmeticTreatmentReport.get(0) + 1.0);
+					cosmeticTreatmentReport.set(1, cosmeticTreatmentReport.get(1) + entry.getValue().getIncome());
+				}
+			}
+		}
+		return cosmeticTreatmentReport;
 	}
 	
 	public static List<Client> calculateLoyalityReport() {
@@ -89,7 +104,7 @@ public class Report {
 		
 		for(Map.Entry<Integer, Treatment> treatment : TreatmentController.getInstance().getTreatments().entrySet()) {
 			LocalDate treatmentDate = treatment.getValue().getDate().toLocalDate();
-			if(isInInterval(startDate, endDate, treatmentDate)) {
+			if(isInInterval(startDate, endDate, treatmentDate) && treatment.getValue().getStatus().equals(TreatmentStatus.PERFORMED)) {
 				if(!beauticianReport.containsKey(treatment.getValue().getBeautician())) {
 					ArrayList<Double> data = new ArrayList<Double>();
 					data.add(getPrice(treatment.getValue()));
@@ -108,7 +123,6 @@ public class Report {
 		return beauticianReport;
 	}
 	
-	public static HashMap<CosmeticService, HashMap<String, Integer>> getServicesReport() {
-		return servicesReport;
-	}
+
+	
 }
