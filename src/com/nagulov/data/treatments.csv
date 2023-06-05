@@ -1,1 +1,6 @@
 Status,Service,Treatment,Beautician,Date,Client,Price
+1,Canceled by the client,Pedikir,Spa pedikir,zikazikic,11.06.2023. 09:00,milicamilic,1600.0
+2,Performed,Masaza,Sportska masaza,simasimic,12.06.2023. 08:00,mikamikic,2500.0
+3,Performed,Masaza,Relaks masaza,zikazikic,13.06.2023. 19:00,mikamikic,2000.0
+4,Scheduled,Manikir,Francuski manikir,zikazikic,23.06.2023. 14:00,mikamikic,1350.0
+5,Scheduled,Manikir,Francuski manikir,zikazikic,02.05.2023. 13:00,mikamikic,1350.0

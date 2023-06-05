@@ -3,9 +3,13 @@ package com.nagulov.ui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,8 +17,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.RowFilter.ComparisonType;
+import javax.swing.RowSorter;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
@@ -46,16 +56,25 @@ public class TableDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private static UserController managerController = UserController.getInstance();
 	
-	protected JToolBar toolbar;
-	protected static JTable table;
+	private JToolBar toolbar;
+	private static JTable table;
 	
-	protected JButton addButton = new JButton();
-	protected JButton editButton = new JButton();
-	protected JButton removeButton = new JButton();
+	private JButton addButton = new JButton();
+	private JButton editButton = new JButton();
+	private JButton removeButton = new JButton();
 	
-	protected ImageIcon addIcon = new ImageIcon("img/add.gif");
-	protected ImageIcon editIcon = new ImageIcon("img/edit.gif");
-	protected ImageIcon removeIcon = new ImageIcon("img/remove.gif");
+	private ImageIcon addIcon = new ImageIcon("img/add.gif");
+	private ImageIcon editIcon = new ImageIcon("img/edit.gif");
+	private ImageIcon removeIcon = new ImageIcon("img/remove.gif");
+
+	private JPanel filterPanel = new JPanel();
+	private JComboBox<String> filterCosmeticTreatment = new JComboBox<String>();
+	private JComboBox<String> filterCosmeticService = new JComboBox<String>();
+	private JTextField filterStartingPrice = new JTextField(20);
+	private JTextField filterEndingPrice = new JTextField(20);
+	private JButton filterButton = new JButton("Filter");
+	
+	private TableRowSorter<AbstractTableModel> sorter = new TableRowSorter<AbstractTableModel>();
 	
 	public static void refreshUser() {
 		UserModel model = (UserModel)table.getModel();
@@ -174,10 +193,36 @@ public class TableDialog extends JDialog {
 	
 	private void initTreatmentModel(){
 		this.setTitle("Treatments");	
+		this.getContentPane().setLayout(new MigLayout("wrap", "[]", "[]20[]"));
 		table = new JTable(new TreatmentModel());
+		sorter.setModel((AbstractTableModel) table.getModel());
+		table.setRowSorter(sorter);
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getTableHeader().setReorderingAllowed(false);
 		init();
+		
+		
+		filterCosmeticService.addItem("");
+		filterCosmeticTreatment.addItem("");
+		for(Map.Entry<String, CosmeticService> entry : DataBase.services.entrySet()) {
+			filterCosmeticService.addItem(entry.getKey());
+			for(CosmeticTreatment treatment : entry.getValue().getTreatments()) {
+				filterCosmeticTreatment.addItem(treatment.getName());
+			}
+		}
+		
+		filterPanel.setLayout(new MigLayout("wrap 9", "[][][][][][][][][]", "[]"));
+		filterPanel.add(new JLabel("Cosmetic Service"));
+		filterPanel.add(filterCosmeticService);
+		filterPanel.add(new JLabel("Cosmetic Treatment:"));
+		filterPanel.add(filterCosmeticTreatment);
+		filterPanel.add(new JLabel("Min price:"));
+		filterPanel.add(filterStartingPrice);
+		filterPanel.add(new JLabel("Max price"));
+		filterPanel.add(filterEndingPrice);
+		filterPanel.add(filterButton);
+
+		this.getContentPane().add(filterPanel);
 		
 		addButton.addActionListener(new ActionListener() {
 			@Override
@@ -213,6 +258,31 @@ public class TableDialog extends JDialog {
 					TreatmentModel.removeTreatment(row);
 					refreshTreatment();
 				}
+			}
+		});
+		
+		filterButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String service = filterCosmeticService.getSelectedItem().toString();
+				String treatment = filterCosmeticTreatment.getSelectedItem().toString();
+				String startingPrice = filterStartingPrice.getText();
+				String endingPrice = filterEndingPrice.getText();
+				List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
+				if(!service.equals("")) {
+					filters.add(RowFilter.regexFilter(service, 1));
+				}
+				if(!treatment.equals("")) {
+					filters.add(RowFilter.regexFilter(treatment, 2));
+				}
+				if(!startingPrice.equals("")) {
+					filters.add(RowFilter.numberFilter(ComparisonType.AFTER, Double.valueOf(startingPrice) - 1.0, 6));
+				}
+				if(!endingPrice.equals("")) {
+					filters.add(RowFilter.numberFilter(ComparisonType.BEFORE, Double.valueOf(endingPrice) + 1.0, 6));
+				}
+				RowFilter<Object, Object> filter = RowFilter.andFilter(filters);
+				sorter.setRowFilter(filter);
 			}
 		});
 	}
@@ -422,7 +492,6 @@ public class TableDialog extends JDialog {
 		this.getContentPane().add(toolbar, BorderLayout.NORTH);
 		JScrollPane sc = new JScrollPane(table);
 		add(sc, BorderLayout.CENTER);
-		
 		this.setVisible(true);
 	}
 	

@@ -47,7 +47,7 @@ public class TreatmentController {
 			t.setPrice(t.getPrice() * 0.9);
 		}
 		t.getBeautician().addTreatment(t);
-		
+		t.getClient().addTreatment(t);
 		treatments.put(DataBase.treatmentId, t);
 		return t;
 	}
@@ -58,20 +58,39 @@ public class TreatmentController {
 		if(t == null) {
 			return;
 		}
+		t.getClient().removeTreatment(t);
+		t.getBeautician().removeTreatment(t);
+		
 		t.setBeautician(beautician);
 		t.setClient(client);
 		t.setDate(date);
 		t.setService(service);
 		t.setStatus(status);
 		t.setTreatment(treatment);
+		
+		t.getClient().addTreatment(t);
+		t.getBeautician().addTreatment(t);
+		
+		if(t.getStatus().equals(TreatmentStatus.PERFORMED)) {
+			for(Treatment ct : t.getClient().getTreatments()) {
+				if(!(t.getId() == ct.getId()) && t.getDate().equals(ct.getDate())) {
+					ct.setStatus(TreatmentStatus.CANCELED_BY_THE_CLIENT);
+				}
+			}
+		}
 	}
 	
 
 	public void removeTreatment(Treatment treatment) {
+		treatment.getBeautician().removeTreatment(treatment);
+		treatment.getClient().removeTreatment(treatment);
 		treatments.remove(treatment.getId());
 	}
 
 	public void removeTreatment(int id) {
+		Treatment t = treatments.get(id);
+		t.getBeautician().removeTreatment(t);
+		t.getClient().removeTreatment(t);
 		treatments.remove(id);
 	}
 	

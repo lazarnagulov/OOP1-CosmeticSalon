@@ -103,6 +103,13 @@ public class TreatmentModel extends AbstractTableModel {
 			return null;
 		}
 	}
-
-
+	
+	@Override
+	public Class<?> getColumnClass(int columnIndex){
+		if(columnIndex == 6) {
+			return Double.class;
+		}else {
+			return String.class;
+		}
+	}
 }

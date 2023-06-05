@@ -26,6 +26,11 @@ public class Client extends User{
 			treatments.add(t);
 		}
 	}
+	
+	public void removeTreatment(Treatment t) {
+		spent -= t.getIncome();
+		treatments.remove(t);
+	}
 
 	public List<Treatment> getTreatments() {
 		return treatments;

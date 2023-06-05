@@ -56,8 +56,6 @@ public class ScheduleTreatmentDialog extends JDialog{
 	private JPanel stPanel = new JPanel();
 	private ButtonGroup serviceTreatmentGroup;
 	private JButton confirmTreatmentButton = new JButton("Confirm treatment");
-	private JButton skipButton = new JButton("Skip");
-	private JButton confirmBeauticianButton = new JButton("Confirm beautician");
 	private JButton confirmButton = new JButton("Confirm");
 	private JButton cancelButton = new JButton("Cancel");
 	private JComboBox<String> beauticianBox = new JComboBox<String>();
@@ -109,21 +107,18 @@ public class ScheduleTreatmentDialog extends JDialog{
 		}
 		
 		beauticianBox.setEnabled(false);
-		skipButton.setEnabled(false);
 		datePicker.setEnabled(false);
-		confirmBeauticianButton.setEnabled(false);
+		datePanel.setEnabled(false);
 		timeField.setEnabled(false);
 		confirmButton.setEnabled(false);
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][]20[][][][]20[]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][]20[][][]20[]"));
 		this.getContentPane().add(new JLabel("Schedule treatment"), "span 2, center");
 		this.getContentPane().add(new JLabel("Treatment"));
 		this.getContentPane().add(stPanel);
 		this.getContentPane().add(confirmTreatmentButton, "span 2, center");
 		this.getContentPane().add(new JLabel("Beautician"));
 		this.getContentPane().add(beauticianBox);
-		this.getContentPane().add(skipButton);
-		this.getContentPane().add(confirmBeauticianButton);		
 		this.getContentPane().add(new JLabel("Date"));
 		this.getContentPane().add(datePicker);
 		this.getContentPane().add(new JLabel("Time"));
@@ -159,34 +154,14 @@ public class ScheduleTreatmentDialog extends JDialog{
 					}
 				}
 				beauticianBox.setEnabled(true);
-				skipButton.setEnabled(true);
-				confirmBeauticianButton.setEnabled(true);
-				datePicker.setEnabled(false);
+				timeField.setEnabled(true);
+				datePanel.setEnabled(true);
+				datePicker.setEnabled(true);
+				confirmButton.setEnabled(true);
 			}
 			
 		});
 
-		skipButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				beauticianBox.setSelectedItem("");
-				beauticianBox.setEnabled(false);
-				skipButton.setEnabled(false);
-				confirmBeauticianButton.setEnabled(false);
-				timeField.setEnabled(true);
-				confirmButton.setEnabled(true);
-			}
-		});
-		
-		confirmBeauticianButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				beauticianBox.setEnabled(false);
-				confirmButton.setEnabled(true);
-				timeField.setEnabled(true);
-			}
-		});
-		
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
