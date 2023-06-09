@@ -12,6 +12,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
@@ -19,6 +20,8 @@ import javax.swing.JTextField;
 
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
+import com.nagulov.data.ErrorMessage;
+import com.nagulov.data.Validator;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Salon;
 import com.nagulov.ui.models.UserModel;
@@ -110,7 +113,7 @@ public class EditUserDialog extends JDialog{
 			JCheckBox btn = new JCheckBox(service.getValue().getName());
 			treatmentsPanel.add(btn);
 			checkboxes.add(btn);
-			if(user instanceof Beautician && ((Beautician)UserController.getInstance().getUser(user.getUsername())).containsTreatment(service.getValue())) {
+			if(user instanceof Beautician && ((Beautician)UserController.getInstance().getUser(user.getUsername())).containsService(service.getValue())) {
 				btn.setSelected(true);
 			}
 		}
@@ -248,6 +251,11 @@ public class EditUserDialog extends JDialog{
 				String password = new String(passwordField.getPassword());
 				String role = roleComboBox.getSelectedItem().toString();
 				
+				ErrorMessage error = Validator.registerUser(name, surname, gender, phoneNumber, address, username, password);
+				if(!error.equals(ErrorMessage.SUCCESS)) {
+					JOptionPane.showMessageDialog(null, error.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				if((DataBase.loggedUser instanceof Manager) && (role.equals(DataBase.BEAUTICIAN) || role.equals(DataBase.RECEPTIONIST))) {
 					int internship = Integer.parseInt(internshipField.getText());
 					int qualification = Integer.parseInt(qualificationBox.getSelectedItem().toString());
@@ -269,7 +277,7 @@ public class EditUserDialog extends JDialog{
 						for(JCheckBox cb : checkboxes) {
 							if(cb.isSelected()) {
 								CosmeticService service = DataBase.services.get(cb.getText());
-								b.addTreatment(service);
+								b.addService(service);
 							}
 						}
 					}

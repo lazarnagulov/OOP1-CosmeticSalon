@@ -33,6 +33,7 @@ import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
+import com.nagulov.data.Validator;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Pricelist;
 import com.nagulov.treatments.Salon;
@@ -194,10 +195,16 @@ public class EditTreatmentDialog extends JDialog{
 				LocalTime time = LocalTime.of(Integer.parseInt(hm[0]), Integer.parseInt(hm[1]));
 				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 				LocalDateTime dateTime = LocalDateTime.of(date, time);
-				if(!b.containsTreatment(DataBase.services.get(service))) {
+		
+				if(!b.containsService(DataBase.services.get(service))) {
 					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_WITHOUT_SERVICE.getError() + service, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+				if(treatment != null && !treatment.getDate().equals(dateTime) && !b.canOperate(dateTime)) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
 				if(treatment != null && !treatment.getDate().equals(dateTime) && !b.canOperate(dateTime)) {
 					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
@@ -229,17 +236,6 @@ public class EditTreatmentDialog extends JDialog{
 		});
 	}
 	
-	public EditTreatmentDialog() {
-		this.treatment = null;
-		this.setTitle(Salon.getInstance().getSalonName());
-		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setLocationRelativeTo(null);
-		initEditServiceDialog();
-		this.pack();
-		this.setVisible(true);
-	}
-	
-	
 	public EditTreatmentDialog(Treatment treatment) {
 		this.treatment = treatment;
 		this.setTitle(Salon.getInstance().getSalonName());
@@ -249,4 +245,14 @@ public class EditTreatmentDialog extends JDialog{
 		this.pack();
 		this.setVisible(true);
 	}
+	
+	public EditTreatmentDialog() {
+		this.setTitle(Salon.getInstance().getSalonName());
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		initEditServiceDialog();
+		this.pack();
+		this.setVisible(true);
+	}
+
 }

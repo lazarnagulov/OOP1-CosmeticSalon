@@ -78,11 +78,15 @@ public class Beautician extends Staff {
 		return true;
 	}
 	
-	public boolean containsTreatment(CosmeticService service) {
+	public void removeService(CosmeticService service) {
+		services.remove(service);
+	}
+	
+	public boolean containsService(CosmeticService service) {
 		return services.contains(service);
 	}
 
-	public void addTreatment(CosmeticService service) {
+	public void addService(CosmeticService service) {
 		if (!services.contains(service)) {
 			services.add(service);
 		}

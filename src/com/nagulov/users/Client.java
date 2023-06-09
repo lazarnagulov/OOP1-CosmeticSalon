@@ -35,7 +35,7 @@ public class Client extends User{
 	public List<Treatment> getTreatments() {
 		return treatments;
 	}
-
+	
 	public void setTreatments(List<Treatment> treatments) {
 		this.treatments = treatments;
 	}

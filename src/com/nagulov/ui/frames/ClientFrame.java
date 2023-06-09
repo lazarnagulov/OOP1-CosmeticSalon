@@ -8,10 +8,12 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
+import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.Salon;
 import com.nagulov.ui.EditUserDialog;
 import com.nagulov.ui.LoginDialog;
@@ -32,6 +34,7 @@ public class ClientFrame extends JFrame {
 	private JButton treatmentButton = new JButton("Schedule treatment");
 	private JButton cancelTreatmentButton = new JButton("Treatments");
 	private JButton logoutButton = new JButton("Logout");
+	private JButton loyalityStatusButton = new JButton("Status");
 	
 	
 	private JPanel userInfo = new JPanel();
@@ -40,24 +43,31 @@ public class ClientFrame extends JFrame {
 	
 		Client c = (Client) DataBase.loggedUser;
 		
-		userInfo.setLayout(new MigLayout("wrap", "[]", "[][][][][][]"));
+		userInfo.setLayout(new MigLayout("wrap", "[]", "[][][][][]"));
 		userInfo.add(new JLabel("-- User info --"));
 		userInfo.add(new JLabel("Name: " + c.getName()));
 		userInfo.add(new JLabel("Surname: " + c.getSurname()));
 		userInfo.add(new JLabel("Gender: " + c.getGender()));
 		userInfo.add(new JLabel("Phone number: " + c.getPhoneNumber()));
 		userInfo.add(new JLabel("Address: " + c.getAddress()));
-		userInfo.add(new JLabel("Loyality card status: " + c.getSpent() + "/" + UserController.getInstance().loyaltyCardNeeded));
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2, fillx", "[][]", "[]20[][]20[]"));
-		
+		this.getContentPane().setLayout(new MigLayout("wrap 2, fillx", "[][]", "[]20[][]20[][]"));
+
 		this.getContentPane().add(new JLabel("Welcome, " + DataBase.loggedUser.getUsername() + "!"));	
 		this.getContentPane().add(logoutButton, "right");
 		this.getContentPane().add(userInfo, "span 2");
+		this.getContentPane().add(new JLabel("Loyality card:"), "center");
+		this.getContentPane().add(loyalityStatusButton, "center");
 		this.getContentPane().add(editInfoButton, "center, span 2");
 		this.getContentPane().add(treatmentButton);
 		this.getContentPane().add(cancelTreatmentButton);
 		
+		loyalityStatusButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Spent money: " + ((Client)DataBase.loggedUser).getSpent() + " / " + UserController.getInstance().loyaltyCardNeeded, "Info", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		
 		cancelTreatmentButton.addActionListener(new ActionListener() {
 			@Override

@@ -22,6 +22,7 @@ import com.nagulov.ui.LoginDialog;
 import com.nagulov.ui.Table;
 import com.nagulov.ui.TableDialog;
 import com.nagulov.ui.charts.BeauticianChartDialog;
+import com.nagulov.ui.charts.IncomeChartDialog;
 import com.nagulov.ui.charts.TreatmentChartDialog;
 
 import net.miginfocom.swing.MigLayout;
@@ -48,6 +49,7 @@ public class ManagerFrame extends JFrame{
 	private JMenu analyticsMenu = new JMenu("Analytics");
 	private JMenuItem analyticsTreatment = new JMenuItem("Treatments in past 30 days");
 	private JMenuItem analyticsBeautician = new JMenuItem("Beauticians in past 30 days");
+	private JMenuItem analyticsIncome = new JMenuItem("Income in past year");
 	
 	private JMenu reportsMenu = new JMenu("Reports");
 	private JMenuItem loyalityCardReport = new JMenuItem("Loyality Card");
@@ -65,6 +67,7 @@ public class ManagerFrame extends JFrame{
 		
 		analyticsMenu.add(analyticsTreatment);
 		analyticsMenu.add(analyticsBeautician);
+		analyticsMenu.add(analyticsIncome);
 		
 		reportsMenu.add(loyalityCardReport);
 		reportsMenu.add(treatmentsReport);
@@ -167,6 +170,13 @@ public class ManagerFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new TreatmentChartDialog();
+			}
+		});
+		
+		analyticsIncome.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new IncomeChartDialog();
 			}
 		});
 		

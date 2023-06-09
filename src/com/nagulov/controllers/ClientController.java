@@ -22,4 +22,5 @@ public class ClientController {
 	public void scheduleTreatment(Treatment treatment) {
 		((Client) DataBase.loggedUser).addTreatment(treatment);
 	}
+
 }

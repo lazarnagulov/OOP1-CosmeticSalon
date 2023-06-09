@@ -14,16 +14,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField.AbstractFormatter;
+import javax.swing.RowFilter.ComparisonType;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -34,11 +39,11 @@ import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
-import com.nagulov.treatments.CosmeticService;
-import com.nagulov.treatments.Pricelist;
+import com.nagulov.data.Validator;
 import com.nagulov.treatments.Salon;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.treatments.TreatmentStatus;
+import com.nagulov.ui.models.ServiceModel;
 import com.nagulov.ui.models.TreatmentModel;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
@@ -53,8 +58,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private JPanel stPanel = new JPanel();
-	private ButtonGroup serviceTreatmentGroup;
+	private JTable treatmentTable;
 	private JButton confirmTreatmentButton = new JButton("Confirm treatment");
 	private JButton confirmButton = new JButton("Confirm");
 	private JButton cancelButton = new JButton("Cancel");
@@ -63,6 +67,14 @@ public class ScheduleTreatmentDialog extends JDialog{
 	private UtilDateModel model = new UtilDateModel();
 	private JDatePanelImpl datePanel;
 	private JDatePickerImpl datePicker;
+
+	private JPanel filterPanel = new JPanel();
+	private JTextField filterCosmeticTreatment = new JTextField(20);
+	private JTextField filterCosmeticService = new JTextField(20);
+	private JTextField filterPrice = new JTextField(20);
+	private JButton filterButton = new JButton("Filter");
+
+	private TableRowSorter<AbstractTableModel> sorter = new TableRowSorter<AbstractTableModel>();
 	
 	private void initScheduleTreatmentDialog() {
 		Properties p = new Properties();
@@ -93,18 +105,22 @@ public class ScheduleTreatmentDialog extends JDialog{
 		        return "";
 		    }
 		});
-		serviceTreatmentGroup = new ButtonGroup();
-		stPanel.setLayout(new MigLayout("wrap 2", "[][]"));
-		List<JRadioButton> checkboxes = new ArrayList<JRadioButton>();
-		for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
-			CosmeticService cs = service.getValue();
-			for(int i = 0; i < cs.getTreatments().size(); ++i) {
-				JRadioButton btn = new JRadioButton(cs.getName() + "-" + cs.getTreatments().get(i) + "-" + Pricelist.getInstance().getPrice(cs.getTreatments().get(i)));
-				serviceTreatmentGroup.add(btn);
-				stPanel.add(btn);
-				checkboxes.add(btn);
-			}
-		}
+		ServiceModel.init();
+		sorter.setModel(new ServiceModel());
+		treatmentTable = new JTable(new ServiceModel());
+		treatmentTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		treatmentTable.getTableHeader().setReorderingAllowed(false);
+		treatmentTable.setRowSorter(sorter);
+		JScrollPane sc = new JScrollPane(treatmentTable);
+		
+		filterPanel.setLayout(new MigLayout("wrap 2", "[][]", "[][][][]"));
+		filterPanel.add(new JLabel("Service:"));
+		filterPanel.add(filterCosmeticService);
+		filterPanel.add(new JLabel("Treatment"));
+		filterPanel.add(filterCosmeticTreatment);
+		filterPanel.add(new JLabel("Price"));
+		filterPanel.add(filterPrice);
+		filterPanel.add(filterButton, "span 2, center");
 		
 		beauticianBox.setEnabled(false);
 		datePicker.setEnabled(false);
@@ -112,10 +128,11 @@ public class ScheduleTreatmentDialog extends JDialog{
 		timeField.setEnabled(false);
 		confirmButton.setEnabled(false);
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][]20[][][]20[]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][]20[][][]20[]"));
 		this.getContentPane().add(new JLabel("Schedule treatment"), "span 2, center");
-		this.getContentPane().add(new JLabel("Treatment"));
-		this.getContentPane().add(stPanel);
+		this.getContentPane().add(new JLabel("Pricelist"), "span 2, center");
+		this.getContentPane().add(sc, "span 2");
+		this.getContentPane().add(filterPanel, "span 2, center");
 		this.getContentPane().add(confirmTreatmentButton, "span 2, center");
 		this.getContentPane().add(new JLabel("Beautician"));
 		this.getContentPane().add(beauticianBox);
@@ -126,19 +143,39 @@ public class ScheduleTreatmentDialog extends JDialog{
 		this.getContentPane().add(confirmButton);
 		this.getContentPane().add(cancelButton);
 		
+		
+		filterButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String service = filterCosmeticService.getText();
+				String treatment = filterCosmeticTreatment.getText();
+				String price = filterPrice.getText();
+				List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
+				if(!service.equals("")) {
+					filters.add(RowFilter.regexFilter(service, 0));
+				}
+				if(!treatment.equals("")) {
+					filters.add(RowFilter.regexFilter(treatment, 1));
+				}
+				if(!price.equals("")) {
+					filters.add(RowFilter.regexFilter(price, 3));
+				}
+				RowFilter<Object, Object> filter = RowFilter.andFilter(filters);
+				sorter.setRowFilter(filter);				
+			}
+		});
+		
 		confirmTreatmentButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String service = null;
-				String treatment = null;
-				beauticianBox.removeAllItems();
-				for(JRadioButton btn : checkboxes) {
-					if(btn.isSelected()){
-						service = btn.getText().split("-")[0];
-						treatment = btn.getText().split("-")[1];
-						break;
-					}
+				int row = treatmentTable.getSelectedRow();
+				if(row == -1) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
+				String service = treatmentTable.getValueAt(row, 0).toString();
+				String treatment = treatmentTable.getValueAt(row, 1).toString();
+				
 				if(service == null || treatment == null) {
 					JOptionPane.showMessageDialog(null, ErrorMessage.NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
@@ -149,7 +186,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 						continue;
 					}
 					Beautician b = (Beautician) entry.getValue();
-					if(b.containsTreatment(DataBase.services.get(service))){
+					if(b.containsService(DataBase.services.get(service))){
 						beauticianBox.addItem(b.getUsername());
 					}
 				}
@@ -165,15 +202,13 @@ public class ScheduleTreatmentDialog extends JDialog{
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String service = null;
-				String treatment = null;
-				for(JRadioButton btn : checkboxes) {
-					if(btn.isSelected()){
-						service = btn.getText().split("-")[0];
-						treatment = btn.getText().split("-")[1];
-						break;
-					}
+				int row = treatmentTable.getSelectedRow();
+				if(row == -1) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
+				String service = treatmentTable.getValueAt(row, 0).toString();
+				String treatment = treatmentTable.getValueAt(row, 1).toString();
 				String[] hm = timeField.getText().split(":");
 				LocalTime time = LocalTime.of(Integer.parseInt(hm[0]), Integer.parseInt(hm[1]));
 				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -189,8 +224,9 @@ public class ScheduleTreatmentDialog extends JDialog{
 						return;
 					}
 				}
-				if(!b.canOperate(dateTime)) {
-					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+				ErrorMessage error = Validator.createTreatment(DataBase.services.get(service), b, dateTime);
+				if(!error.equals(ErrorMessage.SUCCESS)) {
+					JOptionPane.showMessageDialog(null, error.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				String treatmentStr = new StringBuilder("Service: ")

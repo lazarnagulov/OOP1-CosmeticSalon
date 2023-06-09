@@ -83,4 +83,5 @@ public class ServiceModel extends AbstractTableModel{
 		String[] service = services.get(rowIndex).split(",");
 		return service[columnIndex];
 	}
+	
 }

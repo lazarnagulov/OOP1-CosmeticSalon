@@ -39,7 +39,6 @@ public class EditServiceDialog extends JDialog {
 	private JButton confirmButton = new JButton("Confirm");
 	private JButton cancelButton = new JButton("Cancel");
 
-	
 	private void initEditServiceDialog() {
 		
 		serviceField = new JComboBox<String>();

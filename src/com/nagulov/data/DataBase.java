@@ -355,7 +355,7 @@ public class DataBase {
 							for(int i = 0; i < treatments.length; ++i) {
 								CosmeticService cs = DataBase.services.get(treatments[i]);
 								if(cs != null)
-									beautician.addTreatment(cs);
+									beautician.addService(cs);
 							}
 						}
 						UserController.getInstance().addUser(beautician);

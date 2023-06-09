@@ -5,11 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,7 +20,6 @@ import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.RowFilter.ComparisonType;
-import javax.swing.RowSorter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -68,8 +65,8 @@ public class TableDialog extends JDialog {
 	private ImageIcon removeIcon = new ImageIcon("img/remove.gif");
 
 	private JPanel filterPanel = new JPanel();
-	private JComboBox<String> filterCosmeticTreatment = new JComboBox<String>();
-	private JComboBox<String> filterCosmeticService = new JComboBox<String>();
+	private JTextField filterCosmeticTreatment = new JTextField(20);
+	private JTextField filterCosmeticService = new JTextField(20);
 	private JTextField filterStartingPrice = new JTextField(20);
 	private JTextField filterEndingPrice = new JTextField(20);
 	private JButton filterButton = new JButton("Filter");
@@ -201,16 +198,6 @@ public class TableDialog extends JDialog {
 		table.getTableHeader().setReorderingAllowed(false);
 		init();
 		
-		
-		filterCosmeticService.addItem("");
-		filterCosmeticTreatment.addItem("");
-		for(Map.Entry<String, CosmeticService> entry : DataBase.services.entrySet()) {
-			filterCosmeticService.addItem(entry.getKey());
-			for(CosmeticTreatment treatment : entry.getValue().getTreatments()) {
-				filterCosmeticTreatment.addItem(treatment.getName());
-			}
-		}
-		
 		filterPanel.setLayout(new MigLayout("wrap 9", "[][][][][][][][][]", "[]"));
 		filterPanel.add(new JLabel("Cosmetic Service"));
 		filterPanel.add(filterCosmeticService);
@@ -264,8 +251,8 @@ public class TableDialog extends JDialog {
 		filterButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String service = filterCosmeticService.getSelectedItem().toString();
-				String treatment = filterCosmeticTreatment.getSelectedItem().toString();
+				String service = filterCosmeticService.getText();
+				String treatment = filterCosmeticTreatment.getText();
 				String startingPrice = filterStartingPrice.getText();
 				String endingPrice = filterEndingPrice.getText();
 				List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
@@ -276,10 +263,10 @@ public class TableDialog extends JDialog {
 					filters.add(RowFilter.regexFilter(treatment, 2));
 				}
 				if(!startingPrice.equals("")) {
-					filters.add(RowFilter.numberFilter(ComparisonType.AFTER, Double.valueOf(startingPrice) - 1.0, 6));
+					filters.add(RowFilter.numberFilter(ComparisonType.AFTER, Double.valueOf(startingPrice) - 10e-10, 6));
 				}
 				if(!endingPrice.equals("")) {
-					filters.add(RowFilter.numberFilter(ComparisonType.BEFORE, Double.valueOf(endingPrice) + 1.0, 6));
+					filters.add(RowFilter.numberFilter(ComparisonType.BEFORE, Double.valueOf(endingPrice) + 10e-10, 6));
 				}
 				RowFilter<Object, Object> filter = RowFilter.andFilter(filters);
 				sorter.setRowFilter(filter);

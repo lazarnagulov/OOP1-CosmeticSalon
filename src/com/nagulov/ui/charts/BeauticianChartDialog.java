@@ -23,7 +23,7 @@ public class BeauticianChartDialog extends JDialog{
 
 	private void initChartDialog() {
 		JPanel beauticianChart = new XChartPanel<PieChart>(ReportChart.initBeauticianChart());
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][grow]", "[]20[][][][][]20[grow, center]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][grow]", "[]20[grow, center]"));
 		this.getContentPane().add(new JLabel("Statistics: " + LocalDate.now().minusDays(30).format(DataBase.DATE_FORMAT) + " - " + LocalDate.now().format(DataBase.DATE_FORMAT)), "span 2");
 		
 //		for(Map.Entry<TreatmentStatus, Integer> entry : report.entrySet()) {

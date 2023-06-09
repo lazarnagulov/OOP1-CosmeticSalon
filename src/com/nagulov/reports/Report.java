@@ -8,6 +8,8 @@ import java.util.Map;
 
 import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
+import com.nagulov.data.DataBase;
+import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.treatments.TreatmentStatus;
@@ -41,6 +43,32 @@ public class Report {
 		return cosmeticTreatmentReport;
 	}
 	
+	public static HashMap<LocalDate, HashMap<CosmeticService, Double>> calculateIncomeReport(int monthsInPast) {
+		HashMap<LocalDate, HashMap<CosmeticService, Double>> incomeReport = new HashMap<LocalDate, HashMap<CosmeticService, Double>>();
+		LocalDate date = LocalDate.now().minusMonths(monthsInPast);
+		
+		for(int i = 1; i <= monthsInPast; i++) {
+			HashMap<CosmeticService, Double> map = new HashMap<CosmeticService, Double>();
+			for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
+				map.put(service.getValue(), 0.0);
+			}
+			incomeReport.put(date.plusMonths(i).withDayOfMonth(1), map);
+		}
+
+		for(Map.Entry<Integer, Treatment> entry : TreatmentController.getInstance().getTreatments().entrySet()) {
+			LocalDate treatmentDate = entry.getValue().getDate().withDayOfMonth(1).toLocalDate();
+			if(incomeReport.get(treatmentDate) == null)
+				continue;
+			if(!incomeReport.get(treatmentDate).containsKey(entry.getValue().getService())) {
+				incomeReport.get(treatmentDate).put(entry.getValue().getService(), entry.getValue().getIncome());
+			}else {
+				incomeReport.get(treatmentDate).put(entry.getValue().getService(), incomeReport.get(treatmentDate).get(entry.getValue().getService()) + entry.getValue().getIncome());
+			}
+		}
+		
+		return incomeReport;
+	}
+	
 	public static List<Client> calculateLoyalityReport() {
 		List<Client> loyalityReport = new ArrayList<Client>();
 		for(Map.Entry<String, User> entry : UserController.getInstance().getUsers().entrySet()) {
@@ -51,7 +79,6 @@ public class Report {
 		}
 		return loyalityReport;
 	}
-
 	
 	public static HashMap<TreatmentStatus, Integer> calculateTreatmentsReport(LocalDate startDate, LocalDate endDate) {
 		treatmentReport.clear();

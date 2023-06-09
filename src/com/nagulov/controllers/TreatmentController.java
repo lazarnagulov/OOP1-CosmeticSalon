@@ -94,6 +94,10 @@ public class TreatmentController {
 		treatments.remove(id);
 	}
 	
+	public void addTreatment(Treatment treatment) {
+		treatments.put(treatment.getId(), treatment);
+	}
+	
 	public Treatment getTreatment(int id) {
 		return treatments.get(id);
 	}

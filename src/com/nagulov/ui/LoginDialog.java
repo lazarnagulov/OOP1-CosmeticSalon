@@ -6,11 +6,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
+import com.nagulov.data.ErrorMessage;
+import com.nagulov.data.Validator;
 import com.nagulov.treatments.Salon;
 import com.nagulov.ui.frames.BeauticianFrame;
 import com.nagulov.ui.frames.ClientFrame;
@@ -56,17 +59,13 @@ public class LoginDialog extends JDialog{
 				String username = usernameField.getText();
 				String password = new String(passwordField.getPassword());
 				passwordField.setText("");
-		
+
+				ErrorMessage error = Validator.loginUser(username, password);
+				if(!error.equals(ErrorMessage.SUCCESS)) {
+					JOptionPane.showMessageDialog(null, error.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				User u = userController.getUser(username);
-				
-				if(u == null) {
-					return;
-				}
-				
-				if(!u.getPassword().equals(password)) {
-					return;
-				}
-				
 				DataBase.loggedUser = u;
 				
 				switch(u.getClass().getSimpleName()) {

@@ -12,6 +12,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
@@ -20,6 +21,7 @@ import javax.swing.JTextField;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
+import com.nagulov.data.Validator;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Salon;
 import com.nagulov.ui.models.UserModel;
@@ -167,7 +169,11 @@ public class RegisterDialog extends JDialog{
 				String role = null;
 				
 				Staff staff = null;
-				ErrorMessage message = null;
+				ErrorMessage error = Validator.registerUser(name, surname, gender, phoneNumber, address, username, password);
+				if(!error.equals(ErrorMessage.SUCCESS)) {
+					JOptionPane.showMessageDialog(null, error.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				
 				if(isManager) {
 					role = roleComboBox.getSelectedItem().toString();
@@ -184,7 +190,7 @@ public class RegisterDialog extends JDialog{
 								if(cb.isSelected()) {
 									CosmeticService service = DataBase.services.get(cb.getText());
 									Beautician b = (Beautician)UserController.getInstance().getUser(staff.getUsername());
-									b.addTreatment(service);
+									b.addService(service);
 								}
 							}
 						}
@@ -194,13 +200,6 @@ public class RegisterDialog extends JDialog{
 				if(staff == null) {
 					managerController.createUser(name, surname, gender, phoneNumber, address, username, password, getRole(role));
 				}
-//				if(!isManager) {
-//					message = Validator.registerUser(name, surname, gender, phoneNumber, address, username, password);
-//				}
-//				if(message != ErrorMessage.SUCCESS) {
-//					JOptionPane.showMessageDialog(null, message.getError(), "Error", JOptionPane.ERROR_MESSAGE);
-//					return;
-//				}
 				
 				if(isManager) {
 					UserModel.addUser(UserController.getInstance().getUser(username));
