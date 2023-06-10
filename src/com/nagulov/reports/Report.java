@@ -80,7 +80,7 @@ public class Report {
 		return loyalityReport;
 	}
 	
-	public static HashMap<TreatmentStatus, Integer> calculateTreatmentsReport(LocalDate startDate, LocalDate endDate) {
+	public static HashMap<TreatmentStatus, Integer> calculateTreatmentsReport() {
 		treatmentReport.clear();
 		treatmentReport.put(TreatmentStatus.CANCELED_BY_THE_CLIENT, 0);
 		treatmentReport.put(TreatmentStatus.CANCELED_BY_THE_SALON, 0);
@@ -89,19 +89,16 @@ public class Report {
 		treatmentReport.put(TreatmentStatus.SCHEDULED, 0);
 		
 		for(Map.Entry<Integer, Treatment> treatment : TreatmentController.getInstance().getTreatments().entrySet()) {
-			LocalDate treatmentDate = treatment.getValue().getDate().toLocalDate();
-			if(isInInterval(startDate, endDate, treatmentDate)) {
-				if(treatment.getValue().getStatus().equals(TreatmentStatus.CANCELED_BY_THE_CLIENT)) {
-					treatmentReport.put(TreatmentStatus.CANCELED_BY_THE_CLIENT, treatmentReport.get(TreatmentStatus.CANCELED_BY_THE_CLIENT) + 1);
-				}else if(treatment.getValue().getStatus().equals(TreatmentStatus.CANCELED_BY_THE_SALON)) {	
-					treatmentReport.put(TreatmentStatus.CANCELED_BY_THE_SALON, treatmentReport.get(TreatmentStatus.CANCELED_BY_THE_SALON) + 1);
-				}else if(treatment.getValue().getStatus().equals(TreatmentStatus.DID_NOT_SHOW_UP)) {
-					treatmentReport.put(TreatmentStatus.DID_NOT_SHOW_UP, treatmentReport.get(TreatmentStatus.DID_NOT_SHOW_UP) + 1);
-				}else if(treatment.getValue().getStatus().equals(TreatmentStatus.PERFORMED)) {
-					treatmentReport.put(TreatmentStatus.PERFORMED, treatmentReport.get(TreatmentStatus.PERFORMED) + 1);
-				}else {
-					treatmentReport.put(TreatmentStatus.SCHEDULED, treatmentReport.get(TreatmentStatus.SCHEDULED) + 1);
-				}
+			if(treatment.getValue().getStatus().equals(TreatmentStatus.CANCELED_BY_THE_CLIENT)) {
+				treatmentReport.put(TreatmentStatus.CANCELED_BY_THE_CLIENT, treatmentReport.get(TreatmentStatus.CANCELED_BY_THE_CLIENT) + 1);
+			}else if(treatment.getValue().getStatus().equals(TreatmentStatus.CANCELED_BY_THE_SALON)) {	
+				treatmentReport.put(TreatmentStatus.CANCELED_BY_THE_SALON, treatmentReport.get(TreatmentStatus.CANCELED_BY_THE_SALON) + 1);
+			}else if(treatment.getValue().getStatus().equals(TreatmentStatus.DID_NOT_SHOW_UP)) {
+				treatmentReport.put(TreatmentStatus.DID_NOT_SHOW_UP, treatmentReport.get(TreatmentStatus.DID_NOT_SHOW_UP) + 1);
+			}else if(treatment.getValue().getStatus().equals(TreatmentStatus.PERFORMED)) {
+				treatmentReport.put(TreatmentStatus.PERFORMED, treatmentReport.get(TreatmentStatus.PERFORMED) + 1);
+			}else {
+				treatmentReport.put(TreatmentStatus.SCHEDULED, treatmentReport.get(TreatmentStatus.SCHEDULED) + 1);
 			}
 		}
 		

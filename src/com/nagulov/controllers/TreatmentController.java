@@ -67,17 +67,9 @@ public class TreatmentController {
 		t.setService(service);
 		t.setStatus(status);
 		t.setTreatment(treatment);
-		
+
 		t.getClient().addTreatment(t);
 		t.getBeautician().addTreatment(t);
-		
-		if(t.getStatus().equals(TreatmentStatus.PERFORMED)) {
-			for(Treatment ct : t.getClient().getTreatments()) {
-				if(!(t.getId() == ct.getId()) && t.getDate().equals(ct.getDate())) {
-					ct.setStatus(TreatmentStatus.CANCELED_BY_THE_CLIENT);
-				}
-			}
-		}
 	}
 	
 

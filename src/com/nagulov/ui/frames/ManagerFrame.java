@@ -28,7 +28,6 @@ import com.nagulov.ui.charts.TreatmentChartDialog;
 import net.miginfocom.swing.MigLayout;
 
 public class ManagerFrame extends JFrame{
-
 	
 	/**
 	 * 
@@ -47,7 +46,7 @@ public class ManagerFrame extends JFrame{
 	private JMenuItem treatmentItem = new JMenuItem("Treatments");
 
 	private JMenu analyticsMenu = new JMenu("Analytics");
-	private JMenuItem analyticsTreatment = new JMenuItem("Treatments in past 30 days");
+	private JMenuItem analyticsTreatment = new JMenuItem("Treatments status");
 	private JMenuItem analyticsBeautician = new JMenuItem("Beauticians in past 30 days");
 	private JMenuItem analyticsIncome = new JMenuItem("Income in past year");
 	

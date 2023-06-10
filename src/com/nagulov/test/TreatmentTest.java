@@ -60,6 +60,7 @@ public class TreatmentTest {
 		UserController.getInstance().loyaltyCardNeeded = 0;
 		Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, service, treatment, b, datetime, c);
 		assertEquals(Pricelist.getInstance().getPrice(treatment) * 0.9, t.getPrice());
+		UserController.getInstance().loyaltyCardNeeded = 100000.0;
 	}
 	
 	@Test

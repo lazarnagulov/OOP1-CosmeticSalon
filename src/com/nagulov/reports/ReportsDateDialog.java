@@ -155,7 +155,7 @@ public class ReportsDateDialog extends JDialog{
 				if(table.equals(Table.BEAUTICIAN_INCOME)) {
 					Report.calculateBeauticianReport(startDate, endDate);
 				}else if(table.equals(Table.TREATMENTS_STATUS)) {
-					Report.calculateTreatmentsReport(startDate, endDate);
+					Report.calculateTreatmentsReport();
 				}else if(table.equals(Table.COSMETIC_TREATMENT_STATUS)) {
 					String[] ct = cosmeticTreatmentBox.getSelectedItem().toString().split("-");
 					CosmeticService service = ServiceController.getInstance().getServices().get(ct[0]);

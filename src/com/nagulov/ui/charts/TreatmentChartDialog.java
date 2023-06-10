@@ -28,7 +28,7 @@ public class TreatmentChartDialog extends JDialog {
 	private void initChartDialog() {
 		JPanel treatmentChart = new XChartPanel<PieChart>(ReportChart.initTreatmentChart());
 		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][grow]", "[]20[][][][][]20[grow, center]"));
-		this.getContentPane().add(new JLabel("Statistics: " + LocalDate.now().minusDays(30).format(DataBase.DATE_FORMAT) + " - " + LocalDate.now().format(DataBase.DATE_FORMAT)), "span 2");
+		this.getContentPane().add(new JLabel("Statistics:"), "span 2");
 		
 		HashMap<TreatmentStatus, Integer> report = Report.treatmentReport;
 		

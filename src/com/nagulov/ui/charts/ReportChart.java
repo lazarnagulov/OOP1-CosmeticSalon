@@ -88,7 +88,7 @@ public class ReportChart{
 				.height(300)
 				.build();
 
-		HashMap<TreatmentStatus, Integer> data = Report.calculateTreatmentsReport(LocalDate.now().minusDays(30), LocalDate.now());
+		HashMap<TreatmentStatus, Integer> data = Report.calculateTreatmentsReport();
 		for(Map.Entry<TreatmentStatus, Integer> entry : data.entrySet()) {
 			treatmentChart.addSeries(entry.getKey().toString().replace("_", " "), entry.getValue());
 		}

@@ -128,21 +128,20 @@ public class ScheduleTreatmentDialog extends JDialog{
 		timeField.setEnabled(false);
 		confirmButton.setEnabled(false);
 		
-		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[]20[][][]20[][][]20[]"));
+		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][]", "[][]20[120px][][]20[]"));
 		this.getContentPane().add(new JLabel("Schedule treatment"), "span 2, center");
 		this.getContentPane().add(new JLabel("Pricelist"), "span 2, center");
 		this.getContentPane().add(sc, "span 2");
 		this.getContentPane().add(filterPanel, "span 2, center");
 		this.getContentPane().add(confirmTreatmentButton, "span 2, center");
-		this.getContentPane().add(new JLabel("Beautician"));
+		this.getContentPane().add(new JLabel("Beautician:"));
 		this.getContentPane().add(beauticianBox);
-		this.getContentPane().add(new JLabel("Date"));
+		this.getContentPane().add(new JLabel("Date:"));
 		this.getContentPane().add(datePicker);
-		this.getContentPane().add(new JLabel("Time"));
+		this.getContentPane().add(new JLabel("Time (e.g. 13:00):"));
 		this.getContentPane().add(timeField);
 		this.getContentPane().add(confirmButton);
 		this.getContentPane().add(cancelButton);
-		
 		
 		filterButton.addActionListener(new ActionListener() {
 			@Override
@@ -209,11 +208,18 @@ public class ScheduleTreatmentDialog extends JDialog{
 				}
 				String service = treatmentTable.getValueAt(row, 0).toString();
 				String treatment = treatmentTable.getValueAt(row, 1).toString();
-				String[] hm = timeField.getText().split(":");
-				LocalTime time = LocalTime.of(Integer.parseInt(hm[0]), Integer.parseInt(hm[1]));
-				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-				LocalDateTime dateTime = LocalDateTime.of(date, time);
-				
+				LocalDateTime dateTime = null;
+				LocalDate date = null;
+				LocalTime time = null;
+				try {
+					String[] hm = timeField.getText().split(":");
+					time = LocalTime.of(Integer.parseInt(hm[0]), Integer.parseInt(hm[1]));
+					date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					dateTime = LocalDateTime.of(date, time);
+				}catch(Exception dateException) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.INVALID_TIME.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				String beautician = beauticianBox.getSelectedItem().toString();
 				Beautician b = (Beautician)UserController.getInstance().getUser(beautician);
 				if(b == null) {

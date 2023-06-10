@@ -190,7 +190,6 @@ public class TableDialog extends JDialog {
 	
 	private void initTreatmentModel(){
 		this.setTitle("Treatments");	
-		this.getContentPane().setLayout(new MigLayout("wrap", "[]", "[]20[]"));
 		table = new JTable(new TreatmentModel());
 		sorter.setModel((AbstractTableModel) table.getModel());
 		table.setRowSorter(sorter);
@@ -198,18 +197,19 @@ public class TableDialog extends JDialog {
 		table.getTableHeader().setReorderingAllowed(false);
 		init();
 		
+		
 		filterPanel.setLayout(new MigLayout("wrap 9", "[][][][][][][][][]", "[]"));
-		filterPanel.add(new JLabel("Cosmetic Service"));
+		filterPanel.add(new JLabel("Service"));
 		filterPanel.add(filterCosmeticService);
-		filterPanel.add(new JLabel("Cosmetic Treatment:"));
+		filterPanel.add(new JLabel("Treatment:"));
 		filterPanel.add(filterCosmeticTreatment);
 		filterPanel.add(new JLabel("Min price:"));
 		filterPanel.add(filterStartingPrice);
-		filterPanel.add(new JLabel("Max price"));
+		filterPanel.add(new JLabel("Max price:"));
 		filterPanel.add(filterEndingPrice);
 		filterPanel.add(filterButton);
 
-		this.getContentPane().add(filterPanel);
+		this.getContentPane().add(filterPanel, BorderLayout.SOUTH);
 		
 		addButton.addActionListener(new ActionListener() {
 			@Override
