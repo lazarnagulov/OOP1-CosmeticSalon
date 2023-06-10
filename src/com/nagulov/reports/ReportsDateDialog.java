@@ -21,7 +21,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import com.nagulov.data.DataBase;
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
@@ -125,7 +125,7 @@ public class ReportsDateDialog extends JDialog{
 		this.getContentPane().add(endDatePicker);
 		if(table.equals(Table.COSMETIC_TREATMENT_STATUS)) {
 			cosmeticTreatmentBox = new JComboBox<String>();
-			for(Map.Entry<String, CosmeticService> entry : DataBase.services.entrySet()) {
+			for(Map.Entry<String, CosmeticService> entry : ServiceController.getInstance().getServices().entrySet()) {
 				for(CosmeticTreatment treatment : entry.getValue().getTreatments()) {
 					cosmeticTreatmentBox.addItem(entry.getValue().getName() + "-" + treatment.getName());
 				}
@@ -158,7 +158,7 @@ public class ReportsDateDialog extends JDialog{
 					Report.calculateTreatmentsReport(startDate, endDate);
 				}else if(table.equals(Table.COSMETIC_TREATMENT_STATUS)) {
 					String[] ct = cosmeticTreatmentBox.getSelectedItem().toString().split("-");
-					CosmeticService service = DataBase.services.get(ct[0]);
+					CosmeticService service = ServiceController.getInstance().getServices().get(ct[0]);
 					CosmeticTreatment treatment = service.getTreatment(ct[1]);
 					Report.calculateComseticTreatmentReport(treatment, startDate, endDate);
 					

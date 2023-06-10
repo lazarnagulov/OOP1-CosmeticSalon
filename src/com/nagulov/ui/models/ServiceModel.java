@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
@@ -20,7 +21,7 @@ public class ServiceModel extends AbstractTableModel{
 	public static void init() {
 		if(services.isEmpty()) {
 			StringBuilder sb = new StringBuilder();
-			for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
+			for(Map.Entry<String, CosmeticService> service : ServiceController.getInstance().getServices().entrySet()) {
 				sb.append(service.getKey()).append(",");
 				for(int i = 0; i < service.getValue().getTreatments().size(); ++i) {
 					sb.append(service.getValue().getTreatments().get(i).getName()).append(",")
@@ -45,7 +46,7 @@ public class ServiceModel extends AbstractTableModel{
 	}
 
 	public static void addTreatment(CosmeticTreatment treatment) {
-		CosmeticService cs = DataBase.cosmeticTreatments.get(treatment);
+		CosmeticService cs = ServiceController.getInstance().getCosmeticTreatments().get(treatment);
 		services.add(new StringBuilder(cs.getName()).append(",")
 						.append(treatment.getName()).append(",")
 						.append(treatment.getDuration()).append(",")

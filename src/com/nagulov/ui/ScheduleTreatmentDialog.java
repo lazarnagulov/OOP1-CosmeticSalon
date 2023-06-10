@@ -18,9 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField.AbstractFormatter;
-import javax.swing.RowFilter.ComparisonType;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableRowSorter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,12 +26,15 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import com.nagulov.controllers.ClientController;
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
@@ -186,7 +186,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 						continue;
 					}
 					Beautician b = (Beautician) entry.getValue();
-					if(b.containsService(DataBase.services.get(service))){
+					if(b.containsService(ServiceController.getInstance().getServices().get(service))){
 						beauticianBox.addItem(b.getUsername());
 					}
 				}
@@ -217,14 +217,14 @@ public class ScheduleTreatmentDialog extends JDialog{
 				String beautician = beauticianBox.getSelectedItem().toString();
 				Beautician b = (Beautician)UserController.getInstance().getUser(beautician);
 				if(b == null) {
-					b = UserController.getInstance().findAvailableBeautician(dateTime, DataBase.services.get(service));
+					b = UserController.getInstance().findAvailableBeautician(dateTime, ServiceController.getInstance().getServices().get(service));
 					if(b == null) {
 						JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 						timeField.setText("");
 						return;
 					}
 				}
-				ErrorMessage error = Validator.createTreatment(DataBase.services.get(service), b, dateTime);
+				ErrorMessage error = Validator.createTreatment(ServiceController.getInstance().getServices().get(service), b, dateTime);
 				if(!error.equals(ErrorMessage.SUCCESS)) {
 					JOptionPane.showMessageDialog(null, error.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
@@ -243,7 +243,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 				
 				int choice = JOptionPane.showConfirmDialog(null, treatmentStr, "Confirm Treatment", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
-					Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, DataBase.services.get(service), DataBase.services.get(service).getTreatment(treatment), b, dateTime, (Client)DataBase.loggedUser);
+					Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, ServiceController.getInstance().getServices().get(service), ServiceController.getInstance().getServices().get(service).getTreatment(treatment), b, dateTime, (Client)DataBase.loggedUser);
 					ClientController.getInstance().scheduleTreatment(t);
 					TreatmentModel.addTreatment(t);
 					dispose();

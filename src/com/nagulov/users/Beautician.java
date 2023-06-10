@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Treatment;
 

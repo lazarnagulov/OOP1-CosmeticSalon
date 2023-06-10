@@ -2,15 +2,9 @@ package com.nagulov.data;
 
 import java.time.LocalDateTime;
 
-import javax.swing.JOptionPane;
-
 import com.nagulov.controllers.UserController;
 import com.nagulov.treatments.CosmeticService;
-import com.nagulov.treatments.CosmeticTreatment;
-import com.nagulov.treatments.Treatment;
-import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.users.Beautician;
-import com.nagulov.users.Client;
 
 public class Validator {
 	

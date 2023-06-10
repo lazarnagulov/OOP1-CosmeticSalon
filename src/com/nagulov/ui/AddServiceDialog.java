@@ -11,8 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import com.nagulov.controllers.UserController;
-import com.nagulov.data.DataBase;
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
@@ -42,7 +41,7 @@ public class AddServiceDialog extends JDialog{
 		
 		serviceField = new JComboBox<String>();
 		
-		for(Map.Entry<String, CosmeticService> entry : DataBase.services.entrySet()) {	
+		for(Map.Entry<String, CosmeticService> entry : ServiceController.getInstance().getServices().entrySet()) {	
 			serviceField.addItem(entry.getKey());
 		}
 		
@@ -71,8 +70,8 @@ public class AddServiceDialog extends JDialog{
 				
 				CosmeticService service = new CosmeticService(serviceName);
 				
-				if(!DataBase.services.containsKey(serviceName)) {
-					DataBase.services.put(serviceName, service);
+				if(!ServiceController.getInstance().getServices().containsKey(serviceName)) {
+					ServiceController.getInstance().getServices().put(serviceName, service);
 				}
 				
 				setVisible(false);
@@ -84,12 +83,12 @@ public class AddServiceDialog extends JDialog{
 		addTreatmentButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CosmeticService service = DataBase.services.get(serviceField.getSelectedItem().toString());
+				CosmeticService service = ServiceController.getInstance().getServices().get(serviceField.getSelectedItem().toString());
 				String treatment = treatmentField.getText();
 				LocalTime duration = LocalTime.parse(durationField.getText());
 				double price = Double.parseDouble(priceField.getText());
 				
-				CosmeticTreatment ct = UserController.getInstance().createCosmeticTreatment(service, treatment, duration);
+				CosmeticTreatment ct = ServiceController.getInstance().createCosmeticTreatment(service, treatment, duration);
 				Pricelist.getInstance().setPrice(ct, price);
 				
 				ServiceModel.addTreatment(ct);

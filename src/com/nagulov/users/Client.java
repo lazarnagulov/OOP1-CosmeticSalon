@@ -22,13 +22,11 @@ public class Client extends User{
 	
 	public void addTreatment(Treatment t) {
 		if(!treatments.contains(t)) {
-			spent += t.getPrice();
 			treatments.add(t);
 		}
 	}
 	
 	public void removeTreatment(Treatment t) {
-		spent -= t.getIncome();
 		treatments.remove(t);
 	}
 

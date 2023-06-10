@@ -8,8 +8,6 @@ import org.knowm.xchart.XYChart;
 
 import com.nagulov.treatments.Salon;
 
-import net.miginfocom.swing.MigLayout;
-
 public class IncomeChartDialog extends JDialog{
 
 	/**
@@ -23,11 +21,11 @@ public class IncomeChartDialog extends JDialog{
 	}
 	
 	public IncomeChartDialog() {
-		setTitle(Salon.getInstance().getSalonName());
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setLocationRelativeTo(null);
+		this.setTitle(Salon.getInstance().getSalonName());
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null);
 		initChartDialog();
-		pack();
-		setVisible(true);
+		this.pack();
+		this.setVisible(true);
 	}
 }

@@ -9,21 +9,17 @@ import org.junit.jupiter.api.Test;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.ErrorMessage;
 import com.nagulov.data.Validator;
-import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
-import com.nagulov.users.StaffBuilder;
 import com.nagulov.users.UserBuilder;
 
 public class UserTest {
 
 	
 	private static Client c;
-	private static Beautician b;
 	
 	@BeforeAll
 	public static void init() {
 		c = new UserBuilder("Client", "123").buildClient();
-		b = new StaffBuilder("Beautician", "123").buildBeautician();
 		UserController.getInstance().addUser(c);
 	}
 	
@@ -31,6 +27,12 @@ public class UserTest {
 	@DisplayName("Logging with invalid user")
 	public void testInvalidLogin() {
 		assertEquals(Validator.loginUser("Nonvalid", "123"), ErrorMessage.INVALID_USERNAME);
+	}
+	
+	@Test
+	@DisplayName("Logging with invalid password")
+	public void testInvalidPassword() {
+		assertEquals(Validator.loginUser("Client", "Nonvalid"), ErrorMessage.INVALID_PASSWORD);
 	}
 	
 	@Test

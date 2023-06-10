@@ -29,11 +29,10 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
-import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
-import com.nagulov.data.Validator;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Pricelist;
 import com.nagulov.treatments.Salon;
@@ -113,7 +112,7 @@ public class EditTreatmentDialog extends JDialog{
 		serviceTreatmentGroup = new ButtonGroup();
 		stPanel.setLayout(new MigLayout("wrap 2", "[][]"));
 		List<JRadioButton> checkboxes = new ArrayList<JRadioButton>();
-		for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
+		for(Map.Entry<String, CosmeticService> service : ServiceController.getInstance().getServices().entrySet()) {
 			CosmeticService cs = service.getValue();
 			for(int i = 0; i < cs.getTreatments().size(); ++i) {
 				JRadioButton btn = new JRadioButton(cs.getName() + "-" + cs.getTreatments().get(i) + "-" + Pricelist.getInstance().getPrice(cs.getTreatments().get(i)));
@@ -196,7 +195,7 @@ public class EditTreatmentDialog extends JDialog{
 				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 				LocalDateTime dateTime = LocalDateTime.of(date, time);
 		
-				if(!b.containsService(DataBase.services.get(service))) {
+				if(!b.containsService(ServiceController.getInstance().getServices().get(service))) {
 					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_WITHOUT_SERVICE.getError() + service, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -212,14 +211,14 @@ public class EditTreatmentDialog extends JDialog{
 				
 				String client = clientBox.getSelectedItem().toString();
 				if(treatment != null) {
-					TreatmentController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
+					TreatmentController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), ServiceController.getInstance().getServices().get(service), ServiceController.getInstance().getServices().get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
 				}
 				else {
 					if(!b.canOperate(dateTime)) {
 						JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), DataBase.services.get(service), DataBase.services.get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
+					Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), ServiceController.getInstance().getServices().get(service), ServiceController.getInstance().getServices().get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
 					TreatmentModel.addTreatment(t);
 				}
 				TableDialog.refreshTreatment();

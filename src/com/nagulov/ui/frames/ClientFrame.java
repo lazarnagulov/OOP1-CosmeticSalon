@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
-import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.Salon;
 import com.nagulov.ui.EditUserDialog;
 import com.nagulov.ui.LoginDialog;

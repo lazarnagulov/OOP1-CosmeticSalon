@@ -3,7 +3,7 @@ package com.nagulov.treatments;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nagulov.data.DataBase;
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.users.User;
 
 public class CosmeticService {
@@ -20,17 +20,17 @@ public class CosmeticService {
 	}
 	
 	public void addTreatment(CosmeticTreatment treatment) {
-		DataBase.cosmeticTreatments.put(treatment, this);
+		ServiceController.getInstance().getCosmeticTreatments().put(treatment, this);
 		treatments.add(treatment);
 	}
 	
 	public void removeTreatment(CosmeticTreatment treatment) {
-		DataBase.cosmeticTreatments.remove(treatment);
+		ServiceController.getInstance().getCosmeticTreatments().remove(treatment);
 		treatments.remove(treatment);
 	}
 	
 	public void removeTreatment(String treatment) {
-		DataBase.cosmeticTreatments.remove(getTreatment(treatment));
+		ServiceController.getInstance().getCosmeticTreatments().remove(getTreatment(treatment));
 		treatments.remove(getTreatment(treatment));
 	}
 	

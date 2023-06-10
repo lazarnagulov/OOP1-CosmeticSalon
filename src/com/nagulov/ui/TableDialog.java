@@ -23,6 +23,7 @@ import javax.swing.RowFilter.ComparisonType;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
@@ -51,7 +52,6 @@ public class TableDialog extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static UserController managerController = UserController.getInstance();
 	
 	private JToolBar toolbar;
 	private static JTable table;
@@ -111,7 +111,7 @@ public class TableDialog extends JDialog {
 					return;
 				}
 				String username = table.getValueAt(row, 1).toString();
-				User u = managerController.getUser(username);
+				User u = UserController.getInstance().getUser(username);
 				new EditUserDialog(u);
 				refreshUser();
 			}
@@ -126,11 +126,11 @@ public class TableDialog extends JDialog {
 					return;
 				}
 				String username = table.getValueAt(row, 1).toString();
-				User u = managerController.getUser(username);
+				User u = UserController.getInstance().getUser(username);
 				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete", 
 						u.getName() + " "+u.getSurname() +" - Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
-					managerController.removeUser(u);
+					UserController.getInstance().removeUser(u);
 					UserModel.removeUser(row);
 					refreshUser();
 				}
@@ -162,7 +162,7 @@ public class TableDialog extends JDialog {
 					JOptionPane.showMessageDialog(null, ErrorMessage.ROW_NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				CosmeticService service = DataBase.services.get(table.getValueAt(row, 0).toString());
+				CosmeticService service = ServiceController.getInstance().getServices().get(table.getValueAt(row, 0).toString());
 				new EditServiceDialog(service, service.getTreatment(table.getValueAt(row, 1).toString()), row);
 			}
 		});
@@ -177,7 +177,7 @@ public class TableDialog extends JDialog {
 				}
 				String serviceName = table.getValueAt(row, 0).toString();
 				String treatmentName = table.getValueAt(row, 1).toString();
-				CosmeticService service = DataBase.services.get(serviceName);
+				CosmeticService service = ServiceController.getInstance().getServices().get(serviceName);
 				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete " + treatmentName + "?", "Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
 					service.removeTreatment(treatmentName);
@@ -440,7 +440,7 @@ public class TableDialog extends JDialog {
 		JPanel info = new JPanel();
 		info.setLayout(new MigLayout("wrap", "[grow,fill]", "[]20[grow,fill][grow,fill][grow,fill]"));
 		info.add(new JLabel("Cosmetic Treatment info:"), "span 2");
-		info.add(new JLabel("Service: " + DataBase.cosmeticTreatments.get(treatment).getName()));
+		info.add(new JLabel("Service: " + ServiceController.getInstance().getCosmeticTreatments().get(treatment).getName()));
 		info.add(new JLabel("Name: " + treatment.getName()));
 		info.add(new JLabel("Duration: " + treatment.getDuration().format(DataBase.TIME_FORMAT)));
 		

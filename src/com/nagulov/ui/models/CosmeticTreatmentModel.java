@@ -36,10 +36,13 @@ public class CosmeticTreatmentModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		
-		switch(columnIndex) {
-			case 0: return reportData.get(0).intValue();
-			case 1: return reportData.get(1);
+		try {
+			switch(columnIndex) {
+				case 0: return reportData.get(0).intValue();
+				case 1: return reportData.get(1);
+			}
+		}catch(Exception e) {
+			return null;
 		}
 		return null;
 	}

@@ -14,9 +14,9 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
 
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.treatments.CosmeticService;
@@ -58,10 +58,6 @@ public class DataBase {
 	public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 	public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 	
-	public static HashMap<CosmeticTreatment, CosmeticService> cosmeticTreatments = new HashMap<CosmeticTreatment, CosmeticService>();
-	
-	public static HashMap<String, CosmeticService> services = new HashMap<String, CosmeticService>();
-	
 
 	public static User loggedUser;
 	
@@ -73,7 +69,7 @@ public class DataBase {
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
-			out.print(TREATMENT_HEADER);
+			out.print("ID" + TREATMENT_HEADER);
 			for(Map.Entry<Integer, Treatment> treatment : TreatmentController.getInstance().getTreatments().entrySet()) {
 				try {
 					out.print(treatment.getKey());
@@ -107,7 +103,7 @@ public class DataBase {
 				int id = Integer.parseInt(data[0]);
 				treatmentId = treatmentId < id ? id : treatmentId;   
 				TreatmentStatus status = TreatmentStatus.valueOf(data[1].toUpperCase().replace(" ", "_"));
-				CosmeticService service = services.get(data[2]);
+				CosmeticService service = ServiceController.getInstance().getServices().get(data[2]);
 				if(service == null) {
 					continue;
 				}
@@ -199,7 +195,7 @@ public class DataBase {
 		try {
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
 			out.append(SERVICE_HEADER);
-			for(Map.Entry<String, CosmeticService> service : services.entrySet()) {
+			for(Map.Entry<String, CosmeticService> service : ServiceController.getInstance().getServices().entrySet()) {
 				for(CosmeticTreatment ct : service.getValue().getTreatments()) {
 					out.append(service.getKey() + ",");
 					out.append(ct.getName() + ",");
@@ -241,8 +237,8 @@ public class DataBase {
 					Pricelist.getInstance().setPrice(treatment, Double.parseDouble(data[3]));
 				}
 				else {
-					services.put(service.getName(), service);
-					service = services.get(data[0]);
+					ServiceController.getInstance().getServices().put(service.getName(), service);
+					service = ServiceController.getInstance().getService(data[0]);
 					if(service == null) { 
 						service = new CosmeticService(data[0]);
 					}
@@ -252,7 +248,7 @@ public class DataBase {
 				}
 			}
 			if(service != null)
-				services.put(service.getName(), service);
+				ServiceController.getInstance().getServices().put(service.getName(), service);
 			in.close();
 		} catch (UnsupportedEncodingException | FileNotFoundException e) {
 			e.printStackTrace();
@@ -353,7 +349,7 @@ public class DataBase {
 						if(data.length >= 14) {
 							String[] treatments = data[13].split(";");
 							for(int i = 0; i < treatments.length; ++i) {
-								CosmeticService cs = DataBase.services.get(treatments[i]);
+								CosmeticService cs = ServiceController.getInstance().getServices().get(treatments[i]);
 								if(cs != null)
 									beautician.addService(cs);
 							}

@@ -18,6 +18,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
@@ -144,7 +145,7 @@ public class RegisterDialog extends JDialog{
 			
 			
 			
-			for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
+			for(Map.Entry<String, CosmeticService> service : ServiceController.getInstance().getServices().entrySet()) {
 				JCheckBox btn = new JCheckBox(service.getValue().getName());
 				treatmentsPanel.add(btn);
 				checkboxes.add(btn);
@@ -188,7 +189,7 @@ public class RegisterDialog extends JDialog{
 						if (role == DataBase.BEAUTICIAN) {
 							for(JCheckBox cb : checkboxes) {
 								if(cb.isSelected()) {
-									CosmeticService service = DataBase.services.get(cb.getText());
+									CosmeticService service = ServiceController.getInstance().getServices().get(cb.getText());
 									Beautician b = (Beautician)UserController.getInstance().getUser(staff.getUsername());
 									b.addService(service);
 								}

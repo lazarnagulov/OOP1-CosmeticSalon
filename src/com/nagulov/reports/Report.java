@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
-import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Treatment;
@@ -49,7 +49,7 @@ public class Report {
 		
 		for(int i = 1; i <= monthsInPast; i++) {
 			HashMap<CosmeticService, Double> map = new HashMap<CosmeticService, Double>();
-			for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
+			for(Map.Entry<String, CosmeticService> service : ServiceController.getInstance().getServices().entrySet()) {
 				map.put(service.getValue(), 0.0);
 			}
 			incomeReport.put(date.plusMonths(i).withDayOfMonth(1), map);

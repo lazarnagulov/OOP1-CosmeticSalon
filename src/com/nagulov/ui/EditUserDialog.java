@@ -18,6 +18,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
@@ -109,7 +110,7 @@ public class EditUserDialog extends JDialog{
 		JPanel treatmentsPanel = new JPanel();
 		treatmentsPanel.setLayout(new MigLayout("wrap 2", "[][]"));
 
-		for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
+		for(Map.Entry<String, CosmeticService> service : ServiceController.getInstance().getServices().entrySet()) {
 			JCheckBox btn = new JCheckBox(service.getValue().getName());
 			treatmentsPanel.add(btn);
 			checkboxes.add(btn);
@@ -276,7 +277,7 @@ public class EditUserDialog extends JDialog{
 						b.getServices().clear();
 						for(JCheckBox cb : checkboxes) {
 							if(cb.isSelected()) {
-								CosmeticService service = DataBase.services.get(cb.getText());
+								CosmeticService service = ServiceController.getInstance().getServices().get(cb.getText());
 								b.addService(service);
 							}
 						}
@@ -287,7 +288,7 @@ public class EditUserDialog extends JDialog{
 				}
 				try {
 					TableDialog.refreshUser();
-				}catch(NullPointerException ex) {
+				}catch(Exception ex) {
 					
 				}
 				dispose();

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.swing.table.AbstractTableModel;
 
 import com.nagulov.controllers.TreatmentController;
+import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.Treatment;
 import com.nagulov.users.Beautician;
@@ -21,6 +22,14 @@ public class TreatmentModel extends AbstractTableModel {
 	public static void init() {
 		treatments.clear();
 		for(Map.Entry<Integer, Treatment> entry : TreatmentController.getInstance().getTreatments().entrySet()) {
+			if(!UserController.getInstance().getUsers().containsKey(entry.getValue().getClient().getUsername())) {
+				TreatmentController.getInstance().removeTreatment(entry.getKey());
+				continue;
+			}
+			if(!UserController.getInstance().getUsers().containsKey(entry.getValue().getBeautician().getUsername())) {
+				TreatmentController.getInstance().removeTreatment(entry.getKey());
+				continue;
+			}
 			if(!treatments.contains(entry.getValue())) {
 				treatments.add(entry.getValue());
 			}

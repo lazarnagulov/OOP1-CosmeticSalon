@@ -10,8 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import com.nagulov.controllers.UserController;
-import com.nagulov.data.DataBase;
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Salon;
 import com.nagulov.ui.models.ServiceModel;
@@ -31,7 +30,7 @@ public class RemoveServiceDialog extends JDialog {
 	
 	private void initRemoveServiceDialog() {
 		
-		for(Map.Entry<String, CosmeticService> service : DataBase.services.entrySet()) {
+		for(Map.Entry<String, CosmeticService> service : ServiceController.getInstance().getServices().entrySet()) {
 			serviceBox.addItem(service.getKey());
 		}
 		
@@ -50,8 +49,8 @@ public class RemoveServiceDialog extends JDialog {
 				
 				int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to delete " + service + "?", "Confirm", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.OK_OPTION) {
-					ServiceModel.removeService(DataBase.services.get(service));
-					UserController.getInstance().removeService(DataBase.services.get(service));
+					ServiceModel.removeService(ServiceController.getInstance().getServices().get(service));
+					ServiceController.getInstance().removeService(ServiceController.getInstance().getServices().get(service));
 				}
 				TableDialog.refreshService();
 				setVisible(false);

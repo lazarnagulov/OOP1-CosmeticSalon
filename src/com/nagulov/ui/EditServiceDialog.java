@@ -11,8 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import com.nagulov.controllers.UserController;
-import com.nagulov.data.DataBase;
+import com.nagulov.controllers.ServiceController;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
@@ -26,7 +25,6 @@ public class EditServiceDialog extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static UserController managerController = UserController.getInstance();
 	
 	private CosmeticService service;
 	private CosmeticTreatment treatment;
@@ -42,7 +40,7 @@ public class EditServiceDialog extends JDialog {
 	private void initEditServiceDialog() {
 		
 		serviceField = new JComboBox<String>();
-		for(Map.Entry<String, CosmeticService> entry : DataBase.services.entrySet()) {	
+		for(Map.Entry<String, CosmeticService> entry : ServiceController.getInstance().getServices().entrySet()) {	
 			serviceField.addItem(entry.getKey());
 			if(entry.getKey().equals(service.getName())) {
 				serviceField.setSelectedItem(entry.getKey());
@@ -75,13 +73,13 @@ public class EditServiceDialog extends JDialog {
 				String newTreatment = treatmentField.getText();
 				double price = Double.parseDouble(priceField.getText());
 				
-				CosmeticService cs = DataBase.services.get(newService);
+				CosmeticService cs = ServiceController.getInstance().getServices().get(newService);
 				if(!cs.equals(service)) {
 					service.removeTreatment(treatment);
 					cs.addTreatment(treatment);
 				}
 				
-				managerController.updateCosmeticTreatment(treatment, newTreatment, LocalTime.parse(durationField.getText()), price);
+				ServiceController.getInstance().updateCosmeticTreatment(treatment, newTreatment, LocalTime.parse(durationField.getText()), price);
 				ServiceModel.updateService(row, newService, newTreatment, durationField.getText(), priceField.getText());
 				TableDialog.refreshService();
 				
