@@ -195,6 +195,9 @@ public class TableDialog extends JDialog {
 		table.setRowSorter(sorter);
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getTableHeader().setReorderingAllowed(false);
+		for(int i=0; i<7; i++) {
+			sorter.setSortable(i, false);
+		}
 		init();
 		
 		
@@ -257,10 +260,10 @@ public class TableDialog extends JDialog {
 				String endingPrice = filterEndingPrice.getText();
 				List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
 				if(!service.equals("")) {
-					filters.add(RowFilter.regexFilter(service, 1));
+					filters.add(RowFilter.regexFilter("(?i).*" + service + "*.", 1));
 				}
 				if(!treatment.equals("")) {
-					filters.add(RowFilter.regexFilter(treatment, 2));
+					filters.add(RowFilter.regexFilter("(?i).*" + treatment + "*.", 2));
 				}
 				if(!startingPrice.equals("")) {
 					filters.add(RowFilter.numberFilter(ComparisonType.AFTER, Double.valueOf(startingPrice) - 10e-10, 6));
@@ -281,6 +284,7 @@ public class TableDialog extends JDialog {
 		table.getTableHeader().setReorderingAllowed(false);
 		this.setSize(500,300);
 		this.setLocationRelativeTo(null);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		this.setLocationRelativeTo(null);
@@ -292,6 +296,7 @@ public class TableDialog extends JDialog {
 	
 	private void initLoyalityCard() {
 		this.setTitle("Loyality card");	
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		table = new JTable(new LoyalityCardModel());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getTableHeader().setReorderingAllowed(false);
@@ -314,6 +319,7 @@ public class TableDialog extends JDialog {
 		this.setSize(800,300);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		
 		JButton performTreatment = new JButton("Perform treatment");
 		
@@ -351,6 +357,7 @@ public class TableDialog extends JDialog {
 		table = new JTable(new TreatmentModel());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getTableHeader().setReorderingAllowed(false);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		this.setSize(800,300);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -395,6 +402,7 @@ public class TableDialog extends JDialog {
 		table = new JTable(new TimeTableModel());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getTableHeader().setReorderingAllowed(false);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		JScrollPane sc = new JScrollPane(table);
 		this.setSize(800,300);
 		this.setLocationRelativeTo(null);
@@ -412,6 +420,7 @@ public class TableDialog extends JDialog {
 		table = new JTable(new TreatmentStatusModel());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getTableHeader().setReorderingAllowed(false);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		this.setSize(800,300);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -430,11 +439,12 @@ public class TableDialog extends JDialog {
 		table = new JTable(new CosmeticTreatmentModel());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getTableHeader().setReorderingAllowed(false);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		this.setSize(300,300);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		this.getContentPane().setLayout(new MigLayout("wrap", "[grow,fill]", "[]20[grow,fill]"));
+		this.getContentPane().setLayout(new MigLayout("wrap", "[grow,fill]", "[]20[150px]"));
 
 		
 		JPanel info = new JPanel();
@@ -456,6 +466,7 @@ public class TableDialog extends JDialog {
 	
 	private void init() {
 		this.setSize(800,300);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);

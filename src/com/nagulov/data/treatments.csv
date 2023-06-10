@@ -1,12 +1,16 @@
 IDStatus,Service,Treatment,Beautician,Date,Client,Price
-1,Canceled by the client,Pedikir,Spa pedikir,zikazikic,28.05.2023. 09:00,milicamilic,1600.0
-2,Performed,Masaza,Sportska masaza,simasimic,26.05.2023. 08:00,mikamikic,2500.0
-3,Canceled by the client,Masaza,Relaks masaza,zikazikic,13.06.2023. 19:00,milicamilic,2000.0
-4,Performed,Manikir,Francuski manikir,zikazikic,23.06.2023. 14:00,mikamikic,1350.0
+1,Performed,Pedikir,Spa pedikir,zikazikic,28.05.2023. 09:00,milicamilic,1600.0
+2,Performed,Masaza,Sportska masaza,simasimic,23.02.2023. 08:00,mikamikic,2500.0
+3,Performed,Masaza,Relaks masaza,zikazikic,18.01.2023. 19:00,milicamilic,2000.0
+4,Performed,Manikir,Francuski manikir,jovanovic,10.06.2023. 14:00,mikamikic,1350.0
 5,Did not show up,Manikir,Francuski manikir,zikazikic,27.04.2023. 13:00,mikamikic,1350.0
-6,Performed,Pedikir,Spa pedikir,zikazikic,19.05.2023. 16:00,milicamilic,1600.0
-7,Performed,Manikir,Francuski manikir,jovanovic,10.05.2023. 19:00,mikamikic,1350.0
-8,Performed,Masaza,Relaks masaza,simasimic,05.05.2023. 16:00,milicamilic,2000.0
-9,Canceled by the client,Manikir,Spa manikir,zikazikic,28.05.2023. 14:00,milicamilic,1800.0
-10,Scheduled,Manikir,Francuski manikir,jovanovic,22.06.2023. 14:00,milicamilic,1500.0
-11,Performed,Manikir,Francuski manikir,jovanovic,28.05.2023. 18:00,mikamikic,1500.0
+6,Did not show up,Pedikir,Spa pedikir,zikazikic,13.12.2022. 16:00,milicamilic,1600.0
+7,Performed,Manikir,Francuski manikir,jovanovic,10.04.2023. 19:00,mikamikic,1350.0
+8,Performed,Masaza,Relaks masaza,simasimic,11.05.2023. 16:00,milicamilic,2000.0
+9,Performed,Manikir,Spa manikir,zikazikic,28.05.2023. 14:00,milicamilic,1800.0
+10,Performed,Manikir,Francuski manikir,jovanovic,20.12.2022. 14:00,milicamilic,1500.0
+11,Performed,Manikir,Francuski manikir,jovanovic,20.12.2022. 18:00,mikamikic,1500.0
+12,Did not show up,Manikir,Gel lak,zikazikic,17.06.2023. 18:00,mikamikic,1600.0
+13,Canceled by the client,Masaza,Relaks masaza,zikazikic,03.03.2023. 06:00,mikamikic,2000.0
+14,Scheduled,Masaza,Sportska masaza,simasimic,11.06.2023. 08:00,mikamikic,2500.0
+15,Canceled by the client,Masaza,Sportska masaza,simasimic,11.06.2023. 10:00,milicamilic,2250.0

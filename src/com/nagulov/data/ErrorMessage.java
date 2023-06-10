@@ -15,7 +15,10 @@ public enum ErrorMessage {
 	CANNOT_CANCEL("Treatment is canceled or performed!"),
 	INVALID_DATE_INTERVAL("Invalid date interval!"),
 	INVALID_DATE("Invalid date!"),
-	INVALID_TIME("Invalid time!");
+	INVALID_TIME("Invalid time!"),
+	INVALID_PHONE_NUMBER("Invalid phone number!"),
+	SERVICE_ALREADY_EXISTS("Service already exists!"),
+	INVALID_INPUT("Invalid input!");
 
 	private final String error;
 	

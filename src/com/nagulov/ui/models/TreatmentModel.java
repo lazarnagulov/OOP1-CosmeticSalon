@@ -1,5 +1,6 @@
 package com.nagulov.ui.models;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +11,10 @@ import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.treatments.Treatment;
+import com.nagulov.treatments.TreatmentStatus;
 import com.nagulov.users.Beautician;
 import com.nagulov.users.Client;
+import com.nagulov.users.Receptionist;
 
 public class TreatmentModel extends AbstractTableModel {
 	
@@ -31,11 +34,14 @@ public class TreatmentModel extends AbstractTableModel {
 				continue;
 			}
 			if(!treatments.contains(entry.getValue())) {
+				if(DataBase.loggedUser instanceof Receptionist && !entry.getValue().getStatus().equals(TreatmentStatus.SCHEDULED)) {
+					continue;
+				}
 				treatments.add(entry.getValue());
 			}
 		}
 	}
-
+	
 	public static void init(Beautician b) {
 		treatments.clear();
 		for(Map.Entry<Integer, Treatment> entry : TreatmentController.getInstance().getTreatments().entrySet()) {
@@ -117,7 +123,10 @@ public class TreatmentModel extends AbstractTableModel {
 	public Class<?> getColumnClass(int columnIndex){
 		if(columnIndex == 6) {
 			return Double.class;
-		}else {
+		}else if(columnIndex == 4) {
+			return LocalDateTime.class;
+		}
+		else {
 			return String.class;
 		}
 	}

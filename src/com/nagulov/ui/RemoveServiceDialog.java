@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -11,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import com.nagulov.controllers.ServiceController;
+import com.nagulov.data.DataBase;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Salon;
 import com.nagulov.ui.models.ServiceModel;
@@ -72,6 +74,7 @@ public class RemoveServiceDialog extends JDialog {
 	
 	public RemoveServiceDialog() {
 		setTitle(Salon.getInstance().getSalonName());
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		initRemoveServiceDialog();

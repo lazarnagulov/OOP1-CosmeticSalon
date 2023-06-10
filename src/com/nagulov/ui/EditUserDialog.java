@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -22,7 +23,6 @@ import com.nagulov.controllers.ServiceController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
-import com.nagulov.data.Validator;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Salon;
 import com.nagulov.ui.models.UserModel;
@@ -252,18 +252,22 @@ public class EditUserDialog extends JDialog{
 				String password = new String(passwordField.getPassword());
 				String role = roleComboBox.getSelectedItem().toString();
 				
-				ErrorMessage error = Validator.registerUser(name, surname, gender, phoneNumber, address, username, password);
-				if(!error.equals(ErrorMessage.SUCCESS)) {
-					JOptionPane.showMessageDialog(null, error.getError(), "Error", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
 				if((DataBase.loggedUser instanceof Manager) && (role.equals(DataBase.BEAUTICIAN) || role.equals(DataBase.RECEPTIONIST))) {
-					int internship = Integer.parseInt(internshipField.getText());
-					int qualification = Integer.parseInt(qualificationBox.getSelectedItem().toString());
-					double bonuses = Double.parseDouble(bonusesField.getText());
-					double income = Double.parseDouble(incomeField.getText());
-					double salary = Double.parseDouble(salaryField.getText());
-					
+					int internship = 0;
+					int qualification = 0;
+					double bonuses = 0.0;
+					double income = 0.0;
+					double salary = 0.0;
+					try {
+						internship = Integer.parseInt(internshipField.getText());
+						qualification = Integer.parseInt(qualificationBox.getSelectedItem().toString());
+						bonuses = Double.parseDouble(bonusesField.getText());
+						income = Double.parseDouble(incomeField.getText());
+						salary = Double.parseDouble(salaryField.getText());
+					}catch(Exception inputError) {
+						JOptionPane.showMessageDialog(null, ErrorMessage.INVALID_INPUT, "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 					if(UserController.getInstance().getUser(username) instanceof Staff)	
 						managerController.updateStaff((Staff)UserController.getInstance().getUser(username), name, surname, gender, phoneNumber, address, username, password, bonuses, income, internship, qualification, salary, getRole(role));
 					else {
@@ -284,7 +288,7 @@ public class EditUserDialog extends JDialog{
 					}
 					
 				}else {
-					managerController.updateUser(user, name, surname, gender, phoneNumber, address, username, password, getRole(role));
+					UserController.getInstance().updateUser(user, name, surname, gender, phoneNumber, address, username, password, getRole(role));
 				}
 				try {
 					TableDialog.refreshUser();
@@ -306,6 +310,7 @@ public class EditUserDialog extends JDialog{
 	public EditUserDialog(User user) {
 		this.user = user;
 		setTitle(Salon.getInstance().getSalonName());
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		initEditUserDialog();

@@ -1,9 +1,9 @@
 package com.nagulov.ui.charts;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,6 +41,7 @@ public class TreatmentChartDialog extends JDialog {
 	
 
 	public TreatmentChartDialog() {
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		setTitle(Salon.getInstance().getSalonName());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);

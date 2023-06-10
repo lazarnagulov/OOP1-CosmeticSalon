@@ -5,16 +5,22 @@ import java.awt.event.ActionListener;
 import java.time.LocalTime;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.nagulov.controllers.ServiceController;
+import com.nagulov.data.DataBase;
+import com.nagulov.data.ErrorMessage;
+import com.nagulov.data.Validator;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
+import com.nagulov.treatments.Salon;
 import com.nagulov.ui.models.ServiceModel;
 
 import net.miginfocom.swing.MigLayout;
@@ -67,13 +73,14 @@ public class AddServiceDialog extends JDialog{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String serviceName = newServiceField.getText();
-				
 				CosmeticService service = new CosmeticService(serviceName);
-				
-				if(!ServiceController.getInstance().getServices().containsKey(serviceName)) {
-					ServiceController.getInstance().getServices().put(serviceName, service);
+
+				ErrorMessage error = Validator.createService(serviceName);
+				if(!error.equals(ErrorMessage.SUCCESS)) {
+					JOptionPane.showMessageDialog(null, error.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
-				
+				ServiceController.getInstance().getServices().put(serviceName, service);
 				setVisible(false);
 				dispose();
 			}
@@ -85,14 +92,19 @@ public class AddServiceDialog extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				CosmeticService service = ServiceController.getInstance().getServices().get(serviceField.getSelectedItem().toString());
 				String treatment = treatmentField.getText();
-				LocalTime duration = LocalTime.parse(durationField.getText());
-				double price = Double.parseDouble(priceField.getText());
-				
+				double price = 0.0;
+				LocalTime duration = null;
+				try {
+					duration = LocalTime.parse(durationField.getText());
+					price = Double.parseDouble(priceField.getText());
+				}catch(Exception invalidInput) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.INVALID_INPUT, "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				CosmeticTreatment ct = ServiceController.getInstance().createCosmeticTreatment(service, treatment, duration);
 				Pricelist.getInstance().setPrice(ct, price);
 				
 				ServiceModel.addTreatment(ct);
-				
 				TableDialog.refreshService();
 				
 				setVisible(false);
@@ -110,11 +122,12 @@ public class AddServiceDialog extends JDialog{
 	}
 	
 	public AddServiceDialog() {
-		setTitle("Cosmetic Salon Nagulov");
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setTitle(Salon.getInstance().getSalonName());
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		initAddServiceDialog();
-		pack();
-		setVisible(true);
+		this.pack();
+		this.setVisible(true);
 	}
 }

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -32,7 +33,9 @@ import org.jdatepicker.impl.UtilDateModel;
 import com.nagulov.controllers.ServiceController;
 import com.nagulov.controllers.TreatmentController;
 import com.nagulov.controllers.UserController;
+import com.nagulov.data.DataBase;
 import com.nagulov.data.ErrorMessage;
+import com.nagulov.data.Validator;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.Pricelist;
 import com.nagulov.treatments.Salon;
@@ -190,32 +193,38 @@ public class EditTreatmentDialog extends JDialog{
 					JOptionPane.showMessageDialog(null, ErrorMessage.NOT_SELECTED.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				String[] hm = timeField.getText().split(":");
-				LocalTime time = LocalTime.of(Integer.parseInt(hm[0]), Integer.parseInt(hm[1]));
-				LocalDate date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-				LocalDateTime dateTime = LocalDateTime.of(date, time);
-		
+				
+				LocalTime time = null;
+				LocalDate date = null;
+				LocalDateTime dateTime = null;
+				try {
+					String[] hm = timeField.getText().split(":");
+					time = LocalTime.of(Integer.parseInt(hm[0]), Integer.parseInt(hm[1]));
+					date = model.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					dateTime = LocalDateTime.of(date, time);
+				}catch(Exception invalidDate) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.INVALID_TIME.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				if(!b.containsService(ServiceController.getInstance().getServices().get(service))) {
 					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_WITHOUT_SERVICE.getError() + service, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				if(treatment != null && !treatment.getDate().equals(dateTime) && !b.canOperate(dateTime)) {
-					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
-					return;
+				if(treatment != null && treatment.getDate().getHour() != dateTime.getHour()) {
+					ErrorMessage error = Validator.createTreatment(ServiceController.getInstance().getService(service), b, dateTime);
+					if(!error.equals(ErrorMessage.SUCCESS)) {
+						JOptionPane.showMessageDialog(null, error.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 				}
-				
-				if(treatment != null && !treatment.getDate().equals(dateTime) && !b.canOperate(dateTime)) {
-					JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				
 				String client = clientBox.getSelectedItem().toString();
 				if(treatment != null) {
 					TreatmentController.getInstance().updateTreatment(treatment.getId(), TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), ServiceController.getInstance().getServices().get(service), ServiceController.getInstance().getServices().get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
 				}
 				else {
-					if(!b.canOperate(dateTime)) {
-						JOptionPane.showMessageDialog(null, ErrorMessage.BEAUTICIAN_IS_NOT_AVAILABLE.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					ErrorMessage error = Validator.createTreatment(ServiceController.getInstance().getService(service), b, dateTime);
+					if(!error.equals(ErrorMessage.SUCCESS)) {
+						JOptionPane.showMessageDialog(null, error.getError(), "Error", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 					Treatment t = TreatmentController.getInstance().createTreatment(TreatmentStatus.valueOf(status.toUpperCase().replace(" ", "_")), ServiceController.getInstance().getServices().get(service), ServiceController.getInstance().getServices().get(service).getTreatment(ctreatment), b, dateTime, (Client)UserController.getInstance().getUser(client));
@@ -249,6 +258,7 @@ public class EditTreatmentDialog extends JDialog{
 		this.setTitle(Salon.getInstance().getSalonName());
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		initEditServiceDialog();
 		this.pack();
 		this.setVisible(true);

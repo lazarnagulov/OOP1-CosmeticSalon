@@ -3,6 +3,7 @@ package com.nagulov.ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -105,21 +106,17 @@ public class LoginDialog extends JDialog{
 		
 	}
 
-	private void loginDialog() {
+	
+	public LoginDialog() {
 		this.setTitle(Salon.getInstance().getSalonName());
 		this.setSize(724,540);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setResizable(false);
 		initLoginDialog(this);
 		this.pack();
 		this.setVisible(true);
-	}
-	
-	
-	
-	public LoginDialog() {
-		loginDialog();
 	}
 
 }

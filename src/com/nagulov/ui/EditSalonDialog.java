@@ -6,14 +6,17 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.nagulov.controllers.SalonController;
 import com.nagulov.controllers.UserController;
 import com.nagulov.data.DataBase;
+import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.Salon;
 
 import net.miginfocom.swing.MigLayout;
@@ -60,9 +63,17 @@ public class EditSalonDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String salonName = salonNameField.getText();
-				LocalTime opening = LocalTime.parse(openingTimeField.getText());
-				LocalTime closing = LocalTime.parse(closingTimeField.getText());
-				double loyalityCard = Double.parseDouble(loyalityCardRequirementField.getText());
+				LocalTime opening = null;
+				LocalTime closing = null;
+				double loyalityCard = 0.0;
+				try {
+					opening = LocalTime.parse(openingTimeField.getText());
+					closing = LocalTime.parse(closingTimeField.getText());
+					loyalityCard = Double.parseDouble(loyalityCardRequirementField.getText());
+				}catch(Exception invalidInput) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.INVALID_INPUT, "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				Salon.getInstance().setSalonName(salonName);
 				Salon.getInstance().setOpening(opening);
 				Salon.getInstance().setClosing(closing);
@@ -85,6 +96,7 @@ public class EditSalonDialog extends JDialog {
 	public EditSalonDialog() {
 		this.setTitle(Salon.getInstance().getSalonName());
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		this.setLocationRelativeTo(null);
 		this.initEditSalonDialog();
 		this.pack();

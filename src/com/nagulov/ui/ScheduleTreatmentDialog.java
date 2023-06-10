@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -71,6 +72,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 	private JPanel filterPanel = new JPanel();
 	private JTextField filterCosmeticTreatment = new JTextField(20);
 	private JTextField filterCosmeticService = new JTextField(20);
+	private JTextField filterDuration = new JTextField(20);
 	private JTextField filterPrice = new JTextField(20);
 	private JButton filterButton = new JButton("Filter");
 
@@ -107,19 +109,24 @@ public class ScheduleTreatmentDialog extends JDialog{
 		});
 		ServiceModel.init();
 		sorter.setModel(new ServiceModel());
+		for(int i=0; i<4; i++) {
+			sorter.setSortable(i, false);
+		}
 		treatmentTable = new JTable(new ServiceModel());
 		treatmentTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		treatmentTable.getTableHeader().setReorderingAllowed(false);
 		treatmentTable.setRowSorter(sorter);
 		JScrollPane sc = new JScrollPane(treatmentTable);
 		
-		filterPanel.setLayout(new MigLayout("wrap 2", "[][]", "[][][][]"));
+		filterPanel.setLayout(new MigLayout("wrap 2", "[][]", "[][][][][]"));
 		filterPanel.add(new JLabel("Service:"));
 		filterPanel.add(filterCosmeticService);
 		filterPanel.add(new JLabel("Treatment"));
 		filterPanel.add(filterCosmeticTreatment);
 		filterPanel.add(new JLabel("Price"));
 		filterPanel.add(filterPrice);
+		filterPanel.add(new JLabel("Duration:"));
+		filterPanel.add(filterDuration);
 		filterPanel.add(filterButton, "span 2, center");
 		
 		beauticianBox.setEnabled(false);
@@ -149,12 +156,17 @@ public class ScheduleTreatmentDialog extends JDialog{
 				String service = filterCosmeticService.getText();
 				String treatment = filterCosmeticTreatment.getText();
 				String price = filterPrice.getText();
+				String duration = filterDuration.getText();
+				
 				List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
 				if(!service.equals("")) {
-					filters.add(RowFilter.regexFilter(service, 0));
+					filters.add(RowFilter.regexFilter("(?i).*" + service + "*.", 0));
 				}
 				if(!treatment.equals("")) {
-					filters.add(RowFilter.regexFilter(treatment, 1));
+					filters.add(RowFilter.regexFilter("(?i).*" + treatment + "*.", 1));
+				}
+				if(!duration.equals("")) {
+					filters.add(RowFilter.regexFilter(duration, 2));
 				}
 				if(!price.equals("")) {
 					filters.add(RowFilter.regexFilter(price, 3));
@@ -272,6 +284,7 @@ public class ScheduleTreatmentDialog extends JDialog{
 		this.setTitle(Salon.getInstance().getSalonName());
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		this.initScheduleTreatmentDialog();
 		this.pack();
 		this.setVisible(true);

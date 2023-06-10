@@ -174,7 +174,7 @@ public class DataBase {
 				String[] data = input.split(",");
 				Salon.getInstance().setSalonName(data[0]);
 				Salon.getInstance().setOpening(LocalTime.parse(data[1]));
-				Salon.getInstance().setOpening(LocalTime.parse(data[2]));
+				Salon.getInstance().setClosing(LocalTime.parse(data[2]));
 				UserController.getInstance().loyaltyCardNeeded = Double.parseDouble(data[3]);
 			}
 			in.close();

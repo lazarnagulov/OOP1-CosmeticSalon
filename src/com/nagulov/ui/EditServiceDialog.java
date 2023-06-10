@@ -5,13 +5,17 @@ import java.awt.event.ActionListener;
 import java.time.LocalTime;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.nagulov.controllers.ServiceController;
+import com.nagulov.data.DataBase;
+import com.nagulov.data.ErrorMessage;
 import com.nagulov.treatments.CosmeticService;
 import com.nagulov.treatments.CosmeticTreatment;
 import com.nagulov.treatments.Pricelist;
@@ -71,15 +75,22 @@ public class EditServiceDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				String newService = serviceField.getSelectedItem().toString();
 				String newTreatment = treatmentField.getText();
-				double price = Double.parseDouble(priceField.getText());
-				
+				LocalTime duration = null;
+				double price = 0.0;
+				try {
+					duration = LocalTime.parse(durationField.getText());
+					price = Double.parseDouble(priceField.getText());
+				}catch(Exception invalidInput) {
+					JOptionPane.showMessageDialog(null, ErrorMessage.INVALID_INPUT.getError(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				CosmeticService cs = ServiceController.getInstance().getServices().get(newService);
 				if(!cs.equals(service)) {
 					service.removeTreatment(treatment);
 					cs.addTreatment(treatment);
 				}
 				
-				ServiceController.getInstance().updateCosmeticTreatment(treatment, newTreatment, LocalTime.parse(durationField.getText()), price);
+				ServiceController.getInstance().updateCosmeticTreatment(treatment, newTreatment, duration, price);
 				ServiceModel.updateService(row, newService, newTreatment, durationField.getText(), priceField.getText());
 				TableDialog.refreshService();
 				
@@ -104,6 +115,7 @@ public class EditServiceDialog extends JDialog {
 		this.row = row;
 		setTitle(Salon.getInstance().getSalonName());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		this.setLocationRelativeTo(null);
 		initEditServiceDialog();
 		pack();

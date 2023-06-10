@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -85,10 +86,6 @@ public class ManagerFrame extends JFrame{
 		userInfo.add(new JLabel("Phone number: " + DataBase.loggedUser.getPhoneNumber()));
 		userInfo.add(new JLabel("Address: " + DataBase.loggedUser.getAddress()));
 		
-//		JPanel beauticianChart = new XChartPanel<PieChart>(ReportChart.initBeauticianChart());
-		
-//		JPanel serviceIncomeChart = new XChartPanel<XYChart>(ReportChart.initServiceIncomeChart());
-		
 		this.setJMenuBar(menu);
 		this.getContentPane().setLayout(new MigLayout("wrap 2", "[][grow]", "[fill]20[grow, center]20[center]"));
 		
@@ -97,9 +94,6 @@ public class ManagerFrame extends JFrame{
 		this.getContentPane().add(userInfo, "wrap, span 2");
 		this.getContentPane().add(editInfoButton, "left");
 		this.getContentPane().add(editSalonButton, "right");
-//		this.getContentPane().add(beauticianChart);
-//		this.getContentPane().add(treatmentChart);
-//		this.getContentPane().add(serviceIncomeChart, "span 2");
 	
 		treatmentsReport.addActionListener(new ActionListener() {
 			@Override
@@ -207,6 +201,7 @@ public class ManagerFrame extends JFrame{
 		this.setTitle(Salon.getInstance().getSalonName());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
+		this.setIconImage(new ImageIcon("img" + DataBase.SEPARATOR + "logo.jpg").getImage());
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
