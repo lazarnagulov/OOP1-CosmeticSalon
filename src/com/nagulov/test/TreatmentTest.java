@@ -48,6 +48,13 @@ public class TreatmentTest {
 	}	
 	
 	@Test
+	@DisplayName("Creating treatment in past")
+	public void testCreatingTreatmentInPast() {
+		assertEquals(Validator.createTreatment(service, b, datetime.minusMonths(1)), ErrorMessage.INVALID_DATE);
+	}
+	
+	
+	@Test
 	@DisplayName("Cheking if beautician can schedule two treatments at the same time")
 	public void testUserCantOperate() {
 		TreatmentController.getInstance().createTreatment(TreatmentStatus.SCHEDULED, service, treatment, b, datetime, c);

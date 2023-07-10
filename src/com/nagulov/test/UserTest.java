@@ -14,7 +14,6 @@ import com.nagulov.users.UserBuilder;
 
 public class UserTest {
 
-	
 	private static Client c;
 	
 	@BeforeAll

@@ -11,4 +11,8 @@ IDStatus,Service,Treatment,Beautician,Date,Client,Price
 10,Performed,Manikir,Francuski manikir,jovanovic,20.12.2022. 14:00,milicamilic,1500.0
 11,Performed,Manikir,Francuski manikir,jovanovic,20.12.2022. 18:00,mikamikic,1500.0
 12,Did not show up,Manikir,Gel lak,zikazikic,17.06.2023. 18:00,mikamikic,1600.0
-13,Scheduled,Masaza,Relaks masaza,zikazikic,03.03.2023. 06:00,mikamikic,2000.0
+13,Canceled by the client,Masaza,Relaks masaza,zikazikic,03.03.2023. 06:00,mikamikic,2000.0
+14,Scheduled,Masaza,Sportska masaza,simasimic,11.06.2023. 08:00,mikamikic,2500.0
+15,Scheduled,Masaza,Sportska masaza,simasimic,11.06.2023. 10:00,milicamilic,2250.0
+16,Scheduled,Manikir,Spa manikir,zikazikic,17.06.2023. 15:00,milicamilic,1800.0
+17,Scheduled,Masaza,Relaks masaza,simasimic,29.06.2023. 17:00,milicamilic,1800.0
